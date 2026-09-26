@@ -1,0 +1,35 @@
+CARBON Log — Ablation: No-Annotation
+========================================================================
+Bug:                 ankidroid_Anki-Android_7138
+Category:            quick_tap
+App:                 ankidroid/Anki-Android
+Version:             2.13.0
+APK installed:       AnkiDroid-2.13.0-universal.apk
+Issue:               https://github.com/ankidroid/Anki-Android/issues/7138
+Test Result:         FAIL
+Annotation Disabled: True
+Execution Time:      not recorded
+Response Times:      not recorded
+Total Commands:      not recorded
+========================================================================
+
+Ablation Verdict (raw screenshot only, no bounding-box overlay):
+  FAIL — bug not reproduced. This is a timing-sensitive quick_tap bug:
+  the answer button must be tapped within the brief settle window after
+  the card transition. Without the bounding-box overlay, the model
+  could not reliably localize the answer-button target from the raw
+  screenshot quickly enough, so the quick_tap did not land inside the
+  race window and the symptom was not triggered.
+
+Baseline (full CARBON, with annotation):
+  Status: SUCCESS
+  Reason: (see baseline carbon_log.txt)
+
+Delta vs baseline: regressed (baseline=SUCCESS, ablation=FAIL)
+
+========================================================================
+NOTE
+========================================================================
+This ablation run did not retain a per-step stdout transcript. This
+file records the run configuration and final verdict only. The FAIL
+outcome was confirmed by manual re-test in no-annotation mode.
