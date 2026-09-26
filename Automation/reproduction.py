@@ -1,3 +1,4 @@
+import os
 import sys
 from datetime import datetime
 from collections import defaultdict
@@ -46,6 +47,24 @@ def get_prompt(device, attribute_to_element_map, package_name, execution_status,
      
         prompt = f"{execution_status}.{info}"
 
+    # Guard: the agent sometimes taps a system app icon that shares the target
+    # app's label (e.g. the preinstalled "Messages" instead of the app under
+    # test) and then keeps working inside the wrong app. Nudge it back.
+    # Transient system UI (permissions, settings) is expected and not flagged.
+    try:
+        _current_pkg = (device.app_current() or {}).get("package", "")
+    except Exception:
+        _current_pkg = ""
+    _system_ui = {"com.android.settings", "com.android.systemui",
+                  "com.android.packageinstaller",
+                  "com.google.android.packageinstaller",
+                  "com.android.permissioncontroller",
+                  "com.google.android.permissioncontroller"}
+    if _current_pkg and _current_pkg != package_name and _current_pkg not in _system_ui:
+        prompt = (f"WARNING: the app on screen is '{_current_pkg}', but the app you are "
+                  f"testing is '{package_name}'. Leave '{_current_pkg}' and return to "
+                  f"'{package_name}'. Do NOT keep working inside '{_current_pkg}'.\n\n{prompt}")
+
     # Append UIAutomator Viewer element map to prompt for cross-referencing with annotated screenshot
     if viewer_legend:
         prompt = f"{prompt}\n\n{viewer_legend}"
@@ -92,7 +111,10 @@ def reproduce_bug(device_port, reprot_file_name):
     clear_logcat(device_port)
 
     device.set_orientation("natural")
-    package_name = device.app_current()['package']
+    # Target package comes from the harness (the installed APK's real package).
+    # app_current() at startup can be a permission dialog, not the app.
+    package_name = os.environ.get("REBL_TARGET_PACKAGE") or device.app_current()['package']
+    print(f"[reproduction] target package: {package_name}")
     bug_report = read_bug_report(reprot_file_name)
 
     history = load_training_prompts('./prompts/training_prompts_ori.json')
@@ -116,6 +138,11 @@ def reproduce_bug(device_port, reprot_file_name):
     executed_commands, execution_status = [], []
     step_number = 0
     prev_color_report = None  # track colors from previous step for diff
+    # Abort if the agent repeats the same action/screen this many times in a
+    # row (it's stuck in a loop and just burning tokens). Tunable via env.
+    repeat_streak = 0
+    MAX_REPEAT_STREAK = int(os.environ.get("REBL_MAX_REPEAT", "3"))
+    aborted_loop = False
     
     # here the variabel name should be bug_triggered
     while not crash:
@@ -159,6 +186,20 @@ def reproduce_bug(device_port, reprot_file_name):
             execution_status = execute_commands(command_list, device, widget_dict, attribute_to_element_map, package_name)
             flags[3] = add_commands(executed_commands, command_list)
 
+            # Track consecutive repeated-sequence detections. add_commands returns
+            # a truthy "Repeating sequence detected..." string when the agent just
+            # repeated itself; None otherwise. N in a row => stuck loop => abort.
+            if flags[3]:
+                repeat_streak += 1
+                print(f"[loop-guard] repeat streak {repeat_streak}/{MAX_REPEAT_STREAK}")
+                if repeat_streak >= MAX_REPEAT_STREAK:
+                    print(f"[loop-guard] ABORTING: agent repeated the same steps "
+                          f"{MAX_REPEAT_STREAK} times in a row (stuck loop). Marking case as failed.")
+                    aborted_loop = True
+                    break
+            else:
+                repeat_streak = 0
+
             # Logcat Exception Monitor: detect silent failures after command execution
             exc_found, exc_lines = check_logcat_exceptions(device_port, package_name)
             if exc_found:
@@ -169,14 +210,24 @@ def reproduce_bug(device_port, reprot_file_name):
                 print(exc_report)
         #if not crash:
         #    crash = check_crash(reprot_file_name, history, package_name, device_port, execution_data)
+    if aborted_loop:
+        print("[loop-guard] LOOP_ABORT: case failed due to repeated stuck loop.")
     start_time, response_time, total_commands = execution_data
     log_and_save_history(reprot_file_name, start_time, response_time, total_commands, history, package_name, 'xxx')
+    # Emit token/cost usage for this case (captured in my_gpt during the run).
+    try:
+        print(token_usage_report(LLM['model']))
+    except Exception as _e:
+        print(f"[token-usage] unavailable: {_e}")
     device.set_orientation("natural")
-    
+    return aborted_loop
 
 
 def main(device_port, reprot_file_name):
-    reproduce_bug(device_port, reprot_file_name)
+    aborted_loop = reproduce_bug(device_port, reprot_file_name)
+    # Exit code 3 signals run_dataset that the case was aborted for looping.
+    if aborted_loop:
+        sys.exit(3)
 
 if __name__ == "__main__":
     if len(sys.argv) == 2: 

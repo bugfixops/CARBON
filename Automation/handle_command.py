@@ -436,7 +436,7 @@ def _adb_shell(device, cmd):
     try:
         result = subprocess.run(
             ['adb', '-s', serial, 'shell', cmd],
-            capture_output=True, text=True, timeout=10
+            capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=10
         )
         return result.stdout.strip()
     except Exception as e:
