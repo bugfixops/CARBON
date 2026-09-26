@@ -1,0 +1,66 @@
+Bug Report Title:
+Feed settings crash when rotating screen
+Bug Report Issue:
+First of all, thank you for this very useful Podcast app! While building the app myself from `develop`, I noticed an issue with the revised feed settings.
+
+It appears the feed and its settings are not properly saved and restored in the `FeedSettingsActivity` (lifecycle methods). 
+
+**App version**: unreleased/develop 1580e93b940436b76e2db46fa5501c8f02e38770
+
+**Android version**: 7.1.2 (LineageOS 14.1-20180610-NIGHTLY-titan)
+
+**Device model**: MOTO G 2014
+
+**Expected behaviour**: View is restored after rotation
+
+**Current behaviour**: App crashes
+
+**First occurred**: On branch `develop` with revised feed settings
+
+**Steps to reproduce**: in any feed, open settings, then rotate screen
+
+**Environment**: Default settings on branch develop
+
+**Stacktrace/Logcat**: 
+```
+2019-06-29 12:12:49.506 31847-31847/de.danoeh.antennapod.debug E/AndroidRuntime: FATAL EXCEPTION: main
+    Process: de.danoeh.antennapod.debug, PID: 31847
+    java.lang.RuntimeException: Unable to start activity ComponentInfo{de.danoeh.antennapod.debug/de.danoeh.antennapod.activity.FeedSettingsActivity}: java.lang.NullPointerException: Attempt to invoke virtual method 'de.danoeh.antennapod.core.feed.FeedPreferences de.danoeh.antennapod.core.feed.Feed.getPreferences()' on a null object reference
+        at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2684)
+        at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:2751)
+        at android.app.ActivityThread.handleRelaunchActivity(ActivityThread.java:4556)
+        at android.app.ActivityThread.-wrap19(ActivityThread.java)
+        at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1502)
+        at android.os.Handler.dispatchMessage(Handler.java:102)
+        at android.os.Looper.loop(Looper.java:154)
+        at android.app.ActivityThread.main(ActivityThread.java:6186)
+        at java.lang.reflect.Method.invoke(Native Method)
+        at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:889)
+        at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:779)
+     Caused by: java.lang.NullPointerException: Attempt to invoke virtual method 'de.danoeh.antennapod.core.feed.FeedPreferences de.danoeh.antennapod.core.feed.Feed.getPreferences()' on a null object reference
+        at de.danoeh.antennapod.fragment.FeedSettingsFragment.onCreatePreferences(FeedSettingsFragment.java:30)
+        at android.support.v7.preference.PreferenceFragmentCompat.onCreate(PreferenceFragmentCompat.java:224)
+        at android.support.v4.app.Fragment.performCreate(Fragment.java:2331)
+        at android.support.v4.app.FragmentManagerImpl.moveToState(FragmentManager.java:1386)
+        at android.support.v4.app.FragmentManagerImpl.moveFragmentToExpectedState(FragmentManager.java:1759)
+        at android.support.v4.app.FragmentManagerImpl.moveToState(FragmentManager.java:1827)
+        at android.support.v4.app.FragmentManagerImpl.dispatchStateChange(FragmentManager.java:3244)
+        at android.support.v4.app.FragmentManagerImpl.dispatchCreate(FragmentManager.java:3194)
+        at android.support.v4.app.FragmentController.dispatchCreate(FragmentController.java:184)
+        at android.support.v4.app.FragmentActivity.onCreate(FragmentActivity.java:355)
+        at android.support.v7.app.AppCompatActivity.onCreate(AppCompatActivity.java:84)
+        at de.danoeh.antennapod.activity.FeedSettingsActivity.onCreate(FeedSettingsActivity.java:46)
+        at android.app.Activity.performCreate(Activity.java:6684)
+        at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1119)
+        at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2637)
+        at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:2751) 
+        at android.app.ActivityThread.handleRelaunchActivity(ActivityThread.java:4556) 
+        at android.app.ActivityThread.-wrap19(ActivityThread.java) 
+        at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1502) 
+        at android.os.Handler.dispatchMessage(Handler.java:102) 
+        at android.os.Looper.loop(Looper.java:154) 
+        at android.app.ActivityThread.main(ActivityThread.java:6186) 
+        at java.lang.reflect.Method.invoke(Native Method) 
+        at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:889) 
+        at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:779)
+```

@@ -1,0 +1,87 @@
+Bug Report Title:
+``NumberFormatException`` and can never open the setting page anymore
+Bug Report Issue:
+This exception was found on the master (v1.4.0, the latest code version) and a Google Android phone. 
+
+STR:  Go to setting, click ``Location Service``, choose ``Network``, open ``Update period``, delete the default value "5" (leave the EditText empty), and click ``OK``.
+
+The exception trace:
+
+```
+java.lang.NumberFormatException: Invalid int: ""
+ 	at java.lang.Integer.invalidInt(Integer.java:138)
+ 	at java.lang.Integer.parseInt(Integer.java:358)
+ 	at java.lang.Integer.parseInt(Integer.java:334)
+ 	at de.rampro.activitydiary.ui.settings.SettingsActivity.updateLocationAge(SettingsActivity.java:238)
+ 	at de.rampro.activitydiary.ui.settings.SettingsActivity.onSharedPreferenceChanged(SettingsActivity.java:135)
+ 	at android.app.SharedPreferencesImpl$EditorImpl.notifyListeners(SharedPreferencesImpl.java:479)
+ 	at android.app.SharedPreferencesImpl$EditorImpl.apply(SharedPreferencesImpl.java:387)
+ 	at android.support.v7.preference.Preference.tryCommit(Preference.java:1613)
+ 	at android.support.v7.preference.Preference.persistString(Preference.java:1644)
+ 	at android.support.v7.preference.EditTextPreference.setText(EditTextPreference.java:69)
+ 	at android.support.v7.preference.EditTextPreferenceDialogFragmentCompat.onDialogClosed(EditTextPreferenceDialogFragmentCompat.java:96)
+ 	at android.support.v7.preference.PreferenceDialogFragmentCompat.onDismiss(PreferenceDialogFragmentCompat.java:270)
+ 	at android.app.Dialog$ListenersHandler.handleMessage(Dialog.java:1323)
+ 	at android.os.Handler.dispatchMessage(Handler.java:102)
+ 	at android.os.Looper.loop(Looper.java:148)
+ 	at android.app.ActivityThread.main(ActivityThread.java:5417)
+ 	at java.lang.reflect.Method.invoke(Native Method)
+ 	at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:726)
+ 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:616)
+```
+
+Once this issue happens, the ``setting`` page cannot be opened, and the app crashes with the exception trace below.
+
+```
+java.lang.RuntimeException: Unable to start activity ComponentInfo{de.rampro.activitydiary.debug/de.rampro.activitydiary.ui.settings.SettingsActivity}: java.lang.NumberFormatException: Invalid int: ""
+ 	at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2416)
+ 	at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:2476)
+ 	at android.app.ActivityThread.-wrap11(ActivityThread.java)
+ 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1344)
+ 	at android.os.Handler.dispatchMessage(Handler.java:102)
+ 	at android.os.Looper.loop(Looper.java:148)
+ 	at android.app.ActivityThread.main(ActivityThread.java:5417)
+ 	at java.lang.reflect.Method.invoke(Native Method)
+ 	at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:726)
+ 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:616)
+ Caused by: java.lang.NumberFormatException: Invalid int: ""
+ 	at java.lang.Integer.invalidInt(Integer.java:138)
+ 	at java.lang.Integer.parseInt(Integer.java:358)
+ 	at java.lang.Integer.parseInt(Integer.java:334)
+ 	at de.rampro.activitydiary.ui.settings.SettingsActivity.updateLocationAge(SettingsActivity.java:238)
+ 	at de.rampro.activitydiary.ui.settings.SettingsActivity.onCreate(SettingsActivity.java:471)
+ 	at android.app.Activity.performCreate(Activity.java:6237)
+ 	at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1107)
+ 	at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2369)
+ 	... 9 more
+```
+Comments:
+Comment#1:
+Any plan to fix this issue? I think adding an additional check on the input value would be able to totally fix this issue.
+---
+Comment#2:
+Thanks for reporting. And sorry for.the late answer. Clearly I have to fix this, and it should not be hard to do so. Currently being without computer and long time I did not invest into this app. Again, very sorry. In the last time I focused more on making up my mind on climate change and what.co.sequences it should have on my life than on programming apps.
+
+But I'll try to push a new version soon. In case you are willing to contribute I'd happily review a PR!
+---
+Comment#3:
+Thanks for your reply. I understand your situation. I will try to issue a PR.
+---
+Comment#4:
+Hi @ramack , I inspected the code and located the culprit of this issue:
+
+https://github.com/ramack/ActivityDiary/blob/674fff504d1d856671e2bf9b482d8d0b6238d98d/app/src/main/java/de/rampro/activitydiary/ui/settings/SettingsActivity.java#L238
+
+The issue can be quickly fixed by modifying this line to the code below:
+
+```
+        int v;
+        try{
+            v = Integer.parseInt(value.replaceAll("\\D",""));
+        }catch (NumberFormatException e){
+            return;
+        }
+```
+
+But I am not very faimilar with the app logics. After I manually fixed in this way. It can indeed avoid the crash, but when I reopen the dialog. The invalid input will appear there (instead of showing the default value of ``5``). I am not quite sure how to fix this. Hope my small fix could help you fix this issue in the next version.
+---

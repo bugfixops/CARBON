@@ -1,0 +1,43 @@
+{
+  "source": "github-api",
+  "issue_url": "https://github.com/getodk/collect/issues/360",
+  "canonical_url": "https://github.com/getodk/collect/issues/360",
+  "issue_number": 360,
+  "issue_id": 203123508,
+  "title": "Collect 1.4.13 crash when selecting My Drive to fetch form",
+  "body": "#### Software and hardware versions \r\nCollect v1.4.13, Android v5.1.1, device used Samsung Galaxy J1 Mini and J1\r\n\r\n#### Problem description\r\nODK Collect crashes when we try to fetch an xml form from Google Drive.\r\n#### Steps to reproduce the problem\r\n1. Load Collect 1.4.13 from Google Play\r\n2. Specify platform (Google Drive0\r\n3. Specify Google account.\r\n4. Get Blank Form (enters search GUI)\r\n5. Select My Drive\r\n6. Crash reported\r\n7. Settings file attached\r\n[collect.settings.txt](https://github.com/opendatakit/collect/files/729998/collect.settings.txt)\r\n\r\n#### Expected behavior\r\nGoto xml files in My Drive or Shared With Me and select relevant\r\n\r\n#### Other information \r\nTried on three makes of phone with 3 different versions\r\nSamsung J1 4.44\r\nHuawei P8 Lite 5.0\r\nSamsung J1 Mini 5.1.1\r\nReverted to 1.4.12 APK and all works fine\r\n",
+  "declared_comments": 4,
+  "comments": [
+    {
+      "id": 275154016,
+      "url": "https://github.com/getodk/collect/issues/360#issuecomment-275154016",
+      "body": "Looks like it's the same issue https://github.com/opendatakit/collect/issues/289 but now it occurs when we use the apk from Google Play.",
+      "created_at": "2017-01-25T16:20:39Z",
+      "updated_at": "2017-01-25T22:05:49Z"
+    },
+    {
+      "id": 275310133,
+      "url": "https://github.com/getodk/collect/issues/360#issuecomment-275310133",
+      "body": "The stack traces don't appear to have any useful info. Listing from the drive:\r\n```\r\njava.lang.RuntimeException: An error occurred while executing doInBackground()\r\n\tat android.os.AsyncTask$3.done(AsyncTask.java:309)\r\n\tat java.util.concurrent.FutureTask.finishCompletion(FutureTask.java:354)\r\n\tat java.util.concurrent.FutureTask.setException(FutureTask.java:223)\r\n\tat java.util.concurrent.FutureTask.run(FutureTask.java:242)\r\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1113)\r\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:588)\r\n\tat java.lang.Thread.run(Thread.java:818)\r\nCaused by: java.lang.NullPointerException: Attempt to invoke virtual method 'java.lang.Object com.google.a.b.a.a$b$b.e()' on a null object reference\r\n\tat org.odk.collect.android.activities.GoogleDriveActivity$b.a(Unknown Source)\r\n\tat org.odk.collect.android.activities.GoogleDriveActivity$b.doInBackground(Unknown Source)\r\n\tat android.os.AsyncTask$2.call(AsyncTask.java:295)\r\n\tat java.util.concurrent.FutureTask.run(FutureTask.java:237)\r\n\t... 3 more\r\n```\r\n\r\nPublishing a previously loaded form:\r\n```\r\njava.lang.RuntimeException: An error occurred while executing doInBackground()\r\n\tat android.os.AsyncTask$3.done(AsyncTask.java:309)\r\n\tat java.util.concurrent.FutureTask.finishCompletion(FutureTask.java:354)\r\n\tat java.util.concurrent.FutureTask.setException(FutureTask.java:223)\r\n\tat java.util.concurrent.FutureTask.run(FutureTask.java:242)\r\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1113)\r\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:588)\r\n\tat java.lang.Thread.run(Thread.java:818)\r\nCaused by: java.lang.NoSuchMethodError: No static method newPullParser()Lorg/g/a/a; in class Landroid/util/Xml; or its super classes (declaration of 'android.util.Xml' appears in /system/framework/framework.jar:classes2.dex)\r\n\tat org.odk.collect.android.h.g.a(Unknown Source)\r\n\tat org.odk.collect.android.h.g.a(Unknown Source)\r\n\tat org.odk.collect.android.h.g.a(Unknown Source)\r\n\tat org.odk.collect.android.activities.GoogleSheetsUploaderActivity$a.a(Unknown Source)\r\n\tat org.odk.collect.android.activities.GoogleSheetsUploaderActivity$a.doInBackground(Unknown Source)\r\n\tat android.os.AsyncTask$2.call(AsyncTask.java:295)\r\n\tat java.util.concurrent.FutureTask.run(FutureTask.java:237)\r\n\t... 3 more\r\n```\r\n\r\n@grzesiek2010 is probably correct that it's some kind of API auth issue like in #289 (the stack traces are also similar). @yanokwa and @mitchellsundt are working on it.",
+      "created_at": "2017-01-26T05:19:23Z",
+      "updated_at": "2017-01-26T05:20:25Z"
+    },
+    {
+      "id": 275324049,
+      "url": "https://github.com/getodk/collect/issues/360#issuecomment-275324049",
+      "body": "Realized it couldn't be an API config issue since 1.4.12 and 1.4.13 are signed with the same key. It turns out it's a minification issue. Hints were that I couldn't generate a signed apk that worked when checking out 1.4.12 (minification was disabled for the release build but that code wasn't checked in) and the strange identifiers such as `org.odk.collect.android.h.g.a`. I'm going to turn minification off, add a comment saying why and check that change in.\r\n\r\n@mapland thank you so much for reporting this immediately and providing details on what you tried.",
+      "created_at": "2017-01-26T07:30:21Z",
+      "updated_at": "2017-01-26T07:36:02Z"
+    },
+    {
+      "id": 275335321,
+      "url": "https://github.com/getodk/collect/issues/360#issuecomment-275335321",
+      "body": "Thanks Dream Team, seriously rapid repair, we are using Collect 1.4.14 off\nPlay and it is working smoothly.\n\nOn 26 January 2017 at 09:47, Yaw Anokwa <notifications@github.com> wrote:\n\n> Closed #360 <https://github.com/opendatakit/collect/issues/360> via #361\n> <https://github.com/opendatakit/collect/pull/361>.\n>\n> —\n> You are receiving this because you were mentioned.\n> Reply to this email directly, view it on GitHub\n> <https://github.com/opendatakit/collect/issues/360#event-937376287>, or mute\n> the thread\n> <https://github.com/notifications/unsubscribe-auth/AO9Zf47GW4Fug4yvN98d9v74orWMijD-ks5rWE-agaJpZM4Ltkp2>\n> .\n>\n\n\n\n-- \nChris Berens\nPr GISc (SAGC) #1308\n+27 (0)82 567 9322\n",
+      "created_at": "2017-01-26T08:45:07Z",
+      "updated_at": "2017-01-26T08:45:07Z"
+    }
+  ],
+  "updated_at": "2017-01-26T08:45:07Z",
+  "retrieved_on": "2026-09-20",
+  "is_pull_request": false
+}

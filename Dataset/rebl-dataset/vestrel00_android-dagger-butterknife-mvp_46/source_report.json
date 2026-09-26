@@ -1,0 +1,14 @@
+{
+  "source": "github-api",
+  "issue_url": "https://github.com/vestrel00/android-dagger-butterknife-mvp/issues/46",
+  "canonical_url": "https://github.com/vestrel00/android-dagger-butterknife-mvp/issues/46",
+  "issue_number": 46,
+  "issue_id": 250062247,
+  "title": "Fragment injection does not occur. NullPointerException for Android versions 22 (Lollipop 5.1) and below.",
+  "body": "## Crash\r\n\r\nThe following crash occurs on devices running API 22 (Lollipop 5.1) and below.\r\n\r\n```\r\n   java.lang.NullPointerException: Attempt to invoke interface method 'void com.vestrel00.daggerbutterknifemvp.ui.main.view.MainFragmentListener.onExample1Clicked()' on a null object reference\r\n       at com.vestrel00.daggerbutterknifemvp.ui.main.view.MainFragment.onExample1Clicked(MainFragment.java:63)\r\n      ...\r\n```\r\n\r\nThe crash does not occur for API 23 (Marshmallow 6.0) and above.\r\n\r\n#### Steps to Reproduce\r\n\r\n1. Open the app\r\n2. Click on Example 1 button\r\n\r\nObserve the crash. Note that clicking on any of the example buttons will cause the crash.\r\n\r\n## Analysis\r\n\r\nThe issue is that the `MainFragmentListener listener` in `MainFragment` is null for some reason. This suggests a bug with Dagger 2.11. \r\n\r\nThe issue is that the injection is currently happening in [onAttach(Context)](https://developer.android.com/reference/android/app/Fragment.html#onAttach(android.content.Context)), which is added in API level 23. This means that API level 22 and below will not invoke `onAttach(Context)`, thereby bypassing the injection. \r\n\r\n## Solutions\r\n\r\n1. Perform fragment injection in [onAttach(Activity)](https://developer.android.com/reference/android/app/Fragment.html#onAttach(android.app.Activity)).\r\n2. Use AppCompat Activity and support Fragment with *dagger.android.support* injection frameworks.",
+  "declared_comments": 0,
+  "comments": [],
+  "updated_at": "2017-08-14T16:07:23Z",
+  "retrieved_on": "2026-09-20",
+  "is_pull_request": false
+}
