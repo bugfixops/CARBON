@@ -49,6 +49,10 @@ def execute_suggestion(suggestion_list, attribute_to_element_map, device, packag
             device.set_orientation('l')
         elif suggestion[0] == 'back':
             device.press('back')
+        elif suggestion[0] == 'menu':
+            # Legacy MENU key (KEYCODE_MENU) for pre-Honeycomb apps whose
+            # options menu has no on-screen affordance on modern devices.
+            device.press('menu')
         elif suggestion[0] == 'swipe':
             swipe(device, suggestion[1])
             print('execute swipe left')

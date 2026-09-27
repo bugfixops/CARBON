@@ -164,6 +164,21 @@ def _adc_ok():
     return bool(p and Path(p).is_file())
 
 
+def ensure_apk_override(path_str, log_prefix):
+    """Retest path: use a caller-supplied APK (e.g. the pre-fix version)."""
+    p = Path(path_str)
+    if not p.is_file():
+        raise base.APKUnavailableError(f"override APK not found: {path_str}")
+    size = p.stat().st_size
+    if size < 100_000:
+        raise base.APKUnavailableError(f"override APK too small ({size} bytes): {p.name}")
+    with open(p, "rb") as f:
+        if f.read(4) != b"PK\x03\x04":
+            raise base.APKUnavailableError(f"Not a ZIP/APK: {p.name}")
+    print(f"{log_prefix} override APK OK: {p.name} ({size} bytes)")
+    return p
+
+
 def run_one_case(device_port, category, case_folder, bug_report, apk_path, model):
     """One case with the Gemini/Vertex-ADC child env (otherwise shared logic)."""
     log_prefix = f"[dev {device_port}]"
@@ -185,9 +200,13 @@ def run_one_case(device_port, category, case_folder, bug_report, apk_path, model
     with open(log_path, "w", encoding="utf-8", errors="replace") as lf:
         lf.write(banner + "\n")
 
-    # 1. APK (local to the dataset)
+    # 1. APK (local to the dataset; REBL_APK_OVERRIDE wins for retests)
+    apk_override = os.environ.get("REBL_APK_OVERRIDE", "").strip()
     try:
-        apk_local = ensure_apk_local(category, case_folder, apk_path, log_prefix)
+        if apk_override:
+            apk_local = ensure_apk_override(apk_override, log_prefix)
+        else:
+            apk_local = ensure_apk_local(category, case_folder, apk_path, log_prefix)
     except base.APKUnavailableError as e:
         print(f"{log_prefix} {e}")
         with open(log_path, "a", encoding="utf-8", errors="replace") as lf:
@@ -204,6 +223,23 @@ def run_one_case(device_port, category, case_folder, bug_report, apk_path, model
         with open(log_path, "a", encoding="utf-8", errors="replace") as lf:
             lf.write(f"[run_rebl] INSTALL_FAILED: {e}\n")
         return finalize("install_failed")
+
+    # 2b. optional pre-setup shell (retests): runs after install, before the
+    # agent starts. Gets REBL_DEVICE_SERIAL / ANDROID_SERIAL=emulator-<port>.
+    pre_setup = os.environ.get("REBL_PRE_SETUP", "").strip()
+    if pre_setup:
+        penv = os.environ.copy()
+        penv["REBL_DEVICE_SERIAL"] = f"emulator-{device_port}"
+        penv["ANDROID_SERIAL"] = f"emulator-{device_port}"
+        print(f"{log_prefix} running REBL_PRE_SETUP ...")
+        try:
+            r = subprocess.run(pre_setup, shell=True, cwd=str(AUTOMATION_DIR),
+                               env=penv, capture_output=True, text=True, timeout=300)
+            with open(log_path, "a", encoding="utf-8", errors="replace") as lf:
+                lf.write(f"\n[run_rebl] PRE_SETUP rc={r.returncode}\n{r.stdout}\n{r.stderr}\n")
+        except Exception as e:
+            with open(log_path, "a", encoding="utf-8", errors="replace") as lf:
+                lf.write(f"\n[run_rebl] PRE_SETUP failed: {e}\n")
 
     # 3. child env: Vertex-ADC provider. The child only ever sees the
     # credentials FILE path -- never the raw GCP_SA_JSON secret.
@@ -230,7 +266,20 @@ def run_one_case(device_port, category, case_folder, bug_report, apk_path, model
         child_env.pop(f"LLM_API_KEY{i}", None)
     print(f"{log_prefix} ADC auth via {os.environ.get('GOOGLE_APPLICATION_CREDENTIALS')}; model={model}")
 
-    cmd = [sys.executable, "-u", "reproduction.py", str(device_port), str(bug_report)]
+    # Agent hint (retests): prepend extra instructions to the bug report the
+    # agent sees as its first prompt. Lets a retest correct a previous run's
+    # mistake (e.g. "the vault password you set is 1234 -- reuse it").
+    hint = os.environ.get("REBL_AGENT_HINT", "").strip()
+    report_arg = bug_report
+    if hint:
+        hinted = dev_work / "bug_report_hinted.txt"
+        hinted.write_text(
+            hint.rstrip() + "\n\n" + Path(bug_report).read_text(encoding="utf-8", errors="replace"),
+            encoding="utf-8")
+        report_arg = hinted
+        print(f"{log_prefix} agent hint injected ({len(hint)} chars)")
+
+    cmd = [sys.executable, "-u", "reproduction.py", str(device_port), str(report_arg)]
     print(f"{log_prefix} Log -> {log_path}")
     status = "completed"
     with open(log_path, "a", encoding="utf-8", errors="replace") as log_file:

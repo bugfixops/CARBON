@@ -72,6 +72,18 @@ on:
         description: "Emulator arch"
         required: false
         default: "x86_64"
+      apk_url:
+        description: "smoke retest: override APK URL (e.g. pre-fix version); empty = dataset APK"
+        required: false
+        default: ""
+      agent_hint:
+        description: "smoke retest: extra instructions prepended to the bug report prompt"
+        required: false
+        default: ""
+      pre_setup:
+        description: "smoke retest: shell snippet run after emulator boot (adb via $REBL_DEVICE_SERIAL)"
+        required: false
+        default: ""
 
 env:
   GEMINI_MODEL: ${{ inputs.model }}
@@ -152,6 +164,12 @@ jobs:
           sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/share/boost /usr/share/swift /opt/az 2>/dev/null || true
           docker system prune -af 2>/dev/null || true
           df -h /
+      - name: Download override APK (retest)
+        if: inputs.mode == 'smoke' && inputs.apk_url != ''
+        run: |
+          curl -sSL --fail "${{ inputs.apk_url }}" -o "$RUNNER_TEMP/override.apk"
+          ls -la "$RUNNER_TEMP/override.apk"
+          echo "REBL_APK_OVERRIDE=$RUNNER_TEMP/override.apk" >> "$GITHUB_ENV"
       - name: Run retest shard on emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -170,6 +188,8 @@ jobs:
           GEMINI_TIMEOUT_SECONDS: ${{ inputs.case_timeout_seconds }}
           GEMINI_MAX_SPEND_USD: ${{ inputs.max_spend_usd }}
           REBL_RERUN_ALL: ${{ inputs.rerun_all }}
+          REBL_AGENT_HINT: ${{ inputs.agent_hint }}
+          REBL_PRE_SETUP: ${{ inputs.pre_setup }}
 
       - name: Upload shard results
         if: always()
