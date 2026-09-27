@@ -35,23 +35,29 @@ harness actions like `rapid_click` and `tap_then_swipe`, API level adjustments).
 | vijai1996_screenrecorder_25 | F-Droid 1.8.1 APK |
 | mikepenz_FastAdapter_113 | Multiselect delete repro |
 
-## Remaining 7 (not passing)
+## Remaining 7 (not reproduced)
 
-| Case | Reason |
+**Not reproduced under the tested conditions; causes remain partly unresolved.**
+Failure to reproduce does not establish that a bug is fixed. See each case
+folder's `NOT_REPRODUCIBLE.md` for the full evidence and caveats.
+
+| Case | Status |
 |------|--------|
-| getodk_collect_360 | Skipped — requires Google OAuth (user directive) |
-| beemdevelopment_Aegis_287 | Confirmed no-repro — vault and language settings work correctly |
-| ankidroid_Anki-Android_5638 | Bug fixed in 2.9.1 (PR #5670 already merged) |
-| moezbhatti_qksms_1124 | Bug fixed in 3.1.3 (setting saves correctly) |
-| MarcusWolschon_osmeditor4android_637 | Does not reproduce in 0.9.10b1324 |
-| hidroh_materialistic_1067 | Race condition won't trigger reliably |
-| ankidroid_Anki-Android_6432 | Agent cannot complete complex multi-step setup |
+| getodk_collect_360 | Skipped — requires Google OAuth (environment blocker; original attempt ran and failed on this prerequisite) |
+| beemdevelopment_Aegis_287 | No-repro — v6 retest confirmed language persists correctly (see published v6 log) |
+| ankidroid_Anki-Android_5638 | Not reproduced — "Error saving note" needs investigation; the earlier "fixed in 2.9.1" claim was wrong (PR #5670 merged Dec 2019, after 2.9.1's Oct 2019 release) |
+| moezbhatti_qksms_1124 | Not reproduced — possible settings-path mismatch (agent tested system notification channels, not the app's in-app path; original fix credited in 3.2.2) |
+| MarcusWolschon_osmeditor4android_637 | Not reproduced — wave log was inconclusive (timeout + rate limits); v4 retest showed no crash but trigger may be device-specific |
+| hidroh_materialistic_1067 | Not reproduced — plausibly timing-sensitive; race window not hittable in emulator |
+| ankidroid_Anki-Android_6432 | Setup failure — agent could not complete the ~15-step card/note-type setup within time limits |
 
 ## APK Version Verification
 
-All "fixed" cases were verified to use the exact versions from the bug reports:
+APK versions were verified against the bug reports (extracted from
+AndroidManifest.xml):
 - anki_5638: 2.9.1 (matches report)
 - qksms_1124: 3.1.3 (matches report)
 - osmeditor_637: 0.9.10b1324 (matches report)
 
-The bugs are genuinely fixed in those builds, not version mismatches.
+Version parity holds, but non-reproduction in the tested build does not prove
+the bug is fixed — see per-case notes for the specific caveats.
