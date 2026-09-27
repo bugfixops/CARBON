@@ -106,6 +106,14 @@ def rapid_click(device, coor, count=10):
         device.click(coor[0], coor[1])
     return True
 
+def tap_then_swipe(device, tap_coor, swipe_start, swipe_end, swipe_steps=10):
+    """Tap coordinates, then IMMEDIATELY swipe with no LLM roundtrip between.
+    For race-condition bugs where the gap between two gestures must be
+    milliseconds (e.g. tap Save then swipe before the UI settles)."""
+    device.click(tap_coor[0], tap_coor[1])
+    device.swipe(swipe_start[0], swipe_start[1], swipe_end[0], swipe_end[1], swipe_steps)
+    return True
+
 def set_text(device, rep_attr, input_text, index):
     ui_object = locate_ui_object(device, rep_attr, 'set_text', index)
     if ui_object is None:
@@ -810,6 +818,11 @@ def handle_command(command, device, attribute_to_element_map, package_name):
         'rapid_click': lambda: rapid_click(device,
             command.get('coor') or [command.get('x'), command.get('y')],
             command.get('count', 10)),
+        'tap_then_swipe': lambda: tap_then_swipe(device,
+            command.get('tap_coor') or [command.get('tap_x'), command.get('tap_y')],
+            [command.get('swipe_start_x'), command.get('swipe_start_y')],
+            [command.get('swipe_end_x'), command.get('swipe_end_y')],
+            command.get('swipe_steps', 10)),
         'edge_swipe': lambda: edge_swipe(device, command.get('edge'), command.get('to_direction')),
         'pinch': lambda: pinch(device, command.get('pinch_type', 'out'), command.get('x'), command.get('y')),
         'two_finger_swipe': lambda: two_finger_swipe(device, command.get('to_direction', 'up'), command.get('x'), command.get('y')),
