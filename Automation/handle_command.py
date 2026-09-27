@@ -80,6 +80,12 @@ def change_status(device, element, command):
 def back(device):
     device.press('back')
 
+
+def menu(device):
+    # Legacy MENU key (KEYCODE_MENU) for pre-Honeycomb apps whose options
+    # menu has no on-screen affordance on modern devices.
+    device.press('menu')
+
 def click(device, coor):
     device.click(coor[0],coor[1])
     return True
@@ -766,6 +772,7 @@ def handle_command(command, device, attribute_to_element_map, package_name):
         'orientation': lambda: orientation(device, command),
         'rotate': lambda: orientation(device, command),
         'back': lambda: back(device),
+        'menu': lambda: menu(device),
         'swipe': lambda: swipe(device, command.get('to_direction', None)),
         'multiple_selection': lambda: multiple_selection(device, command['features'], attribute_to_element_map),
         'Navigate up': lambda: back(device),
