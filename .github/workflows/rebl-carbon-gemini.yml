@@ -84,6 +84,10 @@ on:
         description: "smoke retest: shell snippet run after emulator boot (adb via $REBL_DEVICE_SERIAL)"
         required: false
         default: ""
+      max_repeat:
+        description: "smoke retest: max consecutive repeated actions before loop-abort (default 3)"
+        required: false
+        default: "3"
 
 env:
   GEMINI_MODEL: ${{ inputs.model }}
@@ -190,6 +194,7 @@ jobs:
           REBL_RERUN_ALL: ${{ inputs.rerun_all }}
           REBL_AGENT_HINT: ${{ inputs.agent_hint }}
           REBL_PRE_SETUP: ${{ inputs.pre_setup }}
+          REBL_MAX_REPEAT: ${{ inputs.max_repeat }}
 
       - name: Upload shard results
         if: always()
