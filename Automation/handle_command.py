@@ -94,6 +94,18 @@ def long_click(device, coor):
     device.long_click(coor[0],coor[1], 1.5)
     return True
 
+def rapid_click(device, coor, count=10):
+    """Click the same coordinates rapidly N times for race-condition bugs
+    (e.g. fast multiple taps on a Play/Stop button)."""
+    try:
+        n = int(count)
+    except (TypeError, ValueError):
+        n = 10
+    n = max(1, min(n, 50))
+    for _ in range(n):
+        device.click(coor[0], coor[1])
+    return True
+
 def set_text(device, rep_attr, input_text, index):
     ui_object = locate_ui_object(device, rep_attr, 'set_text', index)
     if ui_object is None:
@@ -795,6 +807,9 @@ def handle_command(command, device, attribute_to_element_map, package_name):
         'media_gesture': lambda: media_gesture(device, command.get('gesture_type')),
         'double_tap_screen': lambda: double_tap_screen(device, command.get('x'), command.get('y')),
         'double_tap': lambda: double_tap_screen(device, command.get('x'), command.get('y')),
+        'rapid_click': lambda: rapid_click(device,
+            command.get('coor') or [command.get('x'), command.get('y')],
+            command.get('count', 10)),
         'edge_swipe': lambda: edge_swipe(device, command.get('edge'), command.get('to_direction')),
         'pinch': lambda: pinch(device, command.get('pinch_type', 'out'), command.get('x'), command.get('y')),
         'two_finger_swipe': lambda: two_finger_swipe(device, command.get('to_direction', 'up'), command.get('x'), command.get('y')),
