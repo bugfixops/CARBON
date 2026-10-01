@@ -98,7 +98,8 @@ The inputs were audited before the campaign ran. The record is kept here unmodif
   re-verification note and the version discrepancies it flags.
 - [`DATASET_PROVENANCE.md`](DATASET_PROVENANCE.md) — the dataset's own provenance document
   with the full 96-row index.
-- [`SHA256SUMS`](SHA256SUMS) — 530 recorded digests.
+- [`SHA256SUMS`](SHA256SUMS) — 530 recorded digests. **528 re-verify; 2 expected failures, see
+  below.**
 - [`verify_apk_signatures.py`](verify_apk_signatures.py) — APK signature verification;
   results in [`signature_report.json`](signature_report.json).
 - [`validate_rebl_dataset.py`](validate_rebl_dataset.py) — dataset validator; results in
@@ -108,6 +109,28 @@ The inputs were audited before the campaign ran. The record is kept here unmodif
 
 Note the audit's own caveat: matching APKs and reports establish provenance, **not** runtime
 reproduction.
+
+### Running the checksum verification — 2 failures are expected
+
+`shasum -a 256 -c SHA256SUMS` reports **2 failures**, on `DATASET_PROVENANCE.md` (recorded
+under its former name `README.md`) and on `VALIDATION.md`. **This is expected and
+pre-existing — the artifact is not corrupt.**
+
+- **528 of the 530 entries verify clean:** all 519 case files, and 9 of the 11 top-level
+  entries.
+- The 2 failures are the dataset's own **prose documents**, not data. Both were edited after
+  `SHA256SUMS` was generated: each carries a "Re-verified September 26, 2026" note added on
+  top of an audit dated 2026-09-20, so the recorded digests predate the text they cover.
+- The staleness is **inherited, not introduced by the restructure.** Extracting the source
+  branch's own `SHA256SUMS` together with its own copies of those two files and running
+  `shasum -c` there fails the same 2 entries, and both files' git blob hashes are unchanged
+  before and after the move.
+- `SHA256SUMS` was deliberately **not** rewritten. It is the audited record; correcting it
+  here would replace evidence with a reconstruction.
+
+Note also that the recorded paths are relative to the pre-merge flat layout, so entries must
+be resolved through the `crash/`, `non_crash/` and `untested/` prefixes — see "Layout changes
+made during the merge" below for the one-liner that does this.
 
 ## How this set was merged
 
@@ -161,8 +184,9 @@ Before the merge, inputs sat flat at `Dataset/rebl-dataset/<case>/` and outputs 
 `non_crash` to match `ReBL_Failed_Dataset`). `SHA256SUMS`, `manifest.json`,
 `signature_report.json`, `validation_report.json` and `fetch_report.json` are carried over
 **byte-identical**, so their recorded paths are relative to the old flat layout. Rewriting them
-would have destroyed the audited record, so they were left alone. All 530 digests still verify
-by resolving each entry through the three prefixes:
+would have destroyed the audited record, so they were left alone. **528 of the 530 recorded
+digests re-verify** by resolving each entry through the three prefixes — every one of the 519
+case files, plus 9 of the 11 top-level entries:
 
 ```bash
 cd Dataset/ReBL_Full_Dataset
@@ -175,8 +199,17 @@ while IFS= read -r line; do
 done < SHA256SUMS | shasum -a 256 -c
 ```
 
-Because of this shift, `validate_rebl_dataset.py` and `test_dataset_validation.py` assume the
-old flat layout and will **not** pass unmodified against this tree. They are kept as the
+The 2 entries that do **not** match are `DATASET_PROVENANCE.md` (recorded as `README.md`) and
+`VALIDATION.md`. That is a pre-existing discrepancy in the dataset's own audit record, not
+something the move introduced: both documents were edited after `SHA256SUMS` was generated —
+each carries a "Re-verified September 26, 2026" note added on top of a 2026-09-20 audit — so
+their recorded digests were already stale. Verified by extracting the source branch's own
+`SHA256SUMS` and its own copies of those two files and running `shasum -c` there: the same 2
+entries fail, and both files' git blob hashes are identical before and after the move. See
+"Running the checksum verification" above.
+
+Because of this path shift, `validate_rebl_dataset.py` and `test_dataset_validation.py` assume
+the old flat layout and will **not** pass unmodified against this tree. They are kept as the
 record of what was run at audit time.
 
 **2. The checksummed `README.md` is now `DATASET_PROVENANCE.md`.** The dataset's original
