@@ -19,7 +19,7 @@ self-report.
 ```
 Automation/      CARBON tool: capture, multi-modal encoding, action executor, dual oracle
 Dataset/         One folder per testing campaign (see "Dataset" below):
-  gesture-category-testing/  100-bug gesture-diverse benchmark, 8 gesture categories
+  category-testing-gemini-2.5-pro/  100-bug gesture-diverse benchmark, 8 gesture categories
   ReBL_Failed_Dataset/       9-bug ReBL documented-failure set (the paper's cited artifact)
   ReBL_Full_Dataset/         95-bug ReBL-dataset campaign, CARBON on Gemini 2.5 Pro
   CARBON_GPT4o_Dataset/      the same 100-bug benchmark run with GPT-4o (logs only)
@@ -67,8 +67,8 @@ named `Pixel_4` (override with `AVD_NAME`).
 
 ```bash
 # Install the bug's APK once, then reproduce it
-adb install -r -t "Dataset/gesture-category-testing/double_tap/FossifyOrg_Gallery_847 Tested/gallery-24-foss-release.apk"
-./run.sh "Dataset/gesture-category-testing/double_tap/FossifyOrg_Gallery_847 Tested/bug_report.txt"
+adb install -r -t "Dataset/category-testing-gemini-2.5-pro/double_tap/FossifyOrg_Gallery_847 Tested/gallery-24-foss-release.apk"
+./run.sh "Dataset/category-testing-gemini-2.5-pro/double_tap/FossifyOrg_Gallery_847 Tested/bug_report.txt"
 
 # With no argument, a sample bug is used
 ./run.sh
@@ -99,7 +99,7 @@ use `gemini-2.5-pro`.
 
 `Dataset/` holds one folder per testing campaign.
 
-**`gesture-category-testing/`** — the 100-bug gesture-diverse benchmark across eight
+**`category-testing-gemini-2.5-pro/`** — the 100-bug gesture-diverse benchmark across eight
 gesture categories. Each bug folder includes the verbatim `bug_report.txt`, per-tool
 execution logs (CARBON, ReBL, AdbGPT, ReActDroid), the three ablation logs under
 `abalation-tests/`, and an `Annotation/` example. This is the set the headline results
@@ -116,9 +116,9 @@ unifies the case's inputs (report, APK, metadata) with its run log. The 9 bugs i
 [Dataset/ReBL_Full_Dataset/README.md](Dataset/ReBL_Full_Dataset/README.md).
 
 **`CARBON_GPT4o_Dataset/`** — CARBON's GPT-4o run over the same 100-bug benchmark, grouped
-as a set. Logs only; each file also lives beside its bug in `gesture-category-testing/`. See
+as a set. Logs only; each file also lives beside its bug in `category-testing-gemini-2.5-pro/`. See
 [Dataset/CARBON_GPT4o_Dataset/README.md](Dataset/CARBON_GPT4o_Dataset/README.md) and the
-comparison in [CARBON_gemini-2.5-pro_vs_gpt-4o.md](CARBON_gemini-2.5-pro_vs_gpt-4o.md).
+comparison in [CARBON_gemini-2.5-pro_vs_gpt-4o.md](Dataset/CARBON_gemini-2.5-pro_vs_gpt-4o.md).
 
 > **APKs — the two campaigns differ.** The 95 ReBL-dataset case APKs ship **in this
 > repository**, under `Dataset/ReBL_Full_Dataset/`. The 100 gesture-benchmark APKs do
@@ -179,9 +179,9 @@ A few representative bugs (✅ reproduced · ❌ not reproduced):
 
 | Bug ID | App | CARBON | ReBL | ReActDroid | AdbGPT | Summary |
 |--------|-----|--------|------|------------|--------|---------|
-| [FossifyOrg_Gallery_847](Dataset/gesture-category-testing/double_tap/FossifyOrg_Gallery_847%20Tested) | FossifyOrg/Gallery | ✅ | ❌ | ❌ | ✅ | Invalid "fill screen" zoom for GIF images on double-tap |
-| [FossifyOrg_Paint_25](Dataset/gesture-category-testing/pinch_zoom/FossifyOrg_Paint_25%20Tested) | FossifyOrg/Paint | ✅ | ❌ | ❌ | ✅ | Eraser size not relative to zoom at minimum brush size (pinch) |
-| [MetrolistGroup_Metrolist_3227](Dataset/gesture-category-testing/drag_and_drop/MetrolistGroup_Metrolist_3227%20Tested) | MetrolistGroup/Metrolist | ✅ | ❌ | ❌ | ❌ | Drag-to-reorder corrupts playlist order |
+| [FossifyOrg_Gallery_847](Dataset/category-testing-gemini-2.5-pro/double_tap/FossifyOrg_Gallery_847%20Tested) | FossifyOrg/Gallery | ✅ | ❌ | ❌ | ✅ | Invalid "fill screen" zoom for GIF images on double-tap |
+| [FossifyOrg_Paint_25](Dataset/category-testing-gemini-2.5-pro/pinch_zoom/FossifyOrg_Paint_25%20Tested) | FossifyOrg/Paint | ✅ | ❌ | ❌ | ✅ | Eraser size not relative to zoom at minimum brush size (pinch) |
+| [MetrolistGroup_Metrolist_3227](Dataset/category-testing-gemini-2.5-pro/drag_and_drop/MetrolistGroup_Metrolist_3227%20Tested) | MetrolistGroup/Metrolist | ✅ | ❌ | ❌ | ❌ | Drag-to-reorder corrupts playlist order |
 | [alexstyl_Memento-Calendar_169](Dataset/ReBL_Failed_Dataset/crash/alexstyl_Memento-Calendar_169) | alexstyl/Memento-Calendar | ✅ | ❌ | — | — | Custom-view date picker crash (ReBL failure set) |
 
 **-> See the full per-bug breakdown for all 100 + 9 bugs in [RESULTS.md](RESULTS.md)**, including

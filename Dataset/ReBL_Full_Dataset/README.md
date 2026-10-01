@@ -15,7 +15,7 @@ The complete ReBL-dataset campaign: **95 Android bug reports executed by CARBON 
 Full per-case breakdown: [`RETEST_SUMMARY.md`](RETEST_SUMMARY.md).
 
 This is a **different dataset and a separate campaign** from the 100-bug gesture-diverse
-benchmark in [`../gesture-category-testing/`](../gesture-category-testing/). The two
+benchmark in [`../category-testing-gemini-2.5-pro/`](../category-testing-gemini-2.5-pro/). The two
 numbers are not comparable and must not be conflated.
 
 ## The 90/95 result

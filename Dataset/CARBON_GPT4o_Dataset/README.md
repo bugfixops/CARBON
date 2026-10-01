@@ -23,7 +23,7 @@ The bug folder names are preserved exactly as they appear in the benchmark, incl
 nine trailing-` F` variants such as `FossifyOrg_Clock_156 Tested F`. Do not normalise them.
 
 These files are **copies**. Each one also lives beside its bug in
-[`../gesture-category-testing/`](../gesture-category-testing/), next to that bug's
+[`../category-testing-gemini-2.5-pro/`](../category-testing-gemini-2.5-pro/), next to that bug's
 `bug_report.txt`, the Gemini 2.5 Pro log (`carbon_log.txt`), and the baseline-tool logs. Go
 there for a bug's full context; come here to read the GPT-4o campaign as a set.
 
