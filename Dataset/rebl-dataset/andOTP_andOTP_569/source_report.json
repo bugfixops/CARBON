@@ -1,0 +1,36 @@
+{
+  "source": "github-api",
+  "issue_url": "https://github.com/andOTP/andOTP/issues/569",
+  "canonical_url": "https://github.com/andOTP/andOTP/issues/569",
+  "issue_number": 569,
+  "issue_id": 627270553,
+  "title": "Crash when entering too large of a number in manual entry dialog",
+  "body": "#### General information\r\n\r\n* **App version:** 0.70 and 0.7.1.1-dev\r\n* **App source:** F-Droid and GitHub master\r\n* **Android Version:** 10 (Samsung S9 and x86 emulator)\r\n\r\n#### Steps to reproduce\r\n\r\n**TOTP Crash**\r\n1. Open app to the main list of 2FA codes.\r\n1. Tap the add FAB and select \"Enter details\".\r\n1. Select TOTP for the Type field.\r\n1. Enter something into the Label and Secret fields.\r\n1. Open the Advanced Options overflow, and enter a number larger than `Integer.MAX_VALUE` into either the Period or Digits fields.\r\n\r\n**HOTP Crash**\r\n1. Open app to the main list of 2FA codes.\r\n1. Tap the add FAB and select \"Enter details\".\r\n1. Select HOTP for the Type field.\r\n1. Enter something into the Label and Secret fields.\r\n1. Enter a number larger than `Long.MAX_VALUE` into the Counter field.\r\n1. Tap the Save button.\r\n\r\n#### Expected result\r\n\r\n**What is expected?** \r\nIn the manual details entry dialog, entering a number in the Period or Digits fields larger than `Integer.MAX_VALUE` or entering a number in the Counter field larger than `Long.MAX_VALUE` should disable the Save button.\r\n\r\n**What does happen instead?**\r\nThe application crashes. This would probably never occur during normal usage, but it's an easy fix so I'll put a PR up.\r\n\r\n#### Logcat\r\nTOTP Period/Digits crash:\r\n```\r\n2020-05-29 09:04:34.505 7852-7852/org.shadowice.flocke.andotp.dev E/AndroidRuntime: FATAL EXCEPTION: main\r\n    Process: org.shadowice.flocke.andotp.dev, PID: 7852\r\n    java.lang.NumberFormatException: For input string: \"3000000000\"\r\n        at java.lang.Integer.parseInt(Integer.java:618)\r\n        at java.lang.Integer.parseInt(Integer.java:650)\r\n        at org.shadowice.flocke.andotp.Dialogs.ManualEntryDialog$8.afterTextChanged(ManualEntryDialog.java:293)\r\n        at android.widget.TextView.sendAfterTextChanged(TextView.java:10551)\r\n        at android.widget.TextView$ChangeWatcher.afterTextChanged(TextView.java:13388)\r\n        at android.text.SpannableStringBuilder.sendAfterTextChanged(SpannableStringBuilder.java:1277)\r\n        at android.text.SpannableStringBuilder.replace(SpannableStringBuilder.java:577)\r\n        at android.text.SpannableStringBuilder.replace(SpannableStringBuilder.java:507)\r\n        at android.text.SpannableStringBuilder.replace(SpannableStringBuilder.java:37)\r\n        at android.text.method.NumberKeyListener.onKeyDown(NumberKeyListener.java:131)\r\n```\r\n\r\nHOTP Counter crash:\r\n```\r\n2020-05-29 09:10:59.885 8118-8118/org.shadowice.flocke.andotp.dev E/AndroidRuntime: FATAL EXCEPTION: main\r\n    Process: org.shadowice.flocke.andotp.dev, PID: 8118\r\n    java.lang.NumberFormatException: For input string: \"1000000000000000000000\"\r\n        at java.lang.Long.parseLong(Long.java:597)\r\n        at java.lang.Long.parseLong(Long.java:636)\r\n        at org.shadowice.flocke.andotp.Dialogs.ManualEntryDialog$7.onClick(ManualEntryDialog.java:245)\r\n        at android.view.View.performClick(View.java:7125)\r\n```\r\n",
+  "declared_comments": 3,
+  "comments": [
+    {
+      "id": 636135294,
+      "url": "https://github.com/andOTP/andOTP/issues/569#issuecomment-636135294",
+      "body": "Did a quick search and noticed a similar issue in the EntriesCardAdapter when setting a new counter value (crashes if saving empty or a large value) so I'll add a fix for that to the PR as well.",
+      "created_at": "2020-05-29T19:00:22Z",
+      "updated_at": "2020-05-29T19:00:22Z"
+    },
+    {
+      "id": 636136363,
+      "url": "https://github.com/andOTP/andOTP/issues/569#issuecomment-636136363",
+      "body": "Thank you for fixing it directly. It's kind of an edge case, but it's always good to know that it's fixed.",
+      "created_at": "2020-05-29T19:02:55Z",
+      "updated_at": "2020-05-29T19:02:55Z"
+    },
+    {
+      "id": 636141415,
+      "url": "https://github.com/andOTP/andOTP/issues/569#issuecomment-636141415",
+      "body": "No problem. Definitely a strange edge case, just noticed it while looking through the code and thought I'd push a fix. I love the app so I'm happy to contribute whatever I can.",
+      "created_at": "2020-05-29T19:15:18Z",
+      "updated_at": "2020-05-29T19:15:18Z"
+    }
+  ],
+  "updated_at": "2020-06-05T05:11:47Z",
+  "retrieved_on": "2026-09-20",
+  "is_pull_request": false
+}

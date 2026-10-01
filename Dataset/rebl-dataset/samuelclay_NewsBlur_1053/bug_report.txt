@@ -1,0 +1,58 @@
+Bug Report Title:
+IllegalArgumentException: unexpected url
+Bug Report Issue:
+```
+// CRASH: com.newsblur (pid 31388) (elapsed nanos: 4054557181116)
+// Short Msg: java.lang.IllegalArgumentException
+// Long Msg: java.lang.IllegalArgumentException: unexpected url: x214w22k71g60836m2mfwk0x2cec
+ogin
+// Build Label: google/hammerhead/hammerhead:6.0.1/M4B30Z/3437181:user/release-keys
+// Build Changelist: 3437181
+// Build Time: 1478203422000
+// java.lang.RuntimeException: An error occurred while executing doInBackground()
+// 	at android.os.AsyncTask$3.done(AsyncTask.java:309)
+// 	at java.util.concurrent.FutureTask.finishCompletion(FutureTask.java:354)
+// 	at java.util.concurrent.FutureTask.setException(FutureTask.java:223)
+// 	at java.util.concurrent.FutureTask.run(FutureTask.java:242)
+// 	at android.os.AsyncTask$SerialExecutor$1.run(AsyncTask.java:234)
+// 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1113)
+// 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:588)
+// 	at java.lang.Thread.run(Thread.java:818)
+// Caused by: java.lang.IllegalArgumentException: unexpected url: x214w22k71g60836m2mfwk0x2cec
+// /api/login
+// 	at okhttp3.Request$Builder.url(Request.java:143)
+// 	at com.newsblur.network.APIManager.post_single(APIManager.java:721)
+// 	at com.newsblur.network.APIManager.post(APIManager.java:698)
+// 	at com.newsblur.network.APIManager.post(APIManager.java:733)
+// 	at com.newsblur.network.APIManager.login(APIManager.java:104)
+// 	at com.newsblur.fragment.LoginProgressFragment$LoginTask.doInBackground(LoginProgressFragment.java:83)
+// 	at com.newsblur.fragment.LoginProgressFragment$LoginTask.doInBackground(LoginProgressFragment.java:74)
+// 	at android.os.AsyncTask$2.call(AsyncTask.java:295)
+// 	at java.util.concurrent.FutureTask.run(FutureTask.java:237)
+// 	... 4 more
+// 
+
+```
+Comments:
+Comment#1:
+Can you provide any info about what was happening here?  It looks like you were trying to use a custom server?
+---
+Comment#2:
+Thank you for your response. I found this problem during evaluating my automated testing tool.
+
+It happens when the custom address is invalid.
+
+Reproduce:
+
+1. Install v6.1.0 from F-Droid and launch the app.
+2. Click I have a custom server, and input an invalid server address, e.g., xx
+3. Type a username, e.g., t
+4. Type a password, e.g., t
+5. Click register or login.
+
+Expected:
+Provide a feedback indicating that the address is invalid.
+---
+Comment#3:
+In this case, the server you entered "x214w22k71g60836m2mfwk0x2cec" is not a valid URL base.  We can only support custom servers that use schemes and authority sections considered valid by our HTTP library.  I would suggest testing your custom server via HTTPS, since that is what we use during integration testing.
+---

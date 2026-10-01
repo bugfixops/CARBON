@@ -55,7 +55,14 @@ except ImportError:
 
 # ─── Configuration 
 
-SCREENSHOT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'screenshots')
+# Per-run screenshot directory. When running multiple devices in parallel, each
+# worker sets REBL_SCREENSHOT_DIR to a unique folder so concurrent runs (and
+# clean_screenshots) don't delete each other's images. Falls back to the shared
+# 'screenshots' folder (original behaviour) for single-device runs.
+SCREENSHOT_DIR = os.environ.get(
+    'REBL_SCREENSHOT_DIR',
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), 'screenshots'),
+)
 
 # Maximum image dimension for Gemini API (keeps detail while controlling tokens)
 MAX_IMAGE_SIZE = 1280

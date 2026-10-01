@@ -1,0 +1,183 @@
+{
+  "source": "github-api",
+  "issue_url": "https://github.com/getodk/collect/issues/2086",
+  "canonical_url": "https://github.com/getodk/collect/issues/2086",
+  "issue_number": 2086,
+  "issue_id": 310151914,
+  "title": "Import/Export settings can crash app with certain invalid QR codes",
+  "body": "#### Software and hardware versions \r\n[Collect v1.14.0-beta.1](https://github.com/opendatakit/collect/releases/tag/v1.14.0-beta.1), Android v6.0.1, [Samsung A5](http://www.samsung.com/ph/smartphones/galaxy-a5-2016-a510/SM-A510YZKDXTC/)\r\n\r\n#### Import/Export settings is broken\r\nFirst thing I noticed is that the QR code wasn't previewed.\r\n![screenshot_20180331-031538](https://user-images.githubusercontent.com/5888376/38150821-64b08874-3493-11e8-8bf2-79aafd3bfda7.png)\r\n\r\nThen for few minutes it then shows a popup message saying \"**ODK Collect has stopped.**\"\r\n\r\n#### Steps to reproduce the problem\r\n\r\n1. Fresh install [**Collect v1.14.0-beta.1**](https://github.com/opendatakit/collect/releases/tag/v1.14.0-beta.1)\r\n2. Go to **Admin settings** › **Import/Export settings**\r\n3. Wait for it... (later, ODK Collect will break itself)\r\n",
+  "declared_comments": 24,
+  "comments": [
+    {
+      "id": 377608226,
+      "url": "https://github.com/getodk/collect/issues/2086#issuecomment-377608226",
+      "body": "I'm pretty sure it's the same issue https://github.com/opendatakit/collect/pull/2071\r\nso it has been fixed.",
+      "created_at": "2018-03-30T19:54:43Z",
+      "updated_at": "2018-03-30T19:54:43Z"
+    },
+    {
+      "id": 377617129,
+      "url": "https://github.com/getodk/collect/issues/2086#issuecomment-377617129",
+      "body": "@grzesiek2010 thank you for that valuable information. I'll try to install to check the version with the [commit #6f94565](https://github.com/opendatakit/collect/commit/6f945658071244a674558091718c000a8980a9eb) included in the code base.\r\n\r\nI'll verify later if it really fixed the issue. Thanks again",
+      "created_at": "2018-03-30T20:36:17Z",
+      "updated_at": "2018-03-30T20:37:01Z"
+    },
+    {
+      "id": 377629961,
+      "url": "https://github.com/getodk/collect/issues/2086#issuecomment-377629961",
+      "body": "## Status update\r\n\r\nQR code is now showing, but **SCAN CODE FROM OTHER DEVICE** module have issues.\r\n\r\n### Description\r\n\r\n[Commit #6f94565](https://github.com/opendatakit/collect/commit/6f945658071244a674558091718c000a8980a9eb) did fix the issue and now shows the QR code. However, importing of settings from a QR code have issues. When I tried to **SCAN CODE FROM OTHER DEVICE**, the QR scanner fires up and able to scan a QR code. But then... it seems it can not successfully replicate the settings from the QR code and says \"**ODK Collect has stopped.**\" immediately after scanning.\r\n\r\n### Steps to reproduce the new problem\r\n\r\n1. Download a copy of the **master branch** ~ *where [commit #6f94565](https://github.com/opendatakit/collect/commit/6f945658071244a674558091718c000a8980a9eb) is part of the code base*\r\n2. Open the source-code using **Android Studio**\r\n3. Select `release` for the **Build Variant**\r\n4. **Rebuild Project**\r\n5. **Build APK(s)**\r\n6. Install the APK to the device\r\n7. Open **ODK Collect**\r\n8. Go to **Admin settings** › **Import/Export settings**\r\n9. Click **SCAN CODE FROM OTHER DEVICE** button\r\n10. Scan the *QR code*\r\n11. Wait for it... (ODK Collect breaks itself after trying to replicate the contents of the QR code)\r\n",
+      "created_at": "2018-03-30T21:42:47Z",
+      "updated_at": "2018-03-30T21:44:13Z"
+    },
+    {
+      "id": 377979132,
+      "url": "https://github.com/getodk/collect/issues/2086#issuecomment-377979132",
+      "body": "@abelcallejo Thanks so much for trying out the beta and reporting that first issue! I'm glad the fix has worked for you. 😊\r\n\r\nI'm not currently able to reproduce the issue you're seeing with the two devices I've tried. Do you have ADB installed by any chance? Could you run `adb logcat` from your command line and provide any crash logs you see there? Any other info you can provide about the devices you're using, Android version, etc would be very helpful.",
+      "created_at": "2018-04-02T17:01:49Z",
+      "updated_at": "2018-04-02T17:01:49Z"
+    },
+    {
+      "id": 378100128,
+      "url": "https://github.com/getodk/collect/issues/2086#issuecomment-378100128",
+      "body": "Hi @lognaturel _\\\\ LN \\\\_ , thank you for taking the time to respond on this.\r\n\r\nYesterday, I figured out that the bug turned out to be a fault on my end and not directly about ODK Collect. I'm really sorry about that.\r\n\r\nI was trying to generate custom QR code for the ODK Collect settings by using PHP and some PHP-QR-code libraries. As it turns out, there was a slight malformation in the context of my settings which then turned out to have a malformed QR code.\r\n\r\nThe malformed QR code then creates a bug where it will show \"**ODK Collect has stopped.**\" all the time. Leaving the ODK Collect unusable starting from when the bug got triggered.\r\n\r\n#### Summary\r\n\r\n1. **SCAN CODE FROM OTHER DEVICE** is working fine as long as the contents of the scanned QR code is well-formed.\r\n2. **SCAN CODE FROM OTHER DEVICE** compromises (and even disables) ODK Collect when a user tries to scan a non-odk-collect settings QR code.",
+      "created_at": "2018-04-03T01:36:31Z",
+      "updated_at": "2018-04-03T01:39:24Z"
+    },
+    {
+      "id": 378105779,
+      "url": "https://github.com/getodk/collect/issues/2086#issuecomment-378105779",
+      "body": "Thanks for that clarification, @abelcallejo, and very cool to hear you're using the QR code feature in this way!\r\n\r\nI've modified the issue title to better reflect what's going wrong. Could you please attach an example QR code that causes this crash?",
+      "created_at": "2018-04-03T02:13:58Z",
+      "updated_at": "2018-04-03T02:13:58Z"
+    },
+    {
+      "id": 378109793,
+      "url": "https://github.com/getodk/collect/issues/2086#issuecomment-378109793",
+      "body": "@lognaturel yeap, we are registering users to ODK Aggregate programmatically then generate them these QR codes for their respective settings.\r\n\r\nAnyways, attached is a malformed QR code.\r\n![buggyqr](https://user-images.githubusercontent.com/5888376/38226242-1e100800-372b-11e8-852e-acace2c33f5a.png)\r\n\r\nCheers",
+      "created_at": "2018-04-03T02:39:08Z",
+      "updated_at": "2018-04-03T02:39:08Z"
+    },
+    {
+      "id": 378118652,
+      "url": "https://github.com/getodk/collect/issues/2086#issuecomment-378118652",
+      "body": "Thank you! The settings are loaded fine but then there's a crash when they're actually used which means Collect can then never be launched! Looks like the type of the password ends up wrong:\r\n```\r\nCaused by: java.lang.ClassCastException: java.lang.Boolean cannot be cast to java.lang.String\r\n\tat android.app.SharedPreferencesImpl.getString(SharedPreferencesImpl.java:223)\r\n\tat org.odk.collect.android.preferences.GeneralSharedPreferences.get(GeneralSharedPreferences.java:56)\r\n\tat org.odk.collect.android.utilities.AuthDialogUtility.getPasswordFromPreferences(AuthDialogUtility.java:127)\r\n\tat org.odk.collect.android.utilities.AuthDialogUtility.setWebCredentialsFromPreferences(AuthDialogUtility.java:103)\r\n\tat org.odk.collect.android.application.Collect.onCreate(Collect.java:281)\r\n\tat android.app.Instrumentation.callApplicationOnCreate(Instrumentation.java:1035)\r\n\tat android.app.ActivityThread.handleBindApplication(ActivityThread.java:6034)\r\n```\r\n\r\nWould certainly be good to be more resilient against things like that.",
+      "created_at": "2018-04-03T03:39:23Z",
+      "updated_at": "2018-04-03T03:39:23Z"
+    },
+    {
+      "id": 378121892,
+      "url": "https://github.com/getodk/collect/issues/2086#issuecomment-378121892",
+      "body": "Did you compress the JSON data before converting it into the QRCode?\r\nOn the collect side, we compress the data before converting it into a QRCode",
+      "created_at": "2018-04-03T04:06:00Z",
+      "updated_at": "2018-04-03T04:06:00Z"
+    },
+    {
+      "id": 378127689,
+      "url": "https://github.com/getodk/collect/issues/2086#issuecomment-378127689",
+      "body": "It looks compressed to me. @abelcallejo I think you eventually got it working, right? Did you use the documentation at https://docs.opendatakit.org/collect-import-export/#making-your-own-qr-code/?",
+      "created_at": "2018-04-03T04:51:57Z",
+      "updated_at": "2018-04-03T04:51:57Z"
+    },
+    {
+      "id": 378133104,
+      "url": "https://github.com/getodk/collect/issues/2086#issuecomment-378133104",
+      "body": "As for my end, I was able to make the QR code working. The way I made it work is by compressing the JSON, then the compressed string was encoded in base64.\r\n\r\nThe QR code content can get messy sometimes when headers were already sent and/or error/warning messages comes in as part of the string.\r\n\r\nIn my case, warning messages rode on to the context, thus giving a malformed QR code. But yeah, we were able to make it work.",
+      "created_at": "2018-04-03T05:31:28Z",
+      "updated_at": "2018-04-03T05:31:28Z"
+    },
+    {
+      "id": 379836466,
+      "url": "https://github.com/getodk/collect/issues/2086#issuecomment-379836466",
+      "body": "I think the thing to do here is to do some basic checks on types for the settings.",
+      "created_at": "2018-04-09T17:48:45Z",
+      "updated_at": "2018-04-09T17:50:16Z"
+    },
+    {
+      "id": 380550299,
+      "url": "https://github.com/getodk/collect/issues/2086#issuecomment-380550299",
+      "body": "@opendatakit-bot claim",
+      "created_at": "2018-04-11T18:26:05Z",
+      "updated_at": "2018-04-11T18:26:05Z"
+    },
+    {
+      "id": 382937874,
+      "url": "https://github.com/getodk/collect/issues/2086#issuecomment-382937874",
+      "body": "Hello @brunoguic, you have been unassigned from this issue because you have not updated this issue or any referenced pull requests for over 10 days.\n\nYou can reclaim this issue or claim any other issue by commenting `@opendatakit-bot claim` on that issue.\n\nThanks for your contributions, and hope to see you again soon!",
+      "created_at": "2018-04-20T01:42:30Z",
+      "updated_at": "2018-04-23T07:22:14Z"
+    },
+    {
+      "id": 430075463,
+      "url": "https://github.com/getodk/collect/issues/2086#issuecomment-430075463",
+      "body": "I tried on latest master and the app doesn't crash with the malformed QR code until visiting **General Settings > Server**. It's still possible to recover by visiting **Admin Settings > Import/Export** and load a different non-malformed QR code.\r\n\r\nThe imported settings are saved in [ShowQRCodeFragment here](https://github.com/opendatakit/collect/blob/master@{2018-10-14}/collect_app/src/main/java/org/odk/collect/android/fragments/ShowQRCodeFragment.java#L259). They're later loaded in [ServerPreferencesFragment here](https://github.com/opendatakit/collect/blob/master@{2018-10-14}/collect_app/src/main/java/org/odk/collect/android/preferences/ServerPreferencesFragment.java#L107). At no point does the Android library code seem to allow us to type-check this data, it's all automatic.\r\n\r\nWe could manually type-check ([example](https://stackoverflow.com/a/29616117/763231)) which seems hacky, or we could simply try/catch `addPreferencesFromResource` and refuse to show **General Settings > Server** if the preferences can't be loaded.\r\n\r\nProposed workaround:\r\n\r\n1. try/catch `addPreferencesFromResource`\r\n2. Go back and show a Toast if it fails\r\n\r\nWill this suffice?",
+      "created_at": "2018-10-16T02:07:29Z",
+      "updated_at": "2018-10-16T02:09:06Z"
+    },
+    {
+      "id": 432659319,
+      "url": "https://github.com/getodk/collect/issues/2086#issuecomment-432659319",
+      "body": "@opendatakit-bot claim",
+      "created_at": "2018-10-24T13:38:05Z",
+      "updated_at": "2018-10-24T13:38:05Z"
+    },
+    {
+      "id": 432659326,
+      "url": "https://github.com/getodk/collect/issues/2086#issuecomment-432659326",
+      "body": "Welcome to Open Data Kit, @seadowg! We just sent you an invite to collaborate on this repository at https://github.com/opendatakit/collect/invitations. Please accept this invite in order to claim this issue and begin a fun and rewarding experience contributing to Open Data Kit!\n\nHere are some tips to get you off to a good start:\n* Please read the README.md and CONTRIBUTING.md in this repo. Those two documents have much of what you need to get started. \n* Join the [ODK developer Slack](http://slack.opendatakit.org/) to get help, chat about this issue, and meet the other developers.\n* Sign up and introduce yourself on the [ODK community forum](https://forum.opendatakit.org/) to meet the broader ODK community.\n\nSee you on the other side (that is, the pull request side)!",
+      "created_at": "2018-10-24T13:38:06Z",
+      "updated_at": "2018-10-24T13:38:06Z"
+    },
+    {
+      "id": 432660368,
+      "url": "https://github.com/getodk/collect/issues/2086#issuecomment-432660368",
+      "body": "@cooperka that makes sense to me. Would it also be good to clear the imported settings as well so the app is back in a working state? \r\n\r\nWe could offer the user an option to clear that but that feels like it might be another story/issue 😀",
+      "created_at": "2018-10-24T13:40:36Z",
+      "updated_at": "2018-10-24T13:40:49Z"
+    },
+    {
+      "id": 432678899,
+      "url": "https://github.com/getodk/collect/issues/2086#issuecomment-432678899",
+      "body": "OK I've debugged through this and had a think about it (and a wee chat with a designer) it feels to me like 2 changes makes sense:\r\n\r\n- [ ] Validate at least the types upfront when you import from QR. It'll be interesting to see how much we can base the validation on the xml preferences validation. This feels like the best way to prevent someone from getting in broken state.\r\n- [x] Show a toast with a prompt to reimport if \"corrupt\" settings are loaded on the **Server**. This will account for anyone currently in a broken state and account for the fact that validation might not cover every case.\r\n\r\nInteresting to hear thoughts!",
+      "created_at": "2018-10-24T14:24:08Z",
+      "updated_at": "2018-10-24T22:15:30Z"
+    },
+    {
+      "id": 432823766,
+      "url": "https://github.com/getodk/collect/issues/2086#issuecomment-432823766",
+      "body": "The first point is sounding great to me! I think there is some good cleanup to do around the way values of different types are interpreted though I haven't looked at that code recently.\r\n\r\nI'm not exactly sure I follow the second -- do you mean the blank screen would be shown as the backdrop to the toast and then it would go back to the import/export screen or something else?",
+      "created_at": "2018-10-24T20:52:27Z",
+      "updated_at": "2018-10-24T20:52:51Z"
+    },
+    {
+      "id": 432827300,
+      "url": "https://github.com/getodk/collect/issues/2086#issuecomment-432827300",
+      "body": "Sorry that description is a little confusing! I meant that it would show an error to the user when the user visits **General Settings > Server** and the preferences are \"corrupt\" (there is an exception when calling `addPreferencesFromResource`). \r\n\r\nAfter actually playing around with it (in 6827bbb) it seems that the absolute simplest fix (for if the user us already in the broken state not for preventing them getting there) is showing Toast and then just letting the **Server** settings Fragment load with default values. The user is then in a state where they can change the Server preferences or reimport to fix the problem. ",
+      "created_at": "2018-10-24T21:03:14Z",
+      "updated_at": "2018-10-24T22:06:45Z"
+    },
+    {
+      "id": 432832405,
+      "url": "https://github.com/getodk/collect/issues/2086#issuecomment-432832405",
+      "body": "I am in the favor of failing early as it is important to let the user know that the problem is in the imported settings and hence the QR Code. So it needs to be fixed before it is used by other enumerators.",
+      "created_at": "2018-10-24T21:20:41Z",
+      "updated_at": "2018-10-24T21:20:41Z"
+    },
+    {
+      "id": 432899907,
+      "url": "https://github.com/getodk/collect/issues/2086#issuecomment-432899907",
+      "body": "I agree with @shobhitagarwal1612 that failing early is the ideal. It should be clear to the user right away that their setting import did not work.\r\n\r\nI would tend not to do anything special for the case where the preferences have already become corrupt because that will go away and I doubt many people will have gotten there since it would imply they were writing their own QR codes instead of going from one Collect install to another. But if others think it's important to handle, what @seadowg suggests sounds great to me.",
+      "created_at": "2018-10-25T03:14:54Z",
+      "updated_at": "2018-10-25T03:14:54Z"
+    },
+    {
+      "id": 432937872,
+      "url": "https://github.com/getodk/collect/issues/2086#issuecomment-432937872",
+      "body": "Yeah I agree. Failing when the QR code is scanned is the best place to\r\ncatch this.\r\n\r\nA question: are we worried about people already being stuck in this\r\nscenario? I'd thought also showing an error on settings made sense to try\r\nand help them to get out of a broken state (they've already scanned a\r\nbroken QR) but if that isn't a scenario that makes sense then I can not\r\nbother with it.",
+      "created_at": "2018-10-25T07:03:29Z",
+      "updated_at": "2018-10-25T08:32:07Z"
+    }
+  ],
+  "updated_at": "2018-11-27T15:35:41Z",
+  "retrieved_on": "2026-09-20",
+  "is_pull_request": false
+}

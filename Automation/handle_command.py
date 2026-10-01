@@ -80,12 +80,38 @@ def change_status(device, element, command):
 def back(device):
     device.press('back')
 
+
+def menu(device):
+    # Legacy MENU key (KEYCODE_MENU) for pre-Honeycomb apps whose options
+    # menu has no on-screen affordance on modern devices.
+    device.press('menu')
+
 def click(device, coor):
     device.click(coor[0],coor[1])
     return True
 
 def long_click(device, coor):
     device.long_click(coor[0],coor[1], 1.5)
+    return True
+
+def rapid_click(device, coor, count=10):
+    """Click the same coordinates rapidly N times for race-condition bugs
+    (e.g. fast multiple taps on a Play/Stop button)."""
+    try:
+        n = int(count)
+    except (TypeError, ValueError):
+        n = 10
+    n = max(1, min(n, 50))
+    for _ in range(n):
+        device.click(coor[0], coor[1])
+    return True
+
+def tap_then_swipe(device, tap_coor, swipe_start, swipe_end, swipe_steps=10):
+    """Tap coordinates, then IMMEDIATELY swipe with no LLM roundtrip between.
+    For race-condition bugs where the gap between two gestures must be
+    milliseconds (e.g. tap Save then swipe before the UI settles)."""
+    device.click(tap_coor[0], tap_coor[1])
+    device.swipe(swipe_start[0], swipe_start[1], swipe_end[0], swipe_end[1], swipe_steps)
     return True
 
 def set_text(device, rep_attr, input_text, index):
@@ -436,7 +462,7 @@ def _adb_shell(device, cmd):
     try:
         result = subprocess.run(
             ['adb', '-s', serial, 'shell', cmd],
-            capture_output=True, text=True, timeout=10
+            capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=10
         )
         return result.stdout.strip()
     except Exception as e:
@@ -766,6 +792,7 @@ def handle_command(command, device, attribute_to_element_map, package_name):
         'orientation': lambda: orientation(device, command),
         'rotate': lambda: orientation(device, command),
         'back': lambda: back(device),
+        'menu': lambda: menu(device),
         'swipe': lambda: swipe(device, command.get('to_direction', None)),
         'multiple_selection': lambda: multiple_selection(device, command['features'], attribute_to_element_map),
         'Navigate up': lambda: back(device),
@@ -788,6 +815,14 @@ def handle_command(command, device, attribute_to_element_map, package_name):
         'media_gesture': lambda: media_gesture(device, command.get('gesture_type')),
         'double_tap_screen': lambda: double_tap_screen(device, command.get('x'), command.get('y')),
         'double_tap': lambda: double_tap_screen(device, command.get('x'), command.get('y')),
+        'rapid_click': lambda: rapid_click(device,
+            command.get('coor') or [command.get('x'), command.get('y')],
+            command.get('count', 10)),
+        'tap_then_swipe': lambda: tap_then_swipe(device,
+            command.get('tap_coor') or [command.get('tap_x'), command.get('tap_y')],
+            [command.get('swipe_start_x'), command.get('swipe_start_y')],
+            [command.get('swipe_end_x'), command.get('swipe_end_y')],
+            command.get('swipe_steps', 10)),
         'edge_swipe': lambda: edge_swipe(device, command.get('edge'), command.get('to_direction')),
         'pinch': lambda: pinch(device, command.get('pinch_type', 'out'), command.get('x'), command.get('y')),
         'two_finger_swipe': lambda: two_finger_swipe(device, command.get('to_direction', 'up'), command.get('x'), command.get('y')),

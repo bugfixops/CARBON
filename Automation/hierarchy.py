@@ -1,3 +1,4 @@
+import os
 import uiautomator2 as u2
 import xml.etree.ElementTree as ET
 from collections import defaultdict
@@ -5,12 +6,17 @@ from ElementTree_hepler import *
 import time
 
 
+# Per-run hierarchy dump file. When running multiple devices in parallel, each
+# worker sets REBL_TMP_FILE to a unique path so concurrent dumps don't clobber
+# each other. Falls back to 'tmp' (original behaviour) for single-device runs.
+_TMP_FILE = os.environ.get('REBL_TMP_FILE', 'tmp')
+
 
 def get_current_hierarchy(device):
-    with open('tmp', 'w') as file:
+    with open(_TMP_FILE, 'w', encoding='utf-8') as file:
         file.write(device.dump_hierarchy())
     xmlp = ET.XMLParser(encoding="utf-8")
-    tree = ET.parse('tmp', parser=xmlp)
+    tree = ET.parse(_TMP_FILE, parser=xmlp)
     return tree
 
 def get_container_type(current_type, className, ):

@@ -24,7 +24,7 @@ def get_logcat(device_port):
     #start_time = start_time.strftime('%m-%d %H:%M:%S.%f')[:-3]
     adb_command = ['adb', '-s', f'emulator-{device_port}', 'logcat', '-d', '*:E']
     try:
-        result = subprocess.run(adb_command, capture_output=True, text=True,  timeout=2)
+        result = subprocess.run(adb_command, capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=2)
     except subprocess.TimeoutExpired:
         print("Get logcat did not complete within the timeout period.")
         return ''
@@ -34,7 +34,7 @@ def get_logcat(device_port):
 
 def read_bug_report(file_path):
     #file_path = f"{file_path}"
-    with open(file_path, "r") as file:
+    with open(file_path, "r", encoding="utf-8") as file:
         content = file.readlines()
 
     #app_name = content[0].strip()
@@ -42,10 +42,16 @@ def read_bug_report(file_path):
     return f"App Name: {file_path[11:file_path.find('_issue')]}. Bug Report: {bug_report}"
 
 def load_training_prompts(path): 
-    with open(path, 'r') as f:
+    with open(path, 'r', encoding='utf-8') as f:
         return json.load(f)
     
 def convert_message_to_command_list(message):
+    # The LLM can occasionally return a null/empty message (content filter,
+    # refusal, or an empty completion). Guard against it so we don't crash on
+    # iterating None — treat it as "no command" (the loop then asks for a hint).
+    if not message or not isinstance(message, str):
+        print(f"[parser] empty/None LLM message ({type(message).__name__}); treating as no command.")
+        return []
 
     try: 
         def _is_command_list(value):
