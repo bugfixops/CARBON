@@ -6,7 +6,7 @@
 #     ./run.sh <path-to-bug_report.txt>
 #
 #  Example:
-#     ./run.sh "Dataset/double_tap/FossifyOrg_Gallery_847 Tested/bug_report.txt"
+#     ./run.sh "Dataset/gesture-category-testing/double_tap/FossifyOrg_Gallery_847 Tested/bug_report.txt"
 #
 #  If no bug report is given, a sample bug is used.
 #  Prerequisites:
@@ -22,7 +22,7 @@ EMULATOR="$ANDROID_SDK/emulator/emulator"
 export PATH="$ANDROID_SDK/platform-tools:$ANDROID_SDK/emulator:$PATH"
 
 TARGET_AVD="${AVD_NAME:-Pixel_4}"
-BR_PATH="${1:-Dataset/double_tap/FossifyOrg_Gallery_847 Tested/bug_report.txt}"
+BR_PATH="${1:-Dataset/gesture-category-testing/double_tap/FossifyOrg_Gallery_847 Tested/bug_report.txt}"
 
 if [ ! -f "$BR_PATH" ]; then
     echo "Error: bug report not found: $BR_PATH"
