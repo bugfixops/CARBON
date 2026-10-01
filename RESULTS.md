@@ -12,9 +12,15 @@ For the headline numbers and setup, see the main [README](README.md).
 > **Separate campaign, not part of this page's numbers.** CARBON was also run over the
 > full ReBL dataset — a **different dataset** of 95 bug reports — reproducing **90 of 95**.
 > That campaign has its own folder and its own summary:
-> [Dataset/ReBL_Full_Dataset/](Dataset/ReBL_Full_Dataset/). Nothing on this page counts
-> those cases, and the two results are not comparable: every table below is the 100-bug
-> gesture-diverse benchmark plus the 9-bug ReBL Failure Challenge Set.
+> [Dataset/ReBL_Full_Dataset/RESULTS.md](Dataset/ReBL_Full_Dataset/RESULTS.md). Nothing on
+> this page counts those cases, and the two results are not comparable: every table below is
+> the 100-bug gesture-diverse benchmark plus the 9-bug ReBL Failure Challenge Set.
+
+> **Same 100 bugs, second backing model.** This page is CARBON on `gemini-2.5-pro`. The same
+> benchmark was also run with **GPT-4o**; those per-case results are in
+> [Dataset/CARBON_GPT4o_Dataset/RESULTS.md](Dataset/CARBON_GPT4o_Dataset/RESULTS.md) and the
+> per-bug agreement between the two models is in
+> [Dataset/CARBON_gemini-2.5-pro_vs_gpt-4o.md](Dataset/CARBON_gemini-2.5-pro_vs_gpt-4o.md).
 
 ## Overall Summary
 

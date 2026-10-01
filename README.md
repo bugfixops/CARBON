@@ -25,7 +25,7 @@ Dataset/         One folder per testing campaign (see "Dataset" below):
   CARBON_GPT4o_Dataset/      the same 100-bug benchmark run with GPT-4o (logs only)
 Results-retest-merge/  188 raw timestamped CARBON run logs for the 100-bug benchmark,
                  mirroring Dataset/'s 8 gesture categories and the same bug folder
-                 names; TEST_DATA_SUMMARY_GPT-4O.md is built from these logs
+                 names; CARBON_GPT4o_Dataset/RESULTS.md is built from these logs
 gesture_prevalence/  crawl and keyword classification of 3,629 randomly sampled
                  Android bug reports, measuring how often a report needs a gesture
                  beyond tap/text (see its own README.md)
@@ -90,8 +90,11 @@ LLM_API_KEY=your-gemini-api-key-here
 LLM_MODEL=gemini-2.5-pro
 ```
 
-The screenshot encoding requires a vision-capable model; all reported results
-use `gemini-2.5-pro`.
+The screenshot encoding requires a vision-capable model. The four-tool comparison
+below is measured on `gemini-2.5-pro`, as is the ReBL-dataset campaign. The
+100-bug gesture benchmark was additionally run end-to-end on **GPT-4o** as a
+second backing model, reported separately in
+[Dataset/CARBON_GPT4o_Dataset/RESULTS.md](Dataset/CARBON_GPT4o_Dataset/RESULTS.md).
 
 ---
 
@@ -112,13 +115,15 @@ artifact the paper cites.
 Gemini 2.5 Pro, 90 of 95 reproduced. A different dataset and a separate campaign from the
 100-bug benchmark, so its numbers are not comparable to the tables below. Each case folder
 unifies the case's inputs (report, APK, metadata) with its run log. The 9 bugs in
-`ReBL_Failed_Dataset/` are a curated subset of these 95, kept separately on purpose. See
-[Dataset/ReBL_Full_Dataset/README.md](Dataset/ReBL_Full_Dataset/README.md).
+`ReBL_Failed_Dataset/` are a curated subset of these 95, kept separately on purpose. Per-case
+results, the 20 retest conversions and the 5 non-reproductions:
+[Dataset/ReBL_Full_Dataset/RESULTS.md](Dataset/ReBL_Full_Dataset/RESULTS.md).
 
 **`CARBON_GPT4o_Dataset/`** — CARBON's GPT-4o run over the same 100-bug benchmark, grouped
-as a set. Logs only; each file also lives beside its bug in `category-testing-gemini-2.5-pro/`. See
-[Dataset/CARBON_GPT4o_Dataset/README.md](Dataset/CARBON_GPT4o_Dataset/README.md) and the
-comparison in [CARBON_gemini-2.5-pro_vs_gpt-4o.md](Dataset/CARBON_gemini-2.5-pro_vs_gpt-4o.md).
+as a set: **81 of 100**. Each log also lives beside its bug in `category-testing-gemini-2.5-pro/`.
+Per-case results: [Dataset/CARBON_GPT4o_Dataset/RESULTS.md](Dataset/CARBON_GPT4o_Dataset/RESULTS.md);
+folder layout: [Dataset/CARBON_GPT4o_Dataset/README.md](Dataset/CARBON_GPT4o_Dataset/README.md);
+cross-model comparison: [CARBON_gemini-2.5-pro_vs_gpt-4o.md](Dataset/CARBON_gemini-2.5-pro_vs_gpt-4o.md).
 
 > **APKs — the two campaigns differ.** The 95 ReBL-dataset case APKs ship **in this
 > repository**, under `Dataset/ReBL_Full_Dataset/`. The 100 gesture-benchmark APKs do
@@ -154,6 +159,13 @@ CARBON’s dual oracle confirmed 88 of 92 LLM declarations. ReBL's 50 self-repor
 successes drop to 34 (16 non-crash claims with no supporting signal). AdbGPT's
 54 drop to 4: the other 50 count a fallback `[MISSING]` tap as completion
 without ever reaching the symptom. ReActDroid's 5 (all crashes) stand.
+
+> **Second backing model.** CARBON was also run over these same 100 bugs with
+> **GPT-4o**, reaching 81/100 under that campaign's own resolution rule — see
+> [Dataset/CARBON_GPT4o_Dataset/RESULTS.md](Dataset/CARBON_GPT4o_Dataset/RESULTS.md).
+> That figure is not produced by the six-criterion audit above, so it is not a
+> like-for-like model delta against 88. The four-tool comparison on this page is
+> Gemini 2.5 Pro throughout.
 
 ### Per-category
 
