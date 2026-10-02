@@ -39,7 +39,10 @@ not restate them, so there is one tally for this campaign and one place to corre
 The GPT-4o figure and the Gemini 2.5 Pro figure for the same 100 bugs are not produced by the
 same procedure, so the gap between them should not be read as a clean like-for-like model
 delta. The source logs for this campaign are the 188 runs in
-[`../../Results-retest-merge/`](../../Results-retest-merge/). For the per-bug comparison see
+[`../../Results-retest-merge/`](../../Results-retest-merge/) — **more runs than cases**, and a
+case counts as reproduced if any of its attempts reported success, so this campaign is
+best-of-N where the Gemini 2.5 Pro figure is single-run and additionally audited. The selection
+rule and each case's attempt count are in [`RESULTS.md`](RESULTS.md). For the per-bug comparison see
 [`../CARBON_gemini-2.5-pro_vs_gpt-4o.md`](../CARBON_gemini-2.5-pro_vs_gpt-4o.md) — but its
 agreement 2×2 does not reconcile with the per-case verdicts: the corrected cells are 78 both
 succeed, 9 both fail, 10 Gemini only, 3 GPT-4o only, 13 diverging, because
