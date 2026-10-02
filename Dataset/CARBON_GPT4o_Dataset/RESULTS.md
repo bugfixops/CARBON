@@ -13,6 +13,12 @@ The same 100 bug reports as the `gemini-2.5-pro` campaign in the root
 model. Each bug's transcript sits beside it in this folder as
 `carbon_gpt4o_log.txt`.
 
+Each bug here is resolved from the agent's own final verdict in its
+transcript, plus manual loop-abort and false-positive corrections (the
+rows reading "Rejected on review"). This is **not** the six-criterion
+legitimacy audit that produces the `gemini-2.5-pro` figure of 88, so 81
+against 88 is not a like-for-like model delta.
+
 ## The 19 that failed
 
 | Bug | Category | Why it failed | Log |
@@ -43,4 +49,12 @@ still exists upstream.
 
 Per-bug comparison between the two models:
 [`../CARBON_gemini-2.5-pro_vs_gpt-4o.md`](../CARBON_gemini-2.5-pro_vs_gpt-4o.md).
+Its 88 and 81 totals match this page, but its agreement table does not
+reconcile with the per-case verdicts: `FossifyOrg_Calendar_1103` is filed
+under "neither model reproduced" although GPT-4o reproduced it, and
+`FossifyOrg_Calendar_153` — a GPT-4o failure and a Gemini success — is in
+no divergence table. The per-case counts are 78 both-succeed, 9 both-fail,
+10 Gemini-only, 3 GPT-4o-only, so 13 bugs diverge rather than 11. That
+document is kept unedited by request; read its 2×2 with this correction.
+
 Folder layout: [`README.md`](README.md).

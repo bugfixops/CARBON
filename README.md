@@ -110,7 +110,8 @@ below are measured on. Counts and the reason for each of CARBON's 12 failures:
 [Dataset/category-testing-gemini-2.5-pro/RESULTS.md](Dataset/category-testing-gemini-2.5-pro/RESULTS.md).
 
 **`ReBL_Failed_Dataset/`** — the 9-bug ReBL documented-failure set, kept unchanged as the
-artifact the paper cites.
+artifact the paper cites. CARBON reproduced 7 of 9; counts and the reason for each of the 2
+non-reproductions: [Dataset/ReBL_Failed_Dataset/RESULTS.md](Dataset/ReBL_Failed_Dataset/RESULTS.md).
 
 **`ReBL_Full_Dataset/`** — the full ReBL-dataset campaign: 95 bug reports run by CARBON on
 Gemini 2.5 Pro, 90 of 95 reproduced. A different dataset and a separate campaign from the

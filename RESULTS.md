@@ -210,6 +210,8 @@ matching the paper's Table III.
 - **ODK#360** — Cross-app Google Drive OAuth. Same architectural limitation as ReBL; not claimed as a win.
 - **Osmeditor#637** — CARBON's `set_text` worked on the very widget ReBL flagged, but the bug also requires pre-downloaded OSM map data before the crash path fires.
 
+That set has its own summary, with all 9 per-case verdicts and the evidence links: [Dataset/ReBL_Failed_Dataset/RESULTS.md](Dataset/ReBL_Failed_Dataset/RESULTS.md).
+
 | Bug ID | App | CARBON | ReBL | ReActDroid | AdbGPT | Screenshot | Remarks | Steps |
 |--------|-----|--------|------|------------|--------|------------|---------|-------|
 | [alexstyl_Memento-Calendar_169](Dataset/ReBL_Failed_Dataset/crash/alexstyl_Memento-Calendar_169) | alexstyl/Memento-Calendar | ✅ | ❌ | — | — | ![screenshot](Dataset/ReBL_Failed_Dataset/crash/alexstyl_Memento-Calendar_169/annotated.png) | **Custom-view picker (crash)** → Vision + `swipe_region` reached the NumberPicker UIAutomator2 can't enumerate; Feb 31 fired FATAL EXCEPTION. ReBL paper: *"UI Automator2 fails to extract custom views from the hierarchy."* | 1. Create new contact via '+'. 2. Tap Birthday, disable 'Include year'. 3. Slide month to March, day to 31. 4. Slide month to February. 5. Tap Set. |

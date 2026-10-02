@@ -40,7 +40,9 @@ The GPT-4o figure and the Gemini 2.5 Pro figure for the same 100 bugs are not pr
 same procedure, so the gap between them should not be read as a clean like-for-like model
 delta. The source logs for this campaign are the 188 runs in
 [`../../Results-retest-merge/`](../../Results-retest-merge/). For the per-bug comparison see
-[`../CARBON_gemini-2.5-pro_vs_gpt-4o.md`](../CARBON_gemini-2.5-pro_vs_gpt-4o.md).
+[`../CARBON_gemini-2.5-pro_vs_gpt-4o.md`](../CARBON_gemini-2.5-pro_vs_gpt-4o.md) — its 88 and
+81 totals are right, but its agreement 2×2 does not reconcile with the per-case verdicts; the
+correction is stated in [`RESULTS.md`](RESULTS.md).
 
 Scope note from that document: the comparison covers the 100-bug benchmark only. The 9-bug
 ReBL Failure Challenge Set is excluded because no GPT-4o run exists for it, and the other

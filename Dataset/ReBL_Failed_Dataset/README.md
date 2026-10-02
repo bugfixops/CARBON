@@ -4,6 +4,8 @@
 
 **Result: CARBON 7/9 (77.8%), ReBL 0/9 (these are ReBL's own failures).**
 
+**Counts, the per-case verdict table and the reason for each failure: [`RESULTS.md`](RESULTS.md). This page is the per-bug analysis behind them.**
+
 ## Final scoreboard
 
 | # | Bug | Type | ReBL | CARBON | Edge |

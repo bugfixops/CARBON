@@ -11,9 +11,14 @@
 A different dataset from the 100-bug gesture benchmark; these numbers
 are not comparable to the root [`RESULTS.md`](../../RESULTS.md)
 tables. [`DATASET_PROVENANCE.md`](DATASET_PROVENANCE.md) indexes 96
-input cases; 95 were tested and are the denominator here. The 90 is
-the outcome after one targeted retest pass over the initial failures,
-not a single-shot rate.
+input cases; 95 were tested and are the denominator here. The 96th,
+`frigus02_car-report_43`, was never run and has no case folder.
+
+The 90 is not a single-shot rate. The initial wave reproduced **70 of
+95** (73.7%); its 25 failures were then individually retested with
+targeted fixes — report-matching APK builds, pre-setup scripts,
+API-level corrections, loop-guard tuning, extra harness actions — and
+**20 converted**, leaving the 5 below.
 
 > **`hidroh_materialistic_1067` counts toward the 90 as an ANR, not as
 > the reported crash.** The retest triggered a genuine "Materialistic

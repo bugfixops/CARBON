@@ -9,11 +9,21 @@
 | Not reproduced | **12** |
 
 Counts are the audited ones — the figures published in the root
-[`RESULTS.md`](../../RESULTS.md) and used in the paper.
+[`RESULTS.md`](../../RESULTS.md) and used in the paper. CARBON declared
+**92** successes; the dual oracle confirmed **88**. The four rows below
+marked "rejected on audit" are exactly that difference.
 
-Per-bug evidence sits in `<category>/<Owner>_<Repo>_<Issue> Tested`
-(trailing ` F` where CARBON did not reproduce the bug): the bug
-report, one log per tool, and an annotated screenshot.
+This document covers **CARBON only**. The same 100 bugs were also run
+with ReBL, ReActDroid and AdbGPT, whose logs sit beside each bug in this
+folder; their counts are in the root [`RESULTS.md`](../../RESULTS.md).
+
+Per-bug evidence sits in `<category>/<Owner>_<Repo>_<Issue> Tested`: the
+bug report, one log per tool, and an annotated screenshot. Nine of the
+twelve non-reproductions carry a trailing ` F` in the folder name; three
+of the four audit rejections of a self-reported success
+(`FossifyOrg_File-Manager_195`, `FossifyOrg_Calendar_1103`,
+`libre-tube_LibreTube_8245`) were never renamed. The suffix is therefore
+not an index of the failure set — the table below is.
 
 ## The 12 that failed
 
