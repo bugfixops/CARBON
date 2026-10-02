@@ -125,8 +125,12 @@ How the Detail column was derived:
   status line. Failure is marked by `[run_dataset] FAILED: exceeded 900s
   (15 min) time limit`. Absent that, a case is inferred successful only
   if it reaches a `token usage` summary **and** is not overturned by a
-  `[CARBON RETEST -- MANUAL VERDICT] result: FAIL` block. **13 cases had
-  an initial inferred-success verdict manually overturned on review.**
+  `[CARBON RETEST -- MANUAL VERDICT] result: FAIL` block. **13 run logs
+  across 12 cases carry such an override.** Of those 12 cases, 3
+  (`ankidroid_Anki-Android_17667`, `FossifyOrg_Clock_85`,
+  `gsantner_markor_2746`) later succeeded on a different attempt and so
+  count as reproduced under the best-of-N rule above; the remaining **9
+  are published as failures** in the table below.
 - 5 untagged logs, all from 2026-09-20 and 2026-09-22, predate the tagging
   convention and died on repeated OpenAI API errors before any terminal
   marker; they are treated as incomplete.
