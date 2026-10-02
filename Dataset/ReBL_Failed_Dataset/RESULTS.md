@@ -51,5 +51,7 @@ Failure to reproduce does not establish that a bug is fixed. Neither
 `getodk_collect_360` nor `MarcusWolschon_osmeditor4android_637` was shown
 to be fixed upstream; each reason above says only what blocked that run.
 
-Per-bug analysis of how each case relates to the limitation ReBL's paper
-states, with the paper quotes: [`README.md`](README.md).
+[`README.md`](README.md) is the original head-to-head write-up for this
+set, case by case against the limitation ReBL's paper states, with the
+paper quotes. It predates this document and is kept as written; the
+counts and verdicts above are the record.

@@ -15,7 +15,9 @@ marked "rejected on audit" are exactly that difference.
 
 This document covers **CARBON only**. The same 100 bugs were also run
 with ReBL, ReActDroid and AdbGPT, whose logs sit beside each bug in this
-folder; their counts are in the root [`RESULTS.md`](../../RESULTS.md).
+folder; on the same audit they reproduced 34, 5 and 4 respectively (from
+nominal 50, 5 and 54), and the root [`RESULTS.md`](../../RESULTS.md) has
+their per-bug and per-category tables.
 
 Per-bug evidence sits in `<category>/<Owner>_<Repo>_<Issue> Tested`: the
 bug report, one log per tool, and an annotated screenshot. Nine of the
