@@ -1,0 +1,255 @@
+# ReBL-dataset carbon test (Gemini 2.5 Pro via Vertex AI ADC) — manual dispatch only.
+#
+# Runs the CARBON bug-reproduction tool over the 95 testable cases in
+# Dataset/rebl-dataset/ (crawled from the ReBL paper's bug-report index),
+# with a 30-minute cap per case and Gemini 2.5 Pro via Vertex AI as the LLM
+# provider. Auth is Application Default Credentials: the workflow writes the
+# GCP_SA_JSON secret (service-account JSON) to a file and my_gpt.py mints a
+# short-lived OAuth2 Bearer token from it. No API key exists anywhere in this
+# flow.
+#
+#   mode=smoke : 1 case (default: crash/ramack_ActivityDiary_285).
+#                Runs on ONE emulator; validates the whole pipeline end to end.
+#   mode=wave  : all 95 cases sharded across a 10-job matrix, one emulator
+#                per job. Each job uploads its shard's logs; the `collect` job
+#                merges them and commits to results/rebl-dataset/
+#                on the rebl-carbon-test branch.
+#
+# Required secrets (Settings -> Secrets -> Actions):
+#   GCP_SA_JSON              (required) service-account JSON with roles/aiplatform.user
+#                            on a GCP project that has the Vertex AI API enabled
+#                            and billing attached (Vertex AI draws from the $300
+#                            trial credit / billing account -- there is no
+#                            AI-Studio-style free tier).
+#
+# Nothing is dispatched automatically. Do NOT add push/pull_request triggers:
+# a 95-case x 30-min matrix must only run on explicit manual dispatch.
+
+name: rebl-dataset carbon test (gemini)
+
+on:
+  workflow_dispatch:
+    inputs:
+      model:
+        description: "Vertex AI model id (must exist in VERTEX_LOCATION)"
+        required: true
+        default: "gemini-2.5-pro"
+      mode:
+        description: "smoke = 1 case on 1 emulator; wave = sharded across 10 emulators"
+        required: true
+        type: choice
+        options: [smoke, wave]
+        default: smoke
+      case:
+        description: "smoke mode: single case as 'category/folder' or 'folder'"
+        required: false
+        default: "crash/ramack_ActivityDiary_285"
+      cases:
+        description: "wave mode: comma-separated case list (empty = all 95 ReBL cases)"
+        required: false
+        default: ""
+      case_timeout_seconds:
+        description: "Per-case timeout in seconds (default 1800 = 30 min)"
+        required: false
+        default: "1800"
+      max_spend_usd:
+        description: "Per-job Vertex AI spend cap in USD (wave ceiling = cap x 10 shards)"
+        required: false
+        default: "12"
+      rerun_all:
+        description: "Set 1 to re-run cases that already have committed results"
+        required: false
+        default: "0"
+      api_level:
+        description: "Android API level for the emulator"
+        required: false
+        default: "30"
+      target:
+        description: "Emulator target"
+        required: false
+        default: "google_apis"
+      arch:
+        description: "Emulator arch"
+        required: false
+        default: "x86_64"
+      apk_url:
+        description: "smoke retest: override APK URL (e.g. pre-fix version); empty = dataset APK"
+        required: false
+        default: ""
+      agent_hint:
+        description: "smoke retest: extra instructions prepended to the bug report prompt"
+        required: false
+        default: ""
+      pre_setup:
+        description: "smoke retest: shell snippet run after emulator boot (adb via $REBL_DEVICE_SERIAL)"
+        required: false
+        default: ""
+      max_repeat:
+        description: "smoke retest: max consecutive repeated actions before loop-abort (default 3)"
+        required: false
+        default: "3"
+
+env:
+  GEMINI_MODEL: ${{ inputs.model }}
+
+jobs:
+  validate:
+    name: validate Vertex AI ADC setup
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rebl-carbon-test
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Write service-account JSON + validate
+        env:
+          GCP_SA_JSON: ${{ secrets.GCP_SA_JSON }}
+          GEMINI_TIMEOUT_SECONDS: ${{ inputs.case_timeout_seconds }}
+        run: |
+          if [ -z "$GCP_SA_JSON" ]; then
+            echo "[validate_gemini] FATAL: GCP_SA_JSON secret is not set." >&2
+            exit 1
+          fi
+          printf '%s' "$GCP_SA_JSON" > "$HOME/gcp-sa.json"
+          chmod 600 "$HOME/gcp-sa.json"
+          python -m pip install -q google-auth requests
+          python -c "import google.auth; print('[validate_gemini] google-auth import OK')"
+          GOOGLE_APPLICATION_CREDENTIALS="$HOME/gcp-sa.json" \
+            python -u Automation/validate_gemini.py --model "${{ inputs.model }}"
+
+  setup:
+    name: compute shards
+    needs: validate
+    runs-on: ubuntu-latest
+    outputs:
+      shards: ${{ steps.s.outputs.shards }}
+    steps:
+      - id: s
+        run: |
+          if [ "${{ inputs.mode }}" = "smoke" ]; then
+            echo "shards=[0]" >> "$GITHUB_OUTPUT"
+          else
+            echo "shards=[0,1,2,3,4,5,6,7,8,9]" >> "$GITHUB_OUTPUT"
+          fi
+
+  retest:
+    name: retest (shard ${{ matrix.shard }})
+    needs: [validate, setup]
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: ${{ fromJson(needs.setup.outputs.shards) }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rebl-carbon-test
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -q -r requirements.txt
+
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Free disk space for emulator userdata
+        run: |
+          df -h /
+          sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/share/boost /usr/share/swift /opt/az 2>/dev/null || true
+          docker system prune -af 2>/dev/null || true
+          df -h /
+      - name: Download override APK (retest)
+        if: inputs.mode == 'smoke' && inputs.apk_url != ''
+        run: |
+          curl -sSL --fail "${{ inputs.apk_url }}" -o "$RUNNER_TEMP/override.apk"
+          ls -la "$RUNNER_TEMP/override.apk"
+          echo "REBL_APK_OVERRIDE=$RUNNER_TEMP/override.apk" >> "$GITHUB_ENV"
+      - name: Run retest shard on emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ inputs.api_level }}
+          target: ${{ inputs.target }}
+          arch: ${{ inputs.arch }}
+          profile: pixel_6
+          disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -partition-size 2048
+          # NOTE: the action executes each script LINE as a separate
+          # `/usr/bin/sh -c "<line>"` call, so the whole shard runs through
+          # Automation/run_shard_rebl.sh as ONE line; branching lives in that file.
+          script: bash "$GITHUB_WORKSPACE/Automation/run_shard_rebl.sh" "${{ inputs.mode }}" "${{ inputs.model }}" "${{ inputs.case }}" "${{ inputs.cases }}" "${{ matrix.shard }}"
+        env:
+          GCP_SA_JSON: ${{ secrets.GCP_SA_JSON }}
+          GEMINI_TIMEOUT_SECONDS: ${{ inputs.case_timeout_seconds }}
+          GEMINI_MAX_SPEND_USD: ${{ inputs.max_spend_usd }}
+          REBL_RERUN_ALL: ${{ inputs.rerun_all }}
+          REBL_AGENT_HINT: ${{ inputs.agent_hint }}
+          REBL_PRE_SETUP: ${{ inputs.pre_setup }}
+          REBL_MAX_REPEAT: ${{ inputs.max_repeat }}
+
+      - name: Upload shard results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rebl-gemini-results-shard-${{ matrix.shard }}
+          path: results/rebl-dataset/
+          if-no-files-found: warn
+
+  collect:
+    name: merge shards + commit results
+    needs: retest
+    if: always() && inputs.mode == 'wave'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rebl-carbon-test
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: rebl-gemini-results-shard-*
+          path: _merged_results/
+      - name: Merge into results/rebl-dataset and commit
+        run: |
+          set -e
+          DEST="results/rebl-dataset"
+          mkdir -p "$DEST"
+          # Artifacts hold the results CONTENTS at their root
+          # (upload-artifact uploads dir contents, not the dir itself), one
+          # subdir per shard. Merge the case trees; keep each shard's batch
+          # summary under a unique name so shards don't overwrite each other.
+          FOUND=0
+          for ART in _merged_results/rebl-gemini-results-shard-*/; do
+            [ -d "$ART" ] || continue
+            SHARD="${ART%/}"; SHARD="${SHARD##*-}"
+            echo "merging $ART (shard $SHARD)"
+            rsync -a --exclude "_batch_summary.json" "$ART/" "$DEST"/
+            if [ -f "$ART/_batch_summary.json" ]; then
+              cp "$ART/_batch_summary.json" "$DEST/_batch_summary_shard-${SHARD}.json"
+            fi
+            FOUND=1
+          done
+          if [ "$FOUND" = "0" ]; then
+            echo "WARNING: no shard artifacts found."
+          fi
+          git config user.name "carbon-dev"
+          git config user.email "carbon-dev@users.noreply.github.com"
+          git add "$DEST"
+          if git diff --cached --quiet; then
+            echo "No new results to commit."
+          else
+            git commit -m "rebl-carbon-gemini: wave results (model ${{ inputs.model }})"
+            git pull --rebase origin rebl-carbon-test
+            git push origin rebl-carbon-test
+          fi

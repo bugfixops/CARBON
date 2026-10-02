@@ -1,0 +1,54 @@
+Bug Report Title:
+NumberFormatException
+Bug Report Issue:
+When parsing `Siginificant digits in result`, a `NumberFormatException` may be triggered if the input number is very large.
+
+```
+// CRASH: com.mkulesh.micromath.plus (pid 11486) (elapsed nanos: 5755378442858)
+// Short Msg: java.lang.NumberFormatException
+// Long Msg: java.lang.NumberFormatException: Invalid int: "1274375155085100044673746644154457"
+// Build Label: Android/sdk_google_phone_x86/generic_x86:6.0/MASTER/4088240:userdebug/test-keys
+// Build Changelist: 4088240
+// Build Time: 1497047463000
+// java.lang.NumberFormatException: Invalid int: "1274375155085100044673746644154457"
+// 	at java.lang.Integer.invalidInt(Integer.java:138)
+// 	at java.lang.Integer.parse(Integer.java:413)
+// 	at java.lang.Integer.parseInt(Integer.java:367)
+// 	at java.lang.Integer.parseInt(Integer.java:334)
+// 	at java.lang.Integer.valueOf(Integer.java:525)
+// 	at com.mkulesh.micromath.widgets.HorizontalNumberPicker.onClick(HorizontalNumberPicker.java:111)
+// 	at android.view.View.performClick(View.java:5198)
+// 	at android.view.View$PerformClick.run(View.java:21147)
+// 	at android.os.Handler.handleCallback(Handler.java:739)
+// 	at android.os.Handler.dispatchMessage(Handler.java:95)
+// 	at android.os.Looper.loop(Looper.java:148)
+// 	at android.app.ActivityThread.main(ActivityThread.java:5417)
+// 	at java.lang.reflect.Method.invoke(Native Method)
+// 	at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:726)
+// 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:616)
+// 
+```
+
+*How to repeat*:
+- Start app
+- Open "Document setting" dialog
+- In the field "Significant digits in result", put123456789012.
+- Press "+" button on the right of this field
+*Bad*: crash is observed
+*Desired*: field content is set to a maximum allowed value for this element
+Comments:
+Comment#1:
+thanks, I will fix it
+---
+Comment#2:
+Hi @tianxiaogu, I fixed this crash. Please test and close the issue if it works now
+---
+Comment#3:
+Hi @mkulesh , thank you for your patch. Unfortunately, the defect is not fully fixed. I think you probably also need to include a try-catch block in method `getValue` of class `HorizontalNumberPicker`.
+---
+Comment#4:
+Hi @tianxiaogu, thank you for pointing additional case. I fixed it and believe that all cases are covered now.
+---
+Comment#5:
+Implemented in v2.15.5
+---
