@@ -22,7 +22,10 @@ counts on this benchmark with the reason for each of its 12 failures, see
 > benchmark was also run with **GPT-4o**; those per-case results are in
 > [Dataset/CARBON_GPT4o_Dataset/RESULTS.md](Dataset/CARBON_GPT4o_Dataset/RESULTS.md) and the
 > per-bug agreement between the two models is in
-> [Dataset/CARBON_gemini-2.5-pro_vs_gpt-4o.md](Dataset/CARBON_gemini-2.5-pro_vs_gpt-4o.md).
+> [Dataset/CARBON_gemini-2.5-pro_vs_gpt-4o.md](Dataset/CARBON_gemini-2.5-pro_vs_gpt-4o.md) — whose
+> two totals are right, but whose agreement 2x2 misfiles two cases and does not reconcile with the
+> per-case verdicts; the correction is stated in
+> [Dataset/CARBON_GPT4o_Dataset/RESULTS.md](Dataset/CARBON_GPT4o_Dataset/RESULTS.md).
 
 ## Overall Summary
 

@@ -49,12 +49,14 @@ still exists upstream.
 
 Per-bug comparison between the two models:
 [`../CARBON_gemini-2.5-pro_vs_gpt-4o.md`](../CARBON_gemini-2.5-pro_vs_gpt-4o.md).
-Its 88 and 81 totals match this page, but its agreement table does not
-reconcile with the per-case verdicts: `FossifyOrg_Calendar_1103` is filed
-under "neither model reproduced" although GPT-4o reproduced it, and
-`FossifyOrg_Calendar_153` — a GPT-4o failure and a Gemini success — is in
-no divergence table. The per-case counts are 78 both-succeed, 9 both-fail,
-10 Gemini-only, 3 GPT-4o-only, so 13 bugs diverge rather than 11. That
-document is kept unedited by request; read its 2×2 with this correction.
+**Its agreement table does not reconcile with the per-case verdicts.** Two
+cases are misfiled: `FossifyOrg_Calendar_1103` is listed under "Bugs neither
+model reproduced" although GPT-4o reproduced it, and `FossifyOrg_Calendar_153`
+— a GPT-4o failure and a Gemini success — appears in no divergence table. The
+corrected cells are **78** both succeed, **9** both fail, **10** Gemini only,
+**3** GPT-4o only, so **13** bugs diverge — not the 79 both succeed, 10 both
+fail, 9 Gemini only, 2 GPT-4o only and "only 11 bugs diverge" that it
+publishes. The 88 and 81 totals are unaffected. That document
+is kept unedited by request; read its 2×2 with this correction.
 
 Folder layout: [`README.md`](README.md).

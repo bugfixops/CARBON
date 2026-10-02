@@ -126,6 +126,9 @@ as a set: **81 of 100**. Each log also lives beside its bug in `category-testing
 Counts and the reason for each of the 19 failures: [Dataset/CARBON_GPT4o_Dataset/RESULTS.md](Dataset/CARBON_GPT4o_Dataset/RESULTS.md);
 folder layout: [Dataset/CARBON_GPT4o_Dataset/README.md](Dataset/CARBON_GPT4o_Dataset/README.md);
 cross-model comparison: [CARBON_gemini-2.5-pro_vs_gpt-4o.md](Dataset/CARBON_gemini-2.5-pro_vs_gpt-4o.md).
+Its two totals are right, but its agreement 2x2 misfiles two cases and does not reconcile with
+the per-case verdicts; the correction is stated in
+[Dataset/CARBON_GPT4o_Dataset/RESULTS.md](Dataset/CARBON_GPT4o_Dataset/RESULTS.md).
 
 > **APKs — the two campaigns differ.** The 95 ReBL-dataset case APKs ship **in this
 > repository**, under `Dataset/ReBL_Full_Dataset/`. The 100 gesture-benchmark APKs do
