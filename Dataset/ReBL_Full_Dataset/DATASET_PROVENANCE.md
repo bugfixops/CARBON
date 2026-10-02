@@ -119,6 +119,8 @@ successful or failed bug reproduction without separately recording that limitati
   exact summarized inputs; this folder keeps the source report and the `*` marker.
 - Keep the denominator visible: 96 indexed, 95 reports available; never present a
   smaller tested subset as a complete 96-case benchmark without explaining omissions.
+  The CARBON campaign in [`RESULTS.md`](RESULTS.md) tested those 95, so its
+  denominator is 95, not the 96 indexed here.
 
 ## APK signature and Android compatibility
 

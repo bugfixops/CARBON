@@ -7,7 +7,9 @@ annotated screenshot) under `Dataset/`.
 
 Legend: ✅ reproduced · ❌ not reproduced · — not run on this set.
 
-For the headline numbers and setup, see the main [README](README.md).
+For the headline numbers and setup, see the main [README](README.md). For CARBON's
+counts on this benchmark with the reason for each of its 12 failures, see
+[Dataset/category-testing-gemini-2.5-pro/RESULTS.md](Dataset/category-testing-gemini-2.5-pro/RESULTS.md).
 
 > **Separate campaign, not part of this page's numbers.** CARBON was also run over the
 > full ReBL dataset — a **different dataset** of 95 bug reports — reproducing **90 of 95**.

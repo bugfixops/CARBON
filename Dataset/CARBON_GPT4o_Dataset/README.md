@@ -7,7 +7,7 @@ results, grouped here so the GPT-4o campaign can be read on its own.
 |---|---|
 | Bugs | 100, across the 8 gesture categories |
 | Backing LLM | GPT-4o |
-| Results | see [`RESULTS.md`](RESULTS.md) — pass/fail counts, the per-category split, and a per-case table with the cause of every failure |
+| Results | see [`RESULTS.md`](RESULTS.md) — how many were reproduced, how many were not, and why each failure failed |
 | Contents | 100 `carbon_gpt4o_log.txt` files, plus `RESULTS.md` and this README |
 
 ## Layout
@@ -33,21 +33,13 @@ they are distributed through the Google Drive archive linked from the root
 
 ## Results
 
-The pass/fail counts, the per-category split, the full per-case table and the cause of every
-failure are in [`RESULTS.md`](RESULTS.md). This README does not restate them, so there is one
-tally for this campaign and one place to correct it.
+The counts and the reason for every failure are in [`RESULTS.md`](RESULTS.md). This README does
+not restate them, so there is one tally for this campaign and one place to correct it.
 
-Two things that document states and that are worth knowing before comparing models:
-
-- The **GPT-4o** figure resolves each bug by the **agent's own final verdict in the log
-  transcript**. Where a bug has several run attempts, a SUCCESS attempt is preferred; failing
-  that, the fullest FAILED log is used. The source logs are the 188 runs in
-  [`../../Results-retest-merge/`](../../Results-retest-merge/).
-- The **Gemini 2.5 Pro** figure for the same 100 bugs is the **audit-confirmed**
-  six-criterion number in the root [`RESULTS.md`](../../RESULTS.md).
-
-The two are not produced by the same procedure, so the gap between them should not be read as
-a clean like-for-like model delta. For the per-bug agreement analysis see
+The GPT-4o figure and the Gemini 2.5 Pro figure for the same 100 bugs are not produced by the
+same procedure, so the gap between them should not be read as a clean like-for-like model
+delta. The source logs for this campaign are the 188 runs in
+[`../../Results-retest-merge/`](../../Results-retest-merge/). For the per-bug comparison see
 [`../CARBON_gemini-2.5-pro_vs_gpt-4o.md`](../CARBON_gemini-2.5-pro_vs_gpt-4o.md).
 
 Scope note from that document: the comparison covers the 100-bug benchmark only. The 9-bug

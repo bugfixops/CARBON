@@ -106,7 +106,8 @@ second backing model, reported separately in
 gesture categories. Each bug folder includes the verbatim `bug_report.txt`, per-tool
 execution logs (CARBON, ReBL, AdbGPT, ReActDroid), the three ablation logs under
 `abalation-tests/`, and an `Annotation/` example. This is the set the headline results
-below are measured on.
+below are measured on. Counts and the reason for each of CARBON's 12 failures:
+[Dataset/category-testing-gemini-2.5-pro/RESULTS.md](Dataset/category-testing-gemini-2.5-pro/RESULTS.md).
 
 **`ReBL_Failed_Dataset/`** — the 9-bug ReBL documented-failure set, kept unchanged as the
 artifact the paper cites.
@@ -115,13 +116,13 @@ artifact the paper cites.
 Gemini 2.5 Pro, 90 of 95 reproduced. A different dataset and a separate campaign from the
 100-bug benchmark, so its numbers are not comparable to the tables below. Each case folder
 unifies the case's inputs (report, APK, metadata) with its run log. The 9 bugs in
-`ReBL_Failed_Dataset/` are a curated subset of these 95, kept separately on purpose. Per-case
-results, the 20 retest conversions and the 5 non-reproductions:
+`ReBL_Failed_Dataset/` are a curated subset of these 95, kept separately on purpose. Counts
+and the reason for each of the 5 non-reproductions:
 [Dataset/ReBL_Full_Dataset/RESULTS.md](Dataset/ReBL_Full_Dataset/RESULTS.md).
 
 **`CARBON_GPT4o_Dataset/`** — CARBON's GPT-4o run over the same 100-bug benchmark, grouped
 as a set: **81 of 100**. Each log also lives beside its bug in `category-testing-gemini-2.5-pro/`.
-Per-case results: [Dataset/CARBON_GPT4o_Dataset/RESULTS.md](Dataset/CARBON_GPT4o_Dataset/RESULTS.md);
+Counts and the reason for each of the 19 failures: [Dataset/CARBON_GPT4o_Dataset/RESULTS.md](Dataset/CARBON_GPT4o_Dataset/RESULTS.md);
 folder layout: [Dataset/CARBON_GPT4o_Dataset/README.md](Dataset/CARBON_GPT4o_Dataset/README.md);
 cross-model comparison: [CARBON_gemini-2.5-pro_vs_gpt-4o.md](Dataset/CARBON_gemini-2.5-pro_vs_gpt-4o.md).
 
