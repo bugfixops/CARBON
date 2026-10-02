@@ -117,7 +117,7 @@ campaign; no case is re-classified here.
 How the Detail column was derived:
 
 - Classification comes from log content, never from the folder-name suffix.
-- `[run_retest]`-tagged logs are read from their `FINAL status=` line:
+- ``-tagged logs are read from their `FINAL status=` line:
   `completed` is a success; `failed(timeout)`, `failed(loop)`,
   `error(returncode=...)` and `apk_unavailable` are failures; a missing
   line means incomplete or truncated.

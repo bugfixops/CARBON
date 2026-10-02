@@ -22,7 +22,7 @@ LLM failover across multiple Groq accounts:
     dead account is not retried by every subsequent case.
 
 Checkpointing:
-  * Each case writes "[run_retest] FINAL status=..." as its last log line when
+  * Each case writes " FINAL status=..." as its last log line when
     it concludes (completed / timeout / install_failed / apk_unavailable /
     error). Restarts skip cases that already have a FINAL line -- a dead key
     never causes a completed case to re-run. Disable with REBL_RERUN_ALL=1.
@@ -65,7 +65,7 @@ try:
     if _ADB_DIR not in os.environ.get("PATH", ""):
         os.environ["PATH"] = _ADB_DIR + os.pathsep + os.environ.get("PATH", "")
 except Exception as e:
-    print(f"[run_retest] Warning: could not resolve bundled adb via adbutils: {e}")
+    print(f" Warning: could not resolve bundled adb via adbutils: {e}")
 
 import uiautomator2 as u2
 from apkutils3 import APK
@@ -85,7 +85,7 @@ DEFAULT_MODEL = "openai/gpt-oss-120b"
 FALLBACK_MODEL_SUGGESTION = "qwen/qwen3.8-27b"
 GROQ_MODELS_URL = "https://api.groq.com/openai/v1/models"
 
-FINAL_MARKER = "[run_retest] FINAL status="
+FINAL_MARKER = " FINAL status="
 
 # The 53 timeout cases: (gesture category, exact case folder name).
 TIMEOUT_CASES = [
@@ -232,17 +232,17 @@ def resolve_cases(case=None, cases=None, category=None, limit=None, shard=None, 
         if category and cat != category:
             continue
         if _already_concluded(cat, folder):
-            print(f"[run_retest] SKIP concluded: {key}")
+            print(f" SKIP concluded: {key}")
             continue
         bug_report = DATASET_ROOT / cat / folder / "bug_report.txt"
         if not bug_report.is_file():
-            print(f"[run_retest] SKIP {key}: no bug_report.txt")
+            print(f" SKIP {key}: no bug_report.txt")
             continue
         selected.append((cat, folder, bug_report))
 
     if shard is not None and of:
         selected = [c for i, c in enumerate(selected) if i % of == shard]
-        print(f"[run_retest] shard {shard}/{of}: {len(selected)} case(s)")
+        print(f" shard {shard}/{of}: {len(selected)} case(s)")
 
     if limit:
         selected = selected[:limit]
@@ -331,21 +331,21 @@ def validate_groq_model(model, api_key):
         data = json.load(urllib.request.urlopen(req, timeout=30))
     except urllib.error.HTTPError as e:
         if e.code == 401:
-            sys.exit("[run_retest] FATAL: GROQ_API_KEY_1 rejected (401). "
+            sys.exit(" FATAL: GROQ_API_KEY_1 rejected (401). "
                      "Check the secret value.")
-        sys.exit(f"[run_retest] FATAL: Groq /models returned HTTP {e.code}.")
+        sys.exit(f" FATAL: Groq /models returned HTTP {e.code}.")
     except Exception as e:
-        sys.exit(f"[run_retest] FATAL: could not reach Groq /models: {e}")
+        sys.exit(f" FATAL: could not reach Groq /models: {e}")
     ids = {m.get("id") for m in data.get("data", [])}
     if model in ids:
-        print(f"[run_retest] model '{model}' is available on this Groq account.")
+        print(f" model '{model}' is available on this Groq account.")
         return
     sugg = ""
     if FALLBACK_MODEL_SUGGESTION in ids:
         sugg = (f" Suggested fallback: re-run with --model "
                 f"{FALLBACK_MODEL_SUGGESTION} (it IS available).")
     vision = sorted(i for i in ids if "vision" in i.lower())[:10]
-    sys.exit(f"[run_retest] FATAL: model '{model}' not found on this Groq account."
+    sys.exit(f" FATAL: model '{model}' not found on this Groq account."
              f"{sugg} Vision-capable models visible: {vision}")
 
 
@@ -456,7 +456,7 @@ def run_one_case(device_port, category, case_folder, bug_report, model):
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")[:-3]
     log_path = case_results_dir / f"{timestamp}.log"
 
-    banner = (f"[run_retest] CASE {category}/{case_folder} | provider=groq | "
+    banner = (f" CASE {category}/{case_folder} | provider=groq | "
               f"model={model} | timeout={TIMEOUT_SECONDS}s (30 min) | device={device_port}")
     print(f"\n{'=' * 80}\n{banner}\n{'=' * 80}")
 
@@ -475,7 +475,7 @@ def run_one_case(device_port, category, case_folder, bug_report, model):
     except APKUnavailableError as e:
         print(f"{log_prefix} {e}")
         with open(log_path, "a", encoding="utf-8", errors="replace") as lf:
-            lf.write(f"[run_retest] {e}\n")
+            lf.write(f" {e}\n")
         return finalize("apk_unavailable")
 
     # 2. device install/launch
@@ -486,7 +486,7 @@ def run_one_case(device_port, category, case_folder, bug_report, model):
     except Exception as e:
         print(f"{log_prefix} FAILED to install/launch {apk_path.name}: {e}")
         with open(log_path, "a", encoding="utf-8", errors="replace") as lf:
-            lf.write(f"[run_retest] INSTALL_FAILED: {e}\n")
+            lf.write(f" INSTALL_FAILED: {e}\n")
         return finalize("install_failed")
 
     # 3. child env: Groq provider + multi-key mapping (never log key values)
@@ -530,7 +530,7 @@ def run_one_case(device_port, category, case_folder, bug_report, model):
                 status = f"error(returncode={proc.returncode})"
         except subprocess.TimeoutExpired:
             status = "failed(timeout)"
-            log_file.write(f"\n[run_retest] FAILED: exceeded {TIMEOUT_SECONDS}s "
+            log_file.write(f"\n FAILED: exceeded {TIMEOUT_SECONDS}s "
                            f"(30 min) time limit, case aborted.\n")
 
     # token sidecar (Groq is free-tier; cost stays $0.0)
@@ -543,7 +543,7 @@ def run_one_case(device_port, category, case_folder, bug_report, model):
                 tokens[k] = data.get(k, 0) or 0
             tokens["est_cost_usd"] = data.get("est_cost_usd", 0.0) or 0.0
             with open(log_path, "a", encoding="utf-8", errors="replace") as lf:
-                lf.write(f"\n[run_retest] token usage: calls={tokens['calls']} "
+                lf.write(f"\n token usage: calls={tokens['calls']} "
                          f"prompt={tokens['prompt_tokens']} "
                          f"completion={tokens['completion_tokens']} "
                          f"total={tokens['total_tokens']} est_cost=${tokens['est_cost_usd']}\n")
@@ -590,8 +590,8 @@ def main():
     model = args.model or os.environ.get("GROQ_MODEL", "") or DEFAULT_MODEL
     keys = groq_keys_from_env()
     if not keys:
-        sys.exit("[run_retest] FATAL: no Groq keys found. Set GROQ_API_KEY_1 (.._N) in the environment.")
-    print(f"[run_retest] provider=groq model={model} timeout={TIMEOUT_SECONDS}s "
+        sys.exit(" FATAL: no Groq keys found. Set GROQ_API_KEY_1 (.._N) in the environment.")
+    print(f" provider=groq model={model} timeout={TIMEOUT_SECONDS}s "
           f"({TIMEOUT_SECONDS // 60} min) keys={len(keys)}")
 
     validate_groq_model(model, keys[0])
@@ -599,14 +599,14 @@ def main():
     cases = resolve_cases(case=args.case, cases=args.cases, category=args.category,
                           limit=args.limit, shard=args.shard, of=args.of)
     if not cases:
-        print("[run_retest] No matching cases. Nothing to run.")
+        print(" No matching cases. Nothing to run.")
         return
 
     WORK_ROOT.mkdir(parents=True, exist_ok=True)
     APK_DIR.mkdir(parents=True, exist_ok=True)
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
     device_ports = [p.strip() for p in args.devices.split(",") if p.strip()]
-    print(f"[run_retest] {len(cases)} case(s) across {len(device_ports)} device(s): {device_ports}")
+    print(f" {len(cases)} case(s) across {len(device_ports)} device(s): {device_ports}")
 
     summary = []
     if len(device_ports) == 1:
@@ -622,16 +622,16 @@ def main():
         for t in threads:
             t.join()
 
-    print(f"\n{'=' * 80}\n[run_retest] BATCH SUMMARY ({len(summary)} case(s))\n{'=' * 80}")
+    print(f"\n{'=' * 80}\n BATCH SUMMARY ({len(summary)} case(s))\n{'=' * 80}")
     for r in sorted(summary, key=lambda x: (x["category"], x["case"])):
         print(f"  [dev {r['device']}] {r['category']}/{r['case']}: {r['status']}")
     from collections import Counter
-    print("\n[run_retest] Status tally:")
+    print("\n Status tally:")
     for s, n in Counter(r["status"] for r in summary).most_common():
         print(f"  {s}: {n}")
     grand_calls = sum(r.get("tokens", {}).get("calls", 0) for r in summary)
     grand_total = sum(r.get("tokens", {}).get("total_tokens", 0) for r in summary)
-    print(f"\n[run_retest] TOTAL: calls={grand_calls} tokens={grand_total} (Groq free tier: $0.00)")
+    print(f"\n TOTAL: calls={grand_calls} tokens={grand_total} (Groq free tier: $0.00)")
     try:
         (RESULTS_DIR / "_batch_summary.json").write_text(json.dumps({
             "provider": "groq",
@@ -641,9 +641,9 @@ def main():
             "cases": summary,
             "totals": {"calls": grand_calls, "total_tokens": grand_total, "est_cost_usd": 0.0},
         }, indent=2), encoding="utf-8")
-        print(f"[run_retest] Wrote batch summary -> {RESULTS_DIR / '_batch_summary.json'}")
+        print(f" Wrote batch summary -> {RESULTS_DIR / '_batch_summary.json'}")
     except Exception as e:
-        print(f"[run_retest] Warning: could not write batch summary: {e}")
+        print(f" Warning: could not write batch summary: {e}")
 
 
 if __name__ == "__main__":

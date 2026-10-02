@@ -98,7 +98,7 @@ def run_one_case(device_port, category, case_folder, bug_report, model):
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")[:-3]
     log_path = case_results_dir / f"{timestamp}.log"
 
-    banner = (f"[run_retest] CASE {category}/{case_folder} | provider={PROVIDER_NAME} | "
+    banner = (f" CASE {category}/{case_folder} | provider={PROVIDER_NAME} | "
               f"model={model} | timeout={TIMEOUT_SECONDS}s ({TIMEOUT_SECONDS // 60} min) | device={device_port}")
     print(f"\n{'=' * 80}\n{banner}\n{'=' * 80}")
 
@@ -117,7 +117,7 @@ def run_one_case(device_port, category, case_folder, bug_report, model):
     except base.APKUnavailableError as e:
         print(f"{log_prefix} {e}")
         with open(log_path, "a", encoding="utf-8", errors="replace") as lf:
-            lf.write(f"[run_retest] {e}\n")
+            lf.write(f" {e}\n")
         return finalize("apk_unavailable")
 
     # 2. device install/launch (shared)
@@ -128,7 +128,7 @@ def run_one_case(device_port, category, case_folder, bug_report, model):
     except Exception as e:
         print(f"{log_prefix} FAILED to install/launch {apk_path.name}: {e}")
         with open(log_path, "a", encoding="utf-8", errors="replace") as lf:
-            lf.write(f"[run_retest] INSTALL_FAILED: {e}\n")
+            lf.write(f" INSTALL_FAILED: {e}\n")
         return finalize("install_failed")
 
     # 3. child env: Vertex-ADC provider. The child only ever sees the
@@ -170,7 +170,7 @@ def run_one_case(device_port, category, case_folder, bug_report, model):
                 status = f"error(returncode={proc.returncode})"
         except subprocess.TimeoutExpired:
             status = "failed(timeout)"
-            log_file.write(f"\n[run_retest] FAILED: exceeded {TIMEOUT_SECONDS}s "
+            log_file.write(f"\n FAILED: exceeded {TIMEOUT_SECONDS}s "
                            f"({TIMEOUT_SECONDS // 60} min) time limit, case aborted.\n")
 
     # token sidecar (Vertex AI bills: est_cost_usd comes from usageMetadata)
@@ -183,7 +183,7 @@ def run_one_case(device_port, category, case_folder, bug_report, model):
                 tokens[k] = data.get(k, 0) or 0
             tokens["est_cost_usd"] = data.get("est_cost_usd", 0.0) or 0.0
             with open(log_path, "a", encoding="utf-8", errors="replace") as lf:
-                lf.write(f"\n[run_retest] token usage: calls={tokens['calls']} "
+                lf.write(f"\n token usage: calls={tokens['calls']} "
                          f"prompt={tokens['prompt_tokens']} "
                          f"completion={tokens['completion_tokens']} "
                          f"total={tokens['total_tokens']} est_cost=${tokens['est_cost_usd']}\n")
@@ -241,7 +241,7 @@ def main():
 
     model = args.model or os.environ.get("GEMINI_MODEL", "") or DEFAULT_MODEL
     if not _adc_ok():
-        sys.exit("[run_retest] FATAL: GOOGLE_APPLICATION_CREDENTIALS is not set to an "
+        sys.exit(" FATAL: GOOGLE_APPLICATION_CREDENTIALS is not set to an "
                  "existing service-account JSON file. (The workflow writes it from the "
                  "GCP_SA_JSON secret; see run_shard_gemini.sh.)")
     # Fail fast (no billable call): minting a token catches a bad SA file now,
@@ -252,10 +252,10 @@ def main():
         creds, _ = google.auth.default(scopes=["https://www.googleapis.com/auth/cloud-platform"])
         creds.refresh(_GARequest())
     except Exception as e:
-        sys.exit(f"[run_retest] FATAL: could not mint ADC access token: {e}")
-    print(f"[run_retest] provider={PROVIDER_NAME} model={model} timeout={TIMEOUT_SECONDS}s "
+        sys.exit(f" FATAL: could not mint ADC access token: {e}")
+    print(f" provider={PROVIDER_NAME} model={model} timeout={TIMEOUT_SECONDS}s "
           f"({TIMEOUT_SECONDS // 60} min) ADC token minted OK")
-    print(f"[run_retest] spend cap: ${MAX_SPEND_USD:.2f} per job "
+    print(f" spend cap: ${MAX_SPEND_USD:.2f} per job "
           f"(GEMINI_MAX_SPEND_USD); wave ceiling = cap x shard count")
 
     # Gemini retest pool = the 53 timeout cases PLUS the 8 non-timeout failures
@@ -265,14 +265,14 @@ def main():
                                limit=args.limit, shard=args.shard, of=args.of,
                                pool=base.TIMEOUT_CASES + base.EXTRA_FAILED_CASES)
     if not cases:
-        print("[run_retest] No matching cases. Nothing to run.")
+        print(" No matching cases. Nothing to run.")
         return
 
     WORK_ROOT.mkdir(parents=True, exist_ok=True)
     APK_DIR.mkdir(parents=True, exist_ok=True)
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
     device_ports = [p.strip() for p in args.devices.split(",") if p.strip()]
-    print(f"[run_retest] {len(cases)} case(s) across {len(device_ports)} device(s): {device_ports}")
+    print(f" {len(cases)} case(s) across {len(device_ports)} device(s): {device_ports}")
 
     summary = []
     if len(device_ports) == 1:
@@ -288,16 +288,16 @@ def main():
         for t in threads:
             t.join()
 
-    print(f"\n{'=' * 80}\n[run_retest] BATCH SUMMARY ({len(summary)} case(s))\n{'=' * 80}")
+    print(f"\n{'=' * 80}\n BATCH SUMMARY ({len(summary)} case(s))\n{'=' * 80}")
     for r in sorted(summary, key=lambda x: (x["category"], x["case"])):
         print(f"  [dev {r['device']}] {r['category']}/{r['case']}: {r['status']}")
-    print("\n[run_retest] Status tally:")
+    print("\n Status tally:")
     for s, n in Counter(r["status"] for r in summary).most_common():
         print(f"  {s}: {n}")
     grand_calls = sum(r.get("tokens", {}).get("calls", 0) for r in summary)
     grand_total = sum(r.get("tokens", {}).get("total_tokens", 0) for r in summary)
     grand_cost = round(sum(r.get("tokens", {}).get("est_cost_usd", 0.0) for r in summary), 4)
-    print(f"\n[run_retest] TOTAL: calls={grand_calls} tokens={grand_total} est_cost=${grand_cost} (Vertex AI billing)")
+    print(f"\n TOTAL: calls={grand_calls} tokens={grand_total} est_cost=${grand_cost} (Vertex AI billing)")
     try:
         (RESULTS_DIR / "_batch_summary.json").write_text(json.dumps({
             "provider": PROVIDER_NAME,
@@ -309,9 +309,9 @@ def main():
             "spend_cap_usd": MAX_SPEND_USD,
             "spend_cap_hit": _SPEND_EXCEEDED.is_set(),
         }, indent=2), encoding="utf-8")
-        print(f"[run_retest] Wrote batch summary -> {RESULTS_DIR / '_batch_summary.json'}")
+        print(f" Wrote batch summary -> {RESULTS_DIR / '_batch_summary.json'}")
     except Exception as e:
-        print(f"[run_retest] Warning: could not write batch summary: {e}")
+        print(f" Warning: could not write batch summary: {e}")
 
 
 if __name__ == "__main__":

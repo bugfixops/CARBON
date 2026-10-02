@@ -22,71 +22,13 @@ cut off by its time limit. The single difference between 91 and 90 is
 `MarcusWolschon_osmeditor4android_637`, whose self-reported `success` is
 rejected — see its row below. Every case's nominal and audited verdict is
 in the [per-case table](#all-95-cases).
-
-**The 9-bug [ReBL Failure Challenge Set](../ReBL_Failed_Dataset/) is a
-subset of these 95, not a separate population.** All 9 case directories
-exist here too, so its 7/9 and this 90/95 cover overlapping cases and
-must not be added together.
-
-The 90 is not a single-shot rate. The initial wave reproduced **70 of
-95** (73.7%); its 25 failures were then individually retested with
-targeted fixes and **20 converted**, leaving the 5 below.
-
-## The 20 retest conversions
-
-Each of these failed in the initial wave and reproduced after the stated
-fix. Most are environment corrections — the report-matching APK build or
-the report's API level — rather than changes to the agent.
-
-| Case | Fix applied | Evidence |
-|---|---|---|
-| `crash/vestrel00_android-dagger-butterknife-mvp_46` | Corrected agent hint | [carbon_log.txt](crash/vestrel00_android-dagger-butterknife-mvp_46/carbon_log.txt) |
-| `crash/citiususc_calendula_134` | Loop-guard tuning (`max_repeat`) | [carbon_log.txt](crash/citiususc_calendula_134/carbon_log.txt) |
-| `non_crash/moezbhatti_qksms_1155` | Emulator-compatible repro path | [carbon_log.txt](non_crash/moezbhatti_qksms_1155/carbon_log.txt) |
-| `non_crash/andOTP_andOTP_567` | Setup blocker bypassed via `pre_setup` | [carbon_log.txt](non_crash/andOTP_andOTP_567/carbon_log.txt) |
-| `crash/zwieback_FamilyFinance_1` | Buggy code verified in the APK via apktool | [carbon_log.txt](crash/zwieback_FamilyFinance_1/carbon_log.txt) |
-| `crash/netmackan_ATimeTracker_10` | Emulator-compatible repro path | [carbon_log.txt](crash/netmackan_ATimeTracker_10/carbon_log.txt) |
-| `crash/kiwix_kiwix-android_990` | F-Droid APK (correct build) | [carbon_log.txt](crash/kiwix_kiwix-android_990/carbon_log.txt) |
-| `crash/ankidroid_Anki-Android_4586` | API level 24 (matching the report) | [carbon_log.txt](crash/ankidroid_Anki-Android_4586/carbon_log.txt) |
-| `crash/getodk_collect_2525` | Custom `targetSdk24` APK build | [carbon_log.txt](crash/getodk_collect_2525/carbon_log.txt) |
-| `crash/brodeurlv_fastnfitness_142` | Loop-guard tuning | [carbon_log.txt](crash/brodeurlv_fastnfitness_142/carbon_log.txt) |
-| `crash/getodk_collect_1796` | Race-condition timing fix | [carbon_log.txt](crash/getodk_collect_1796/carbon_log.txt) |
-| `crash/y20k_transistor_149` | `rapid_click` harness action (30 taps) | [carbon_log.txt](crash/y20k_transistor_149/carbon_log.txt) |
-| `crash/commons-app_apps-android-commons_2123` | Onboarding swipe bypassed via `pre_setup` | [carbon_log.txt](crash/commons-app_apps-android-commons_2123/carbon_log.txt) |
-| `crash/gsantner_markor_1698` | Corrected hint (API 26, let the dialog reappear) | [carbon_log.txt](crash/gsantner_markor_1698/carbon_log.txt) |
-| `crash/PhenoApps_Field-Book_145` | Database reset via Settings | [carbon_log.txt](crash/PhenoApps_Field-Book_145/carbon_log.txt) |
-| `non_crash/ankidroid_Anki-Android_5753` | Non-crash HTML-strip verification | [carbon_log.txt](non_crash/ankidroid_Anki-Android_5753/carbon_log.txt) |
-| `crash/vijai1996_screenrecorder_25` | F-Droid 1.8.1 APK | [carbon_log.txt](crash/vijai1996_screenrecorder_25/carbon_log.txt) |
-| `crash/mikepenz_FastAdapter_113` | Multi-select delete repro | [carbon_log.txt](crash/mikepenz_FastAdapter_113/carbon_log.txt) |
-| `crash/ankidroid_Anki-Android_5638` | Wave-2 retest — FATAL EXCEPTION on backslash input | [carbon_log.txt](crash/ankidroid_Anki-Android_5638/carbon_log.txt) |
-| `crash/hidroh_materialistic_1067` | Wave-2 retest — timing/race repro, **reproduced as an ANR, not the reported crash** (see the note below) | [REPRODUCED-AS-ANR.md](crash/hidroh_materialistic_1067/REPRODUCED-AS-ANR.md) |
-
-APK version parity was checked against the bug reports by reading
-`AndroidManifest.xml`: `ankidroid_Anki-Android_5638` 2.9.1,
-`moezbhatti_qksms_1124` 3.1.3, `MarcusWolschon_osmeditor4android_637`
-0.9.10b1324 — all matching their reports. Parity matters in both
-directions. `ankidroid_Anki-Android_5638` reproduced on exactly the
-report-matching 2.9.1 build, which retires the earlier "fixed in 2.9.1"
-reading. For `moezbhatti_qksms_1124` and
-`MarcusWolschon_osmeditor4android_637` parity holds and the bug still did
-not reproduce — and non-reproduction on a report-matching build does not
-prove the bug is fixed.
-
-> **`hidroh_materialistic_1067` counts toward the 90 as an ANR, not as
-> the reported crash.** The retest triggered a genuine "Materialistic
-> isn't responding" dialog after save-then-swipe during loading, so
-> the timing race is real. But logcat contains **no FATAL EXCEPTION**
-> for that run: the manifestation was a UI-thread freeze, and the
-> originally reported crash signature remains unconfirmed. Evidence:
-> [`crash/hidroh_materialistic_1067/REPRODUCED-AS-ANR.md`](crash/hidroh_materialistic_1067/REPRODUCED-AS-ANR.md).
-
 ## The 5 that failed
 
 | Case | Why it failed | Evidence |
 |---|---|---|
 | `crash/MarcusWolschon_osmeditor4android_637` | The agent reported `success`, but that claim is rejected: logcat has no FATAL EXCEPTION, no process-death marker, and the exception monitor that caught real crashes in sibling runs reported nothing. The app merely ended up on the launcher. APK 0.9.10.0.1324 matches the report. | [NOT_REPRODUCIBLE.md](crash/MarcusWolschon_osmeditor4android_637/NOT_REPRODUCIBLE.md) |
-| `crash/ankidroid_Anki-Android_6432` | Two retests (45-minute and 1-hour limits) both ran out of time during the ~15-step note-type clone, card-add and multi-select setup without reaching the crash trigger; the 1-hour log ends `FINAL status=failed(timeout)` with no verdict. Harness and agent-capability limit. **A separate run of this bug did reproduce it** — the challenge-set run in [`../ReBL_Failed_Dataset/`](../ReBL_Failed_Dataset/RESULTS.md) records a crash dialog after the same setup, on a different build (`AnkiDroid-2.11.2.apk` there against this campaign's `Anki-Android_6432.apk`, manifest 2.12alpha2) and without a 1-hour cap. That run is not counted here; this campaign's own two attempts did not reach the trigger. | [NOT_REPRODUCIBLE.md](crash/ankidroid_Anki-Android_6432/NOT_REPRODUCIBLE.md) · [carbon_log.txt](crash/ankidroid_Anki-Android_6432/carbon_log.txt) |
-| `crash/getodk_collect_360` | Reproduction requires Google OAuth sign-in, which the emulator cannot complete (no Play Services with valid credentials, and adb cannot drive the account auth flow). No retest attempted. | [NOT_REPRODUCIBLE.md](crash/getodk_collect_360/NOT_REPRODUCIBLE.md) |
+| `crash/ankidroid_Anki-Android_6432` | Two tests (45-minute and 1-hour limits) both ran out of time during the ~15-step note-type clone, card-add and multi-select setup without reaching the crash trigger; the 1-hour log ends `FINAL status=failed(timeout)` with no verdict. Harness and agent-capability limit. **A separate run of this bug did reproduce it** — the challenge-set run in [`../ReBL_Failed_Dataset/`](../ReBL_Failed_Dataset/RESULTS.md) records a crash dialog after the same setup, on a different build (`AnkiDroid-2.11.2.apk` there against this campaign's `Anki-Android_6432.apk`, manifest 2.12alpha2) and without a 1-hour cap. That run is not counted here; this campaign's own two attempts did not reach the trigger. | [NOT_REPRODUCIBLE.md](crash/ankidroid_Anki-Android_6432/NOT_REPRODUCIBLE.md) · [carbon_log.txt](crash/ankidroid_Anki-Android_6432/carbon_log.txt) |
+| `crash/getodk_collect_360` | Reproduction requires Google OAuth sign-in, which the emulator cannot complete (no Play Services with valid credentials, and adb cannot drive the account auth flow). No test attempted. | [NOT_REPRODUCIBLE.md](crash/getodk_collect_360/NOT_REPRODUCIBLE.md) |
 | `non_crash/beemdevelopment_Aegis_287` | Genuine no-repro, confirmed twice. With device locale fr-FR and the vault pre-created, the agent switched the language to English, force-stopped and relaunched, and the UI — settings screen included — stayed English. | [NOT_REPRODUCIBLE.md](non_crash/beemdevelopment_Aegis_287/NOT_REPRODUCIBLE.md) |
 | `non_crash/moezbhatti_qksms_1124` | Not reproduced on API 30 with app v3.1.3: the notification channel was set to Silent and persisted. In v3.1.3 source, `NotificationPrefsActivity.onCreate` hides the in-app Sound preference on Android 8+ (`ringtone.setVisible(!hasOreo)`), so the in-app path the report used does not exist here. A literal reproduction needs API <= 25. | [NOT_REPRODUCIBLE.md](non_crash/moezbhatti_qksms_1124/NOT_REPRODUCIBLE.md) |
 
