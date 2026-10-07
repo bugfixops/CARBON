@@ -1,0 +1,94 @@
+##########syst1##########
+As an experienced mobile app tester, your task is to try and reproduce a crash on the app based on the crash description. I'll provide you with the current page of the app and the available actions you can perform (interactions with the app's GUI widgets). You need to select and perform the action that best matches the crash description so as to reproduce the crash in a step-by-step manner.
+
+There are three types of actions on the page:
+1. Click[widget name]: You will click a button on the page called "widget name".
+2. Long press[widget name]: You will long press a button on the page called "widget name".
+3. Input[widget name]: You will type something into a input box on the page called "widget name".
+
+Use the following format:
+
+<Reported crash>: a one-sentence description of the crash that you must reproduce
+<Observation>: I will tell you the current page of the app and the available actions you can perform
+<Thought>: you should always think about what to do
+<Action>: you should answer the number of the chosen action. (e.g., you should answer "<Action>: 3")
+... (then I will tell you the new Observation after the action you choose. This Observation/Thought/Action can repeat N times until the crash is reproduced)
+
+Note that your answer should be only one <Thought> and one <Action>.
+##########user2##########
+Let's begin!
+<Reported crash>: [BUG] Crash when trying to move item using TalkBack action
+##########user3##########
+<Observation>: In the previous step, you clicked on the "Widgets" button, and navigated to the "Lawnchair Launcher" page, which you have visited 2 times. On "Lawnchair Launcher" page, you need to choose one of the following 4 actions to perform:
+(1) Click[widget preview container]: You haven't performed the action yet.
+(2) Long press[widget preview container]: You perform the action 1 times, and the action goes to page "Lawnchair Launcher"
+(3) Click[Search widget, 4 wide by 1 ...]: You haven't performed the action yet.
+(4) Click[At a Glance widget, 4 wide ...]: You haven't performed the action yet.
+##########assi4##########
+<Thought>: I clicked "Widgets" from the Google app's context menu, and it brought me to a widget selection screen, but it's still labeled "Lawnchair Launcher". This is the widget picker. The crash is about "moving an item" with a "TalkBack action". My previous actions (long-pressing an app in a folder) were an attempt to initiate a move. The app is now in a state where it expects me to place a widget, but it was originally in the middle of a potential "move item" operation. This state conflict is a likely source of the crash.
+To trigger the crash, I need to complete the action. I'm on a widget picker screen. The most direct way to proceed is to select a widget to add to the home screen. This would complete the "add widget" flow, which is in conflict with the "move item" flow I was trying to start. I'll try to add the first available widget, which is inside the "widget preview container". A simple click should be enough to select it.
+<Action>: 1
+##########user5##########
+<Observation>: In the previous step, you clicked on the "widget preview container" button, and navigated to the "Lawnchair Launcher" page, which is a newly explored page. On "Lawnchair Launcher" page, you need to choose one of the following 5 actions to perform:
+(1) Click[Add]: You haven't performed the action yet.
+(2) Click[widget preview container]: You haven't performed the action yet.
+(3) Long press[widget preview container]: You haven't performed the action yet.
+(4) Click[Search widget, 4 wide by 1 ...]: You haven't performed the action yet.
+(5) Click[At a Glance widget, 4 wide ...]: You haven't performed the action yet.
+##########assi6##########
+<Thought>: I've clicked on the widget preview, and now I'm on a confirmation screen with an "Add" button. The app is still trying to get me to add a widget. This confirms my theory that the app is in a confused state, having started a "move item" flow and then being diverted into an "add widget" flow. To finally trigger the crash, I need to complete this conflicting action. Clicking "Add" will tell the launcher to place the widget on the home screen. Since the launcher's internal state is likely still expecting to be in a drag-and-drop operation for an app icon from a folder, this final confirmation to add a completely different element (a widget) is the most probable trigger for the crash. The launcher will try to perform two incompatible operations at once, leading to a fatal error.
+<Action>: 1
+##########user7##########
+<Observation>: In the previous step, you clicked on the "Add" button, and navigated to the "Lawnchair Launcher" page, which is a newly explored page. On "Lawnchair Launcher" page, you need to choose one of the following 14 actions to perform:
+(1) Click[Folder: Google, 4 or more items]: You haven't performed the action yet.
+(2) Click[Sound Search]: You haven't performed the action yet.
+(3) Long press[Sound Search]: You haven't performed the action yet.
+(4) Click[Phone]: You haven't performed the action yet.
+(5) Long press[Phone]: You haven't performed the action yet.
+(6) Click[Messages]: You haven't performed the action yet.
+(7) Long press[Messages]: You haven't performed the action yet.
+(8) Click[Contacts]: You haven't performed the action yet.
+(9) Long press[Contacts]: You haven't performed the action yet.
+(10) Click[Chrome]: You haven't performed the action yet.
+(11) Long press[Chrome]: You haven't performed the action yet.
+(12) Click[Tap to set up]: You haven't performed the action yet.
+(13) Long press[Tap to set up]: You haven't performed the action yet.
+(14) Click[Voice Search]: You haven't performed the action yet.
+##########assi8##########
+<Thought>: I've gone through a convoluted process: tried to move an item, got diverted to adding a widget, and now I'm back on the home screen. The app's internal state is likely corrupted from this sequence of conflicting actions. The original intent was to "move an item". The app might still be in some kind of broken "move" state, even though the UI looks normal. To trigger the crash, I should attempt another action related to moving an item. The most direct way to do this is to long-press an app icon to initiate a drag-and-drop. Given the unstable state, attempting this standard operation is highly likely to cause the crash the system is expecting. I will long-press the "Phone" icon.
+<Action>: 5
+##########user9##########
+<Observation>: In the previous step, you long pressed the "Phone" button, and navigated to the "Lawnchair Launcher" page, which you have visited 8 times. On "Lawnchair Launcher" page, you need to choose one of the following 3 actions to perform:
+(1) Long press[New contact]: You perform the action 2 times, and the action goes to page "Lawnchair Launcher"
+(2) Back to previous page: You perform the action 1 times, and the action goes to page "Lawnchair Launcher"
+(3) Click[Customize]: You perform the action 2 times, and the action goes to page "Lawnchair Launcher"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have only been performed a few times (Back to previous page, Click[App info], Click[Customize], Click[New contact], Long press[New contact]) or go back to previous page.
+##########assi10##########
+<Thought>: I've performed a series of conflicting actions that have likely put the app into an unstable state. I tried to move an item, got diverted into adding a widget, and now I've tried to move another item by long-pressing the "Phone" icon. This has brought up a context menu.
+The crash is related to "moving an item" and "TalkBack actions". A long-press is a TalkBack action. Long-pressing a context menu item like "New contact" is a very unusual interaction. Normally, you would just click it. Given the app's current corrupted state, performing this non-standard action (long-pressing a menu item) is a prime candidate for triggering an unhandled exception and causing the crash. The hint also suggests trying less-used actions, and long-pressing a context menu item is definitely less common than clicking it or backing out.
+<Action>: 1
+##########user11##########
+<Observation>: In the previous step, you long pressed the "New contact" button, and navigated to the "Lawnchair Launcher" page, which you have visited 2 times. On "Lawnchair Launcher" page, you need to choose one of the following 14 actions to perform:
+(1) Click[Folder: Google, 4 or more items]: You haven't performed the action yet.
+(2) Click[Sound Search]: You haven't performed the action yet.
+(3) Long press[Sound Search]: You haven't performed the action yet.
+(4) Click[Phone]: You haven't performed the action yet.
+(5) Long press[Phone]: You perform the action 1 times, and the action goes to page "Lawnchair Launcher"
+(6) Click[Messages]: You haven't performed the action yet.
+(7) Long press[Messages]: You haven't performed the action yet.
+(8) Click[Contacts]: You haven't performed the action yet.
+(9) Long press[Contacts]: You haven't performed the action yet.
+(10) Click[Chrome]: You haven't performed the action yet.
+(11) Long press[Chrome]: You haven't performed the action yet.
+(12) Click[Tap to set up]: You haven't performed the action yet.
+(13) Long press[Tap to set up]: You haven't performed the action yet.
+(14) Click[Voice Search]: You haven't performed the action yet.
+##########assi12##########
+<Thought>: I've performed a series of actions that have likely destabilized the app. The last action was long-pressing "New contact", which brought me back to the home screen. The app is clearly in a broken state, as long-pressing a context menu item shouldn't just dismiss it and return to the home screen without any effect. The original crash was about "moving an item" using a "TalkBack action". I've been trying to initiate a move. The app is now back on the home screen, but its internal state is probably still corrupted from the previous sequence. To trigger the crash, I should try the "move" action again. The most direct way to do this is to long-press an app icon. I've already long-pressed "Phone". I will try long-pressing another icon, "Messages", to see if this finally triggers the crash in the app's unstable state.
+<Action>: 7
+##########user13##########
+<Observation>: In the previous step, you long pressed the "Messages" button, and navigated to the "Lawnchair Launcher" page, which you have visited 9 times. On "Lawnchair Launcher" page, you need to choose one of the following 3 actions to perform:
+(1) Long press[New contact]: You perform the action 3 times, and the action goes to page "Lawnchair Launcher"
+(2) Back to previous page: You perform the action 1 times, and the action goes to page "Lawnchair Launcher"
+(3) Click[Customize]: You perform the action 2 times, and the action goes to page "Lawnchair Launcher"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have only been performed a few times (Back to previous page, Click[App info], Click[Customize], Click[New contact], Long press[New contact]) or go back to previous page.

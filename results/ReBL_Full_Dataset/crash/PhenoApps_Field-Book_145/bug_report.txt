@@ -1,0 +1,143 @@
+Bug Report Title:
+[BUG] Crashes after loading backup.db or deleting db and navigating to trait activity.
+Bug Report Issue:
+**Describe the bug**
+FieldBook crashes on a fresh install when navigating to Traits after deleting the current db or importing the backup.db.
+
+**To Reproduce**
+Steps to reproduce the behavior on AVD:
+1. Say no to both dialogs on load.
+2. Navigate to settings -> database -> delete database (or import backup.db), press yes both times
+3. Press back, press no both times again.
+4. Press Traits
+
+Steps to reproduce the behavior on physical device:
+1. Say no to both dialogs on load.
+2. Navigate to settings -> database -> delete database (or import backup.db), press yes both times
+3. Press back, press no both times again.
+4. Press Traits, screen flashes white for a few seconds and goes to settings page
+5. Go to step (2) and it will crash when step (4) is reached again.
+
+**Expected behavior**
+The app doesn't crash.
+
+**Device Info (please complete the following information):**
+ - Model: Moto X and Pixel 2 AVD
+ - OS: Android 9
+ - Field Book Version 4.3.1
+Comments:
+Comment#1:
+Weird, I don't get this behavior on my Pixel 1 test device. You might want to see if this persists on the development branch in v4.3.3
+---
+Comment#2:
+Apologies, looks like I didnt include the original error:
+```
+020-08-24 09:55:27.394 5066-5066/com.fieldbook.tracker E/AndroidRuntime: FATAL EXCEPTION: main
+    Process: com.fieldbook.tracker, PID: 5066
+    java.lang.RuntimeException: Unable to start activity ComponentInfo{com.fieldbook.tracker/com.fieldbook.tracker.activities.TraitEditorActivity}: java.lang.IllegalStateException: attempt to re-open an already-closed object: SQLiteDatabase: /data/user/0/com.fieldbook.tracker/databases/fieldbook.db
+        at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2778)
+        at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:2856)
+        at android.app.ActivityThread.-wrap11(Unknown Source:0)
+        at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1589)
+        at android.os.Handler.dispatchMessage(Handler.java:106)
+        at android.os.Looper.loop(Looper.java:164)
+        at android.app.ActivityThread.main(ActivityThread.java:6494)
+        at java.lang.reflect.Method.invoke(Native Method)
+        at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:438)
+        at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:807)
+     Caused by: java.lang.IllegalStateException: attempt to re-open an already-closed object: SQLiteDatabase: /data/user/0/com.fieldbook.tracker/databases/fieldbook.db
+        at android.database.sqlite.SQLiteClosable.acquireReference(SQLiteClosable.java:55)
+        at android.database.sqlite.SQLiteDatabase.queryWithFactory(SQLiteDatabase.java:1234)
+        at android.database.sqlite.SQLiteDatabase.query(SQLiteDatabase.java:1110)
+        at android.database.sqlite.SQLiteDatabase.query(SQLiteDatabase.java:1278)
+        at com.fieldbook.tracker.database.DataHelper.getTraitVisibility(DataHelper.java:1011)
+        at com.fieldbook.tracker.activities.TraitEditorActivity.onCreate(TraitEditorActivity.java:372)
+        at android.app.Activity.performCreate(Activity.java:7009)
+        at android.app.Activity.performCreate(Activity.java:7000)
+        at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1214)
+        at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2731)
+        at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:2856) 
+        at android.app.ActivityThread.-wrap11(Unknown Source:0) 
+        at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1589) 
+        at android.os.Handler.dispatchMessage(Handler.java:106) 
+        at android.os.Looper.loop(Looper.java:164) 
+        at android.app.ActivityThread.main(ActivityThread.java:6494) 
+        at java.lang.reflect.Method.invoke(Native Method) 
+        at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:438) 
+        at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:807) 
+```
+
+
+**Confirmed a different error occurs on 4.3.3 through the same process:**
+```
+2020-08-24 09:53:45.978 4723-4723/com.fieldbook.tracker E/AndroidRuntime: FATAL EXCEPTION: main
+    Process: com.fieldbook.tracker, PID: 4723
+    android.database.sqlite.SQLiteReadOnlyDatabaseException: attempt to write a readonly database (code 1032)
+        at android.database.sqlite.SQLiteConnection.nativeExecuteForChangedRowCount(Native Method)
+        at android.database.sqlite.SQLiteConnection.executeForChangedRowCount(SQLiteConnection.java:735)
+        at android.database.sqlite.SQLiteSession.executeForChangedRowCount(SQLiteSession.java:754)
+        at android.database.sqlite.SQLiteStatement.executeUpdateDelete(SQLiteStatement.java:64)
+        at android.database.sqlite.SQLiteDatabase.executeSql(SQLiteDatabase.java:1754)
+        at android.database.sqlite.SQLiteDatabase.execSQL(SQLiteDatabase.java:1732)
+        at com.fieldbook.tracker.database.DataHelper.updateTraitVisibility(DataHelper.java:155)
+        at com.fieldbook.tracker.adapters.TraitAdapter$1.onCheckedChanged(TraitAdapter.java:160)
+        at android.widget.CompoundButton.setChecked(CompoundButton.java:171)
+        at com.fieldbook.tracker.adapters.TraitAdapter.getView(TraitAdapter.java:148)
+        at com.fieldbook.tracker.dragsort.DragSortListView$AdapterWrapper.getView(DragSortListView.java:2283)
+        at android.widget.AbsListView.obtainView(AbsListView.java:2365)
+        at android.widget.ListView.measureHeightOfChildren(ListView.java:1408)
+        at android.widget.ListView.onMeasure(ListView.java:1315)
+        at com.fieldbook.tracker.dragsort.DragSortListView.onMeasure(DragSortListView.java:1647)
+        at android.view.View.measure(View.java:22071)
+        at android.widget.RelativeLayout.measureChildHorizontal(RelativeLayout.java:715)
+        at android.widget.RelativeLayout.onMeasure(RelativeLayout.java:461)
+        at android.view.View.measure(View.java:22071)
+        at android.view.ViewGroup.measureChildWithMargins(ViewGroup.java:6602)
+        at androidx.coordinatorlayout.widget.CoordinatorLayout.onMeasureChild(CoordinatorLayout.java:760)
+        at androidx.coordinatorlayout.widget.CoordinatorLayout.onMeasure(CoordinatorLayout.java:833)
+        at android.view.View.measure(View.java:22071)
+        at android.view.ViewGroup.measureChildWithMargins(ViewGroup.java:6602)
+        at android.widget.FrameLayout.onMeasure(FrameLayout.java:185)
+        at androidx.appcompat.widget.ContentFrameLayout.onMeasure(ContentFrameLayout.java:143)
+        at android.view.View.measure(View.java:22071)
+        at android.view.ViewGroup.measureChildWithMargins(ViewGroup.java:6602)
+        at androidx.appcompat.widget.ActionBarOverlayLayout.onMeasure(ActionBarOverlayLayout.java:403)
+        at android.view.View.measure(View.java:22071)
+        at android.view.ViewGroup.measureChildWithMargins(ViewGroup.java:6602)
+        at android.widget.FrameLayout.onMeasure(FrameLayout.java:185)
+        at android.view.View.measure(View.java:22071)
+        at android.view.ViewGroup.measureChildWithMargins(ViewGroup.java:6602)
+        at android.widget.LinearLayout.measureChildBeforeLayout(LinearLayout.java:1514)
+        at android.widget.LinearLayout.measureVertical(LinearLayout.java:806)
+        at android.widget.LinearLayout.onMeasure(LinearLayout.java:685)
+        at android.view.View.measure(View.java:22071)
+        at android.view.ViewGroup.measureChildWithMargins(ViewGroup.java:6602)
+        at android.widget.FrameLayout.onMeasure(FrameLayout.java:185)
+        at com.android.internal.policy.DecorView.onMeasure(DecorView.java:724)
+        at android.view.View.measure(View.java:22071)
+        at android.view.ViewRootImpl.performMeasure(ViewRootImpl.java:2422)
+        at android.view.ViewRootImpl.measureHierarchy(ViewRootImpl.java:1504)
+        at android.view.ViewRootImpl.performTraversals(ViewRootImpl.java:1761)
+        at android.view.ViewRootImpl.doTraversal(ViewRootImpl.java:1392)
+        at android.view.ViewRootImpl$TraversalRunnable.run(ViewRootImpl.java:6752)
+        at android.view.Choreographer$CallbackRecord.run(Choreographer.java:911)
+        at android.view.Choreographer.doCallbacks(Choreographer.java:723)
+        at android.view.Choreographer.doFrame(Choreographer.java:658)
+        at android.view.Choreographer$FrameDisplayEventReceiver.run(Choreographer.java:897)
+        at android.os.Handler.handleCallback(Handler.java:790)
+        at android.os.Handler.dispatchMessage(Handler.java:99)
+2020-08-24 09:53:45.979 4723-4723/com.fieldbook.tracker E/AndroidRuntime:     at android.os.Looper.loop(Looper.java:164)
+        at android.app.ActivityThread.main(ActivityThread.java:6494)
+        at java.lang.reflect.Method.invoke(Native Method)
+        at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:438)
+        at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:807)
+```
+---
+Comment#3:
+Confirmed same exception occurs with Pixel 1 AVD running Oreo (27).
+
+Interestingly, the backup.db was not an option by default. But still, deleting the DB and going through the same process recreates the issue.
+---
+Comment#4:
+I think I resolved this in v4.5. I wasn't properly closing the app completely after deleting the internal db.
+---

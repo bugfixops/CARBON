@@ -1,0 +1,104 @@
+2026-10-07 04:54:03.209 | INFO     | ChatGPT:infer:46 - Available actions: [tap, input, scroll, double tap, long tap]
+Action primitives: [Tap] [Component], [Scroll] [Direction], [Input] [Component] [Value], [Double-tap] [Component], [Long-tap] [Component]
+Question: Extract the entity from the following ->
+    "1. Open bookmark 
+    2. Tap "add new bookmark" and create a name with "a" 
+    3. Create another one with name "b" 
+    4. Click "a" 
+    5. Go back to bookmark after changing name "a" to "b" 
+    6. App crash"
+Answer: 
+    1st step is "Open bookmark". The action is "open" and the target component is "bookmark". However, there is no explicit "open" in the Available actions list. Therefore, we select the closest semantic action "tap". Following the Action primitives, the entity of the step is [Tap] ["bookmark"].
+    2nd step is "Tap 'add new bookmark' and create a name with 'a'". Due to the conjunction word "and", this step can be separated into two sub-steps, "Tap 'add new bookmark'" and "create a name with 'a'". For the first sub-step, following the Action primitives, the entity is [Tap] ["add new bookmark"]. For the second sub-step, there is no explicit "create" in the Available actions list. Therefore, we select the closest semantic action "input". Following the Action primitives, the entity of the sub-step is [Input] ["name"] ["a"].
+    3rd step is "Create another one with name 'b'". Due to its semantic meaning, this step is meant to repeat the previous steps to add another bookmark with name "b". Therefore, it should actually be the 2nd step, that is [Tap] ["add new bookmark"] and [Input] ["name"] ["b"].
+    4th step is "Click 'a'". The action is "click" and the target component is "a". However, there is no explicit "click" in the Available actions list. Therefore, we select the closest semantic action "tap". Following the Action primitives, the entity of the step is [Tap] ["a"].
+    5th step is "Go back to bookmark after changing name 'a' to 'b'". Due to the conjunction word "after", this step can be separated into two sub-steps, "Go back to bookmark" and "change name 'a' to 'b'". The conjunction word "after" also alters the temporal order of the sub-steps, that "change name 'a' to 'b'" should be executed first, followed by "go back to bookmark". For the first sub-step, there is no explicit "change" in the Available actions list. Therefore, we select the closest semantic action "input". Following the Action primitives, the entity of the sub-step is [Input] ["name"] ["b"]. For the second sub-step, there is no explicit "go back" in the Available actions list. Therefore, we select the closest semantic action "tap". Following the Action primitives, the entity of the sub-step is [Tap] ["back"].
+    6th step is "App crash". This step does not have any operations.
+    Overall, the extracted S2R entities are: 
+    1. [Tap] ["bookmark"]
+    2. [Tap] ["add new bookmark"]
+    3. [Input] ["name"] ["a"]
+    4. [Tap] ["add new bookmark"]
+    5. [Input] ["name"] ["b"]
+    6. [Tap] ["a"]
+    7. [Input] ["name"] ["b"]
+    8. [Tap] ["back"]
+
+    Question: Extract the entity from the following -> ""Collection synced" notification is too high-priority
+
+App: ankidroid/Anki-Android
+Version: 2.24.0alpha14
+Issue: https://github.com/ankidroid/Anki-Android/issues/20789
+APK: https://github.com/ankidroid/Anki-Android/releases/download/v2.24.0alpha14/AnkiDroid-2.24.0alpha14-full-universal.apk
+APK Tag: v2.24.0alpha14
+Primary Gesture: quick_tap
+
+Steps to Reproduce:
+  1. Sync your collection through any means (e.g. swipe-up, tap the button)
+  2. Immediately lock the screen
+
+Expected Behavior:
+  When the "Collection synced. Media is being synced in the background." notification hits, my phone emits a normal priority long buzz, as though I got a message.
+I'd expect it to show up silently, or with a short buzz at most.
+
+Actual Behavior:
+  (see full report below)
+
+--- Full Issue Body ---
+### Checked for duplicates?
+
+- [x] This issue is not a duplicate
+
+### Does it also happen in the desktop version?
+
+- [ ] This bug does not occur in the latest version of Anki Desktop
+
+### What are the steps to reproduce this bug?
+
+1. Sync your collection through any means (e.g. swipe-up, tap the button)
+2. Immediately lock the screen
+
+### Expected behaviour
+
+When the "Collection synced. Media is being synced in the background." notification hits, my phone emits a normal priority long buzz, as though I got a message.
+I'd expect it to show up silently, or with a short buzz at most.
+
+### Debug info
+
+```text
+AnkiDroid Version = 2.24.0alpha14 (b9e52b175cd656018d0655da8ddcfb37ed10b881)  
+Backend Version = 0.1.64-anki25.09.2 (25.09.2 3890e12c9e48c028c3f12aa58cb64bd9f8895e30)  
+Android Version = 16 (SDK 36)  
+ProductFlavor = play  
+Device Info = Google | google | akita | akita | Pixel 8a | akita  
+WebView Info = [app.vanadium.webview | 772710134]: Mozilla/5.0 (Linux; Android 16; Pixel 8a Build/BP4A.260205.001; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/147.0.7727.101 Mobile Safari/537.36  
+ACRA UUID = b5bedf08-d1ee-4307-a443-a69eb333f879  
+FSRS = 5.1.0 (Enabled: true)  
+Crash Reports Enabled = true
+```
+
+### (Optional) Anything else you want to share?
+
+I hit this frequently, since I'll often sync Anki and immediately lock my phone, and it usually causes me to immediately unlock my phone and check if someone texted me.
+It seems like this is a default-priority notification when it should be low-priority.
+
+### Research
+
+- [x] I have checked the [manual](https://ankidroid.org/docs/manual.html) and the [FAQ](https://github.com/ankidroid/Anki-Android/wiki/FAQ) and could not find a solution to my issue
+- [ ] (Optional) I have confirmed the issue is not resolved in the latest alpha release ([instructions](https://docs.ankidroid.org/manual.html#betaTesting))"
+ Answer:
+2026-10-07 04:54:27.659 | INFO     | ChatGPT:infer:50 - 1st step is "Sync your collection through any means (e.g. swipe-up, tap the button)". This step provides two examples for the action: "swipe-up" and "tap the button". For "swipe-up", the action is "swipe", which is not in the Available actions list. Therefore, we select the closest semantic action "scroll". The direction is "up". Following the Action primitives, the entity of the step is [Scroll] ["up"]. For "tap the button", the action is "tap" and the component is "the button", which refers to the sync button. Following the Action primitives, the entity of the step is [Tap] ["sync button"]. We will use the first example.
+2nd step is "Immediately lock the screen". The action is "lock" and the target is "the screen". This is a system-level action that is not performed on the app's UI. None of the available actions correspond to this operation. Therefore, this step does not have a corresponding entity.
+
+Overall, the extracted S2R entities are:
+1. [Scroll] ["up"]
+2026-10-07 04:54:27.659 | INFO     | extract_step:infer:89 - 
+1. [Scroll] ["up"] 
+  >>>> STEP-1: [Scroll] ["up"] [None]
+{'currentPackageName': 'com.ichi2.anki', 'displayHeight': 2214, 'displayRotation': 0, 'displaySizeDpX': 393, 'displaySizeDpY': 829, 'displayWidth': 1080, 'productName': 'sdk_gphone64_x86_64', 'screenOn': True, 'sdkInt': 34, 'naturalOrientation': True}
+2026-10-07 04:54:27.685 | DEBUG    | __main__:<module>:74 - [Scroll] ["up"]
+run command: adb shell /system/bin/screencap -p /sdcard/screenshot-step_0.png
+run command: adb pull /sdcard/screenshot-step_0.png /tmp/adbgpt_emulator-5554_jm4engtt
+/sdcard/screenshot-step_0.png: 1 file pulled, 0 skipped. 84.3 MB/s (106856 bytes in 0.001s)
+run command: adb shell input swipe 540.0 442.5 541.0 1980 500
+Prcessing time 2.3251266479492188

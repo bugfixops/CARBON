@@ -1,0 +1,129 @@
+##########syst1##########
+As an experienced mobile app tester, your task is to try and reproduce a crash on the app based on the crash description. I'll provide you with the current page of the app and the available actions you can perform (interactions with the app's GUI widgets). You need to select and perform the action that best matches the crash description so as to reproduce the crash in a step-by-step manner.
+
+There are three types of actions on the page:
+1. Click[widget name]: You will click a button on the page called "widget name".
+2. Long press[widget name]: You will long press a button on the page called "widget name".
+3. Input[widget name]: You will type something into a input box on the page called "widget name".
+
+Use the following format:
+
+<Reported crash>: a one-sentence description of the crash that you must reproduce
+<Observation>: I will tell you the current page of the app and the available actions you can perform
+<Thought>: you should always think about what to do
+<Action>: you should answer the number of the chosen action. (e.g., you should answer "<Action>: 3")
+... (then I will tell you the new Observation after the action you choose. This Observation/Thought/Action can repeat N times until the crash is reproduced)
+
+Note that your answer should be only one <Thought> and one <Action>.
+##########user2##########
+Let's begin!
+<Reported crash>: [BUG] Lawnchair crashes in the recent menu
+##########user3##########
+<Observation>: In the previous step, you go back to previous page, and navigated to the "Lawnchair Launcher" page, which you have visited 67 times. On "Lawnchair Launcher" page, you need to choose one of the following 3 actions to perform:
+(1) Long press[Phone]: You perform the action 7 times, and the action goes to page "Lawnchair Launcher"
+(2) Long press[Messages]: You perform the action 7 times, and the action goes to page "Lawnchair Launcher"
+(3) Click[Voice Search]: You perform the action 7 times, and the action goes to page "Lawnchair Launcher"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have only been performed a few times (Back to previous page, Click[Phone], Click[Messages], Click[Contacts], Click[Chrome], Click[Tap to set up]) or go back to previous page.
+##########assi4##########
+<Thought>: I'm back on the home screen. It's the same loop. I've visited this page 67 times now.
+The available actions are:
+(1) `Long press[Phone]`
+(2) `Long press[Messages]`
+(3) `Click[Voice Search]`
+There is no `Long press[Contacts]` this time. This is a change!
+Previously, the options were:
+(1) Long press[Phone]
+(2) Long press[Messages]
+(3) Long press[Contacts]
+(4) Click[Voice Search]
+The `Long press[Contacts]` action is gone. Why? Because I hid the "Contacts" app? No, I hid "HelloWorld!".
+Wait, let me re-check my steps.
+1. `Long press[Contacts]` -> context menu
+2. `Click[Customize]` -> hide app screen
+3. `Input` -> filter
+4. `Click[HelloWorld!]` -> hide app
+5. `Back` -> home screen
+So, I hid "HelloWorld!", but the `Long press[Contacts]` action disappeared. This is very strange. Maybe hiding *any* app causes this change.
+The crash is in the "recent menu". I still don't see an action to open the recent menu.
+The hint is the same as always, suggesting actions that aren't all available.
+I'm on the home screen. I need to trigger the recent menu.
+Is it possible that one of these actions now leads to the recent menu?
+`Long press[Phone]`, `Long press[Messages]`, `Click[Voice Search]`.
+These all seem like standard launcher actions. It's unlikely they open the recent apps screen.
+What if the crash is not about opening the recent menu, but about the state of the launcher *when* the recent menu is opened? The test harness might be opening the recent menu in the background after each step.
+If so, the sequence of hiding an app and then returning to the home screen might be the trigger.
+But the crash hasn't happened yet.
+I need to perform another action.
+The `Long press[Contacts]` action is gone. This is the most significant change I've seen.
+What if the bug is related to this?
+I have three actions left. They have all been performed 7 times. There's no clear "less performed" action to choose.
+Let's think about the "recent menu". It shows recent apps. Maybe I need to launch an app first?
+The available actions don't include launching an app with a simple click. Only long presses.
+This is a dead end. I'm going to try something that I haven't done yet. I've long-pressed Contacts multiple times. I've never long-pressed Phone or Messages. Let's try one of them. It's a shot in the dark.
+<Action>: 1
+##########user5##########
+<Observation>: In the previous step, you long pressed the "Phone" button, and navigated to the "Lawnchair Launcher" page, which you have visited 15 times. On "Lawnchair Launcher" page, you need to choose one of the following 3 actions to perform:
+(1) Long press[New contact]: You perform the action 4 times, and the action goes to page "Lawnchair Launcher"
+(2) Back to previous page: You perform the action 4 times, and the action goes to page "Lawnchair Launcher"
+(3) Click[Customize]: You perform the action 4 times, and the action goes to page "Lawnchair Launcher"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have only been performed a few times (Click[App info], Click[New contact]) or go back to previous page.
+##########assi6##########
+<Thought>: I long-pressed "Phone" and got a context menu. This is similar to when I long-pressed "Contacts".
+The options are:
+(1) `Long press[New contact]`
+(2) `Back to previous page`
+(3) `Click[Customize]`
+The crash is in the "recent menu". I've already gone down the `Click[Customize]` path, which led to hiding an app. It didn't crash, but it did change the state of the home screen (the `Long press[Contacts]` option disappeared).
+Maybe the crash requires hiding *another* app? Or doing something else from the customize menu?
+Let's try the `Customize` path again, but this time starting from the "Phone" app's context menu instead of the "Contacts" app's.
+<Action>: 3
+##########user7##########
+<Observation>: In the previous step, you clicked on the "Customize" button, and navigated to the "Lawnchair Launcher" page, which you have visited 20 times. On "Lawnchair Launcher" page, you need to choose one of the following 3 actions to perform:
+(1) Input[Hide from app drawer]: You haven't filled this input box yet, please first fill it in.
+(2) Back to previous page: You perform the action 9 times, and the action goes to page "Lawnchair Launcher"
+(3) Click[Hide from app drawer]: You perform the action 2 times, and the action goes to page "Lawnchair Launcher"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have only been performed a few times (Click[Hide from app drawer], Click[Chrome]) or go back to previous page.
+##########assi8##########
+<Thought>: I'm back on the "Hide from app drawer" page. This is the same page I was on before.
+The options are:
+(1) `Input[Hide from app drawer]`
+(2) `Back to previous page`
+(3) `Click[Hide from app drawer]`
+I'm repeating the same pattern: long-press an icon, click customize, and now I'm on the hide apps screen.
+Last time, I hid "HelloWorld!". Let's try hiding a different app. Or maybe the same one again?
+The crash is in the "recent menu". The act of hiding an app seems to be a key part of the setup.
+I'll input text to search for an app to hide.
+<Action>: 1
+##########user9##########
+<Observation>: In the previous step, you filled in the "Hide from app drawer" input box, and navigated to the "Lawnchair Launcher" page, which you have visited 2 times. On "Lawnchair Launcher" page, you need to choose one of the following 2 actions to perform:
+(1) Click[HelloWorld!]: You perform the action 5 times, and the action goes to page "Lawnchair Launcher"
+(2) Click[Hide from app drawer]: You perform the action 2 times, and the action goes to page "Lawnchair Launcher"
+##########assi10##########
+<Thought>: I've entered text into the input field again, and I'm presented with the "HelloWorld!" app.
+The options are:
+(1) `Click[HelloWorld!]`
+(2) `Click[Hide from app drawer]`
+Last time I clicked "HelloWorld!" to hide it. This time, I'll do the same. The goal is to reproduce the state that might lead to a crash. Hiding an app seems to be the main state-changing action I can perform.
+<Action>: 1
+##########user11##########
+<Observation>: In the previous step, you clicked on the "HelloWorld!" button, and navigated to the "Lawnchair Launcher" page, which you have visited 21 times. On "Lawnchair Launcher" page, you need to choose one of the following 3 actions to perform:
+(1) Input[Hide from app drawer]: You haven't filled this input box yet, please first fill it in.
+(2) Back to previous page: You perform the action 9 times, and the action goes to page "Lawnchair Launcher"
+(3) Click[Hide from app drawer]: You perform the action 2 times, and the action goes to page "Lawnchair Launcher"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have only been performed a few times (Click[Hide from app drawer], Click[Chrome]) or go back to previous page.
+##########assi12##########
+<Thought>: I've clicked "HelloWorld!" again. It was already hidden, so this action probably un-hid it.
+I'm still on the "Hide from app drawer" page.
+The options are:
+(1) `Input[Hide from app drawer]`
+(2) `Back to previous page`
+(3) `Click[Hide from app drawer]`
+I've now hidden an app, then un-hidden it. This is a new state.
+The crash is in the "recent menu". I need to get out of this settings screen and back to the home screen to see if this new state has an effect. The only way out is the back button.
+<Action>: 2
+##########user13##########
+<Observation>: In the previous step, you go back to previous page, and navigated to the "Lawnchair Launcher" page, which you have visited 68 times. On "Lawnchair Launcher" page, you need to choose one of the following 3 actions to perform:
+(1) Long press[Phone]: You perform the action 8 times, and the action goes to page "Lawnchair Launcher"
+(2) Long press[Messages]: You perform the action 7 times, and the action goes to page "Lawnchair Launcher"
+(3) Click[Voice Search]: You perform the action 7 times, and the action goes to page "Lawnchair Launcher"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have only been performed a few times (Back to previous page, Click[Phone], Click[Messages], Click[Contacts], Click[Chrome], Click[Tap to set up]) or go back to previous page.

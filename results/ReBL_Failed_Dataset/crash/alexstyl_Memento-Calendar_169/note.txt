@@ -1,0 +1,22 @@
+Bug:       Memento#169
+Type:      crash
+Title:     Date-picker crashes when setting an invalid date like Feb 31
+Verdict:   REPRODUCED
+
+CARBON actions:
+  - Added new event, opened birthday picker, disabled 'Include year'
+  - Turned the wheels with picker_scroll (NumberPicker bounds from the hierarchy) and swipe_region (screenshot coordinates)
+  - Scrolled day wheel to 31, then scrolled month wheel to February
+  - Tapped SET
+
+Evidence:  'Memento Calendar has stopped' dialog + FATAL EXCEPTION in logcat
+ReBL failed because: ReBL paper: 'UI Automator2 fails to extract custom views from the hierarchy'
+CARBON edge: picker_scroll / swipe_region turn a wheel by whole values; ReBL has neither action
+Hierarchy:  on this APK (v11.2) the three wheels are NumberPicker nodes in the hierarchy. On the APK in
+            ReBL's benchmark (v3.6, results/ReBL_Full_Dataset/) they are absent; that run reproduced it too.
+
+Run stats:
+  APK:        android_mobile-release-11.2.apk
+  Time:       750.4s
+  LLM turns:  22
+  Commands:   31

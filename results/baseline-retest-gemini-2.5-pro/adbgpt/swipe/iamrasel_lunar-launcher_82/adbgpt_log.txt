@@ -1,0 +1,141 @@
+2026-10-06 06:36:14.043 | INFO     | ChatGPT:infer:46 - Available actions: [tap, input, scroll, double tap, long tap]
+Action primitives: [Tap] [Component], [Scroll] [Direction], [Input] [Component] [Value], [Double-tap] [Component], [Long-tap] [Component]
+Question: Extract the entity from the following ->
+    "1. Open bookmark 
+    2. Tap "add new bookmark" and create a name with "a" 
+    3. Create another one with name "b" 
+    4. Click "a" 
+    5. Go back to bookmark after changing name "a" to "b" 
+    6. App crash"
+Answer: 
+    1st step is "Open bookmark". The action is "open" and the target component is "bookmark". However, there is no explicit "open" in the Available actions list. Therefore, we select the closest semantic action "tap". Following the Action primitives, the entity of the step is [Tap] ["bookmark"].
+    2nd step is "Tap 'add new bookmark' and create a name with 'a'". Due to the conjunction word "and", this step can be separated into two sub-steps, "Tap 'add new bookmark'" and "create a name with 'a'". For the first sub-step, following the Action primitives, the entity is [Tap] ["add new bookmark"]. For the second sub-step, there is no explicit "create" in the Available actions list. Therefore, we select the closest semantic action "input". Following the Action primitives, the entity of the sub-step is [Input] ["name"] ["a"].
+    3rd step is "Create another one with name 'b'". Due to its semantic meaning, this step is meant to repeat the previous steps to add another bookmark with name "b". Therefore, it should actually be the 2nd step, that is [Tap] ["add new bookmark"] and [Input] ["name"] ["b"].
+    4th step is "Click 'a'". The action is "click" and the target component is "a". However, there is no explicit "click" in the Available actions list. Therefore, we select the closest semantic action "tap". Following the Action primitives, the entity of the step is [Tap] ["a"].
+    5th step is "Go back to bookmark after changing name 'a' to 'b'". Due to the conjunction word "after", this step can be separated into two sub-steps, "Go back to bookmark" and "change name 'a' to 'b'". The conjunction word "after" also alters the temporal order of the sub-steps, that "change name 'a' to 'b'" should be executed first, followed by "go back to bookmark". For the first sub-step, there is no explicit "change" in the Available actions list. Therefore, we select the closest semantic action "input". Following the Action primitives, the entity of the sub-step is [Input] ["name"] ["b"]. For the second sub-step, there is no explicit "go back" in the Available actions list. Therefore, we select the closest semantic action "tap". Following the Action primitives, the entity of the sub-step is [Tap] ["back"].
+    6th step is "App crash". This step does not have any operations.
+    Overall, the extracted S2R entities are: 
+    1. [Tap] ["bookmark"]
+    2. [Tap] ["add new bookmark"]
+    3. [Input] ["name"] ["a"]
+    4. [Tap] ["add new bookmark"]
+    5. [Input] ["name"] ["b"]
+    6. [Tap] ["a"]
+    7. [Input] ["name"] ["b"]
+    8. [Tap] ["back"]
+
+    Question: Extract the entity from the following -> "Random crashes when closing applications
+
+App: iamrasel/lunar-launcher
+Version: 2.7.1
+Issue: https://github.com/iamrasel/lunar-launcher/issues/82
+APK: https://github.com/iamrasel/lunar-launcher/releases/download/2.7.1/rasel.lunar.launcher_v2.7.1-signed.apk
+APK Tag: 2.7.1
+Gestures: swipe up, home screen
+Primary Gesture: swipe
+
+Steps to Reproduce:
+  1. Have application open and being used
+  2. Swipe up to put current application in background
+  3. Lunar crashes
+  4. Occurrences are irregular and happen with various apps
+
+Expected Behavior:
+  On swipe up expected behavior is going to Lunar home screen.
+
+Actual Behavior:
+  (see full report below)
+
+--- Full Issue Body ---
+### Checklist
+
+- [X] I made sure that there are **no existing issues** - [open](https://github.com/iamrasel/lunar-launcher/issues) or [closed](https://github.com/iamrasel/lunar-launcher/issues?q=is%3Aissue+is%3Aclosed) - which I could contribute my information to.
+- [X] I have taken the time to fill in all the required details. I understand that the bug report will be dismissed otherwise.
+- [X] This issue contains only one bug.
+
+### App version
+
+2.7.1
+
+### Android version
+
+Android 13 (GrapheneOS) on Pixel 6a
+
+### Steps to reproduce the bug
+
+1. Have application open and being used
+2. Swipe up to put current application in background
+3. Lunar crashes
+4. Occurrences are irregular and happen with various apps
+
+### Expected behavior
+
+On swipe up expected behavior is going to Lunar home screen.
+
+### Screenshots/Screen recordings
+
+_No response_
+
+### Logs
+
+```
+type: crash
+osVersion: google/bluejay/bluejay:13/TQ3A.230605.010/2023062800:user/release-keys
+package: rasel.lunar.launcher:33
+process: rasel.lunar.launcher
+processUptime: 51 + 200 ms
+
+java.lang.ExceptionInInitializerError
+	at java.lang.reflect.Constructor.newInstance0(Native Method)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:343)
+	at androidx.fragment.app.i0.a(Unknown Source:29)
+	at androidx.fragment.app.t0.<init>(SourceFile:3)
+	at androidx.fragment.app.o0.V(Unknown Source:113)
+	at androidx.fragment.app.v.a(Unknown Source:42)
+	at androidx.activity.k.onCreate(Unknown Source:27)
+	at androidx.fragment.app.x.onCreate(Unknown Source:0)
+	at rasel.lunar.launcher.LauncherActivity.onCreate(Unknown Source:0)
+	at android.app.Activity.performCreate(Activity.java:8389)
+	at android.app.Activity.performCreate(Activity.java:8368)
+	at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1422)
+	at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:3633)
+	at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:3789)
+	at android.app.servertransaction.LaunchActivityItem.execute(LaunchActivityItem.java:101)
+	at android.app.servertransaction.TransactionExecutor.executeCallbacks(TransactionExecutor.java:138)
+	at android.app.servertransaction.TransactionExecutor.execute(TransactionExecutor.java:95)
+	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2314)
+	at android.os.Handler.dispatchMessage(Handler.java:106)
+	at android.os.Looper.loopOnce(Looper.java:201)
+	at android.os.Looper.loop(Looper.java:288)
+	at android.app.ActivityThread.main(ActivityThread.java:7937)
+	at java.lang.reflect.Method.invoke(Native Method)
+	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:548)
+	at com.android.internal.os.ExecInit.main(ExecInit.java:49)
+	at com.android.internal.os.RuntimeInit.nativeFinishInit(Native Method)
+	at com.android.internal.os.RuntimeInit.main(RuntimeInit.java:355)
+Caused by: java.lang.NullPointerException
+	at m3.d.<clinit>(Unknown Source:2)
+	... 27 more
+
+```
+
+### Additional information
+
+_No response_"
+ Answer:
+2026-10-06 06:36:25.468 | INFO     | ChatGPT:infer:50 - 1st step is "Have application open and being used". This is a precondition for the bug to occur and not a specific user action. Therefore, it is not an S2R entity.
+2nd step is "Swipe up to put current application in background". The action is "Swipe up". The verb "Swipe" is not in the `Available actions` list. The closest semantic action is "scroll". The direction is "up". Following the Action primitives, the entity of the step is [Scroll] ["up"].
+3rd step is "Lunar crashes". This is the outcome of the bug and not a user action.
+4th step is "Occurrences are irregular and happen with various apps". This is additional information about the bug's nature, not a step to reproduce.
+Overall, the extracted S2R entities are:
+1. [Scroll] ["up"]
+2026-10-06 06:36:25.469 | INFO     | extract_step:infer:89 - 
+1. [Scroll] ["up"] 
+  >>>> STEP-1: [Scroll] ["up"] [None]
+{'currentPackageName': 'rasel.lunar.launcher', 'displayHeight': 2214, 'displayRotation': 0, 'displaySizeDpX': 393, 'displaySizeDpY': 829, 'displayWidth': 1080, 'productName': 'sdk_gphone64_x86_64', 'screenOn': True, 'sdkInt': 34, 'naturalOrientation': True}
+2026-10-06 06:36:26.115 | DEBUG    | __main__:<module>:74 - [Scroll] ["up"]
+run command: adb shell /system/bin/screencap -p /sdcard/screenshot-step_0.png
+run command: adb pull /sdcard/screenshot-step_0.png /tmp/adbgpt_emulator-5554_kn5llmf1
+/sdcard/screenshot-step_0.png: 1 file pulled, 0 skipped. 3.6 MB/s (62743 bytes in 0.017s)
+run command: adb shell input swipe 540.0 442.5 541.0 1980 500
+Prcessing time 9.028127908706665

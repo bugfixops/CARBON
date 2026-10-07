@@ -1,0 +1,67 @@
+##########syst1##########
+As an experienced mobile app tester, your task is to try and reproduce a crash on the app based on the crash description. I'll provide you with the current page of the app and the available actions you can perform (interactions with the app's GUI widgets). You need to select and perform the action that best matches the crash description so as to reproduce the crash in a step-by-step manner.
+
+There are three types of actions on the page:
+1. Click[widget name]: You will click a button on the page called "widget name".
+2. Long press[widget name]: You will long press a button on the page called "widget name".
+3. Input[widget name]: You will type something into a input box on the page called "widget name".
+
+Use the following format:
+
+<Reported crash>: a one-sentence description of the crash that you must reproduce
+<Observation>: I will tell you the current page of the app and the available actions you can perform
+<Thought>: you should always think about what to do
+<Action>: you should answer the number of the chosen action. (e.g., you should answer "<Action>: 3")
+... (then I will tell you the new Observation after the action you choose. This Observation/Thought/Action can repeat N times until the crash is reproduced)
+
+Note that your answer should be only one <Thought> and one <Action>.
+##########user2##########
+Let's begin!
+<Reported crash>: crash while using the search field.
+##########user3##########
+<Observation>: In the previous step, you clicked on the "Create a new note" button, and navigated to the "Main Activity" page, which is a newly explored page. On "Main Activity" page, you need to choose one of the following 3 actions to perform:
+(1) Input[locked note title]: You haven't filled this input box yet, please first fill it in.
+(2) Click[Label]: You haven't performed the action yet.
+(3) Click[Text note]: You haven't performed the action yet.
+##########assi4##########
+<Thought>: I have just clicked "Create a new note" from a state where a search was active and the underlying note was modified. This has brought me to a new screen for creating a note. The original crash was "crash while using the search field". It's possible that the app is in an unstable state, and proceeding with the note creation will trigger the crash as the app tries to reconcile the previous search context with the new note creation context. The most direct way to proceed with creating a note here is to select the type of note. `Click[Text note]` is the most standard option. I will select it to see if this action causes the crash.
+<Action>: 3
+##########user5##########
+<Observation>: In the previous step, you clicked on the "Text note" button, but still kept in the "Main Activity" page, which you have visited 2 times. On "Main Activity" page, you need to choose one of the following 3 actions to perform:
+(1) Input[locked note title]: You haven't filled this input box yet, please first fill it in.
+(2) Click[Label]: You haven't performed the action yet.
+(3) Click[Text note]: You perform the action 1 times, and the action goes to page "Main Activity"
+##########assi6##########
+<Thought>: I clicked "Text note" and I'm still on the same note creation page. This is unexpected. It seems like the app is stuck in a loop or an invalid state. The crash is related to the search field, and I got here by trying to create a new note while a search was active. The app might be confused. The available actions are `Input[locked note title]`, `Click[Label]`, and `Click[Text note]` again. Since clicking "Text note" didn't work, and the crash is not related to labels or locked notes, the most logical action is to try clicking "Text note" again. Perhaps the first click was ignored, and a second click will trigger the problematic code path.
+<Action>: 3
+##########user7##########
+<Observation>: In the previous step, you clicked on the "Text note" button, but still kept in the "Main Activity" page, which you have visited 3 times. On "Main Activity" page, you need to choose one of the following 3 actions to perform:
+(1) Input[locked note title]: You haven't filled this input box yet, please first fill it in.
+(2) Click[Label]: You haven't performed the action yet.
+(3) Click[Text note]: You perform the action 2 times, and the action goes to page "Main Activity"
+##########assi8##########
+<Thought>: I've clicked "Text note" twice, and I'm still stuck on the same note creation screen. This is highly indicative of a bug. The app is clearly not behaving as expected after I tried to create a new note from an active search state. The crash is related to the search field, and this entire sequence was initiated from that context. Since clicking "Text note" repeatedly isn't working, and the crash isn't about locked notes, the only other option on this screen is `Click[Label]`. It's possible that interacting with any element on this broken screen will trigger the crash, as the app tries to handle a new UI event while in an inconsistent state.
+<Action>: 2
+##########user9##########
+<Observation>: In the previous step, you clicked on the "Label" button, but still kept in the "Main Activity" page, which you have visited 4 times. On "Main Activity" page, you need to choose one of the following 3 actions to perform:
+(1) Input[locked note title]: You haven't filled this input box yet, please first fill it in.
+(2) Click[Label]: You perform the action 1 times, and the action goes to page "Main Activity"
+(3) Click[Text note]: You perform the action 2 times, and the action goes to page "Main Activity"
+##########assi10##########
+<Thought>: I am completely stuck on this "Create a new note" page. I've tried clicking "Text note" twice and "Label" once, and nothing happens. The app is in a broken state, which was triggered by trying to create a new note while a search was active. The original crash was "crash while using the search field". It seems the app is unable to proceed from this screen. The only remaining action is `Input[locked note title]`. Even though the crash description doesn't mention locked notes, interacting with this input field is the only thing I haven't tried on this screen. It's possible that any interaction on this broken screen could trigger the crash as the app tries to process it.
+<Action>: 1
+##########user11##########
+<Observation>: In the previous step, you filled in the "locked note title" input box, but still kept in the "Main Activity" page, which you have visited 4 times. On "Main Activity" page, you need to choose one of the following 3 actions to perform:
+(1) Click[OK]: You haven't performed the action yet.
+(2) Click[Label]: You perform the action 1 times, and the action goes to page "Main Activity"
+(3) Click[Text note]: You perform the action 2 times, and the action goes to page "Main Activity"
+##########assi12##########
+<Thought>: I have tried every action on this broken "Create a new note" screen. After inputting text into the "locked note title", an "OK" button has appeared. The app is in a very unstable state, which was initiated by trying to create a new note from an active search context. The original crash was "crash while using the search field". It's highly likely that confirming this final action on this broken screen by clicking "OK" will cause the application to fail as it tries to reconcile the conflicting states of an active search and a new note creation. This is the only logical action left to take to try and trigger the crash.
+<Action>: 1
+##########user13##########
+<Observation>: In the previous step, you clicked on the "OK" button, and navigated to the "HelloWorld" page, which is a newly explored page. On "HelloWorld" page, you need to choose one of the following 5 actions to perform:
+(1) Click[More options]: You haven't performed the action yet.
+(2) Input[note]: You haven't filled this input box yet, please first fill it in.
+(3) Click[General note]: You haven't performed the action yet.
+(4) Click[Search]: You haven't performed the action yet.
+(5) Click[Open note]: You haven't performed the action yet.

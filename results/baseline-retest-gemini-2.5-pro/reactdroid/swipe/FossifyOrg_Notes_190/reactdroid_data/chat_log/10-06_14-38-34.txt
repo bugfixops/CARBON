@@ -1,0 +1,83 @@
+##########syst1##########
+As an experienced mobile app tester, your task is to try and reproduce a crash on the app based on the crash description. I'll provide you with the current page of the app and the available actions you can perform (interactions with the app's GUI widgets). You need to select and perform the action that best matches the crash description so as to reproduce the crash in a step-by-step manner.
+
+There are three types of actions on the page:
+1. Click[widget name]: You will click a button on the page called "widget name".
+2. Long press[widget name]: You will long press a button on the page called "widget name".
+3. Input[widget name]: You will type something into a input box on the page called "widget name".
+
+Use the following format:
+
+<Reported crash>: a one-sentence description of the crash that you must reproduce
+<Observation>: I will tell you the current page of the app and the available actions you can perform
+<Thought>: you should always think about what to do
+<Action>: you should answer the number of the chosen action. (e.g., you should answer "<Action>: 3")
+... (then I will tell you the new Observation after the action you choose. This Observation/Thought/Action can repeat N times until the crash is reproduced)
+
+Note that your answer should be only one <Thought> and one <Action>.
+##########user2##########
+Let's begin!
+<Reported crash>: crash while using the search field.
+##########user3##########
+<Observation>: In the previous step, you clicked on the "General note" button, and navigated to the "General note" page, which is a newly explored page. On "General note" page, you need to choose one of the following 5 actions to perform:
+(1) Click[More options]: You haven't performed the action yet.
+(2) Input[note]: You haven't filled this input box yet, please first fill it in.
+(3) Click[HelloWorld!]: You haven't performed the action yet.
+(4) Click[Search]: You haven't performed the action yet.
+(5) Click[Open note]: You haven't performed the action yet.
+##########assi4##########
+<Thought>: I have initiated the creation of a "General note" while a search was active. I am now on the "General note" creation page. The crash is related to the search field. On this page, there is a "Search" button. It's unusual to have a search button on a note creation screen, especially when a search is already active on the previous screen. Clicking this "Search" button from within this new context (note creation) while a search is active in the background is a very likely candidate for causing a state management conflict and triggering the crash.
+<Action>: 4
+##########user5##########
+<Observation>: In the previous step, you clicked on the "Search" button, and navigated to the "Main Activity" page, which is a newly explored page. On "Main Activity" page, you need to choose one of the following 7 actions to perform:
+(1) Click[More options]: You haven't performed the action yet.
+(2) Input[search query]: You haven't filled this input box yet, please first fill it in.
+(3) Input[note]: You haven't filled this input box yet, please first fill it in.
+(4) Click[HelloWorld!]: You haven't performed the action yet.
+(5) Click[Close]: You haven't performed the action yet.
+(6) Click[Search]: You haven't performed the action yet.
+(7) Click[Open note]: You haven't performed the action yet.
+##########assi6##########
+<Thought>: I clicked "Search" from the note creation page, and it took me back to the "Main Activity" page. This is a strange flow. I am now back on the main screen, which seems to be in a search state. The crash is "crash while using the search field". I've been interacting with the search functionality in a non-standard way. Now, I see an input field for a "note". It's possible the app is confused, thinking I'm both searching and creating a note. Trying to input text into the "note" field in this ambiguous state could be the final step that triggers the crash.
+<Action>: 3
+##########user7##########
+<Observation>: In the previous step, you filled in the "note" input box, but still kept in the "Main Activity" page, which is a newly explored page. On "Main Activity" page, you need to choose one of the following 6 actions to perform:
+(1) Click[More options]: You haven't performed the action yet.
+(2) Input[search query]: You haven't filled this input box yet, please first fill it in.
+(3) Click[HelloWorld!]: You haven't performed the action yet.
+(4) Click[Close]: You haven't performed the action yet.
+(5) Click[Search]: You haven't performed the action yet.
+(6) Click[Open note]: You haven't performed the action yet.
+##########assi8##########
+<Thought>: I have followed a very convoluted path involving searching, starting to create a note, then searching again from the note creation screen, and finally inputting text into a note field on the main screen. The app is likely in a very unstable state. The crash is related to "using the search field". I have just entered text into the `note` input box, but a `Search` button is available. Clicking the `Search` button now, in this mixed state of searching and note-editing, is a highly probable trigger for the crash, as the app might not know how to handle this action.
+<Action>: 5
+##########user9##########
+<Observation>: In the previous step, you clicked on the "Search" button, but still kept in the "Main Activity" page, which you have visited 2 times. On "Main Activity" page, you need to choose one of the following 6 actions to perform:
+(1) Click[More options]: You haven't performed the action yet.
+(2) Input[search query]: You haven't filled this input box yet, please first fill it in.
+(3) Click[HelloWorld!]: You haven't performed the action yet.
+(4) Click[Close]: You haven't performed the action yet.
+(5) Click[Search]: You perform the action 1 times, and the action goes to page "Main Activity"
+(6) Click[Open note]: You haven't performed the action yet.
+##########assi10##########
+<Thought>: I have performed a series of actions mixing search and note creation, and I've just clicked "Search" again. The app is still on the main activity, likely in a confused state. The crash is related to "using the search field". Now I see an item named "HelloWorld!", which is probably an existing note. Trying to open this note while the app is in this unstable search state could easily lead to a crash, as the app might not be able to handle the transition from a broken search view to a note view. This is a strong candidate for the final step to reproduce the crash.
+<Action>: 3
+##########user11##########
+<Observation>: In the previous step, you clicked on the "HelloWorld!" button, and navigated to the "HelloWorld" page, which you have visited 2 times. On "HelloWorld" page, you need to choose one of the following 5 actions to perform:
+(1) Click[More options]: You haven't performed the action yet.
+(2) Click[Create a new note]: You haven't performed the action yet.
+(3) Click[General note]: You haven't performed the action yet.
+(4) Click[Search]: You perform the action 1 times, and the action goes to page "Main Activity"
+(5) Click[Open note]: You haven't performed the action yet.
+##########assi12##########
+<Thought>: I have followed a complex path involving searching and note creation, and I am now viewing an existing note ("HelloWorld"). The crash is related to "using the search field". The app's state is likely unstable due to the previous sequence of actions. On this note viewing page, there is a "Search" button. Given the convoluted history of my interaction with the search feature, clicking "Search" one more time from this new context (viewing a note) is the most probable action to finally trigger the state management conflict and cause the crash.
+<Action>: 4
+##########user13##########
+<Observation>: In the previous step, you clicked on the "Search" button, and navigated to the "Main Activity" page, which you have visited 4 times. On "Main Activity" page, you need to choose one of the following 7 actions to perform:
+(1) Click[More options]: You haven't performed the action yet.
+(2) Input[search query]: You haven't filled this input box yet, please first fill it in.
+(3) Input[note]: You haven't filled this input box yet, please first fill it in.
+(4) Click[General note]: You perform the action 1 times, and the action goes to page "General note"
+(5) Click[Close]: You haven't performed the action yet.
+(6) Click[Search]: You perform the action 1 times, and the action goes to page "Main Activity"
+(7) Click[Open note]: You haven't performed the action yet.

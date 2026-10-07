@@ -1,0 +1,263 @@
+Bug Report Title:
+Crash if you open Settings > Theme or Anti-Features selector and change device orientation
+Bug Report Issue:
+* Device OS and version: Android 8.0.0 (security patch level Feb. 1, 2019)
+* Device model/manufacturer:
+  - Motorola Moto E5 Play
+     - Version: PVTA
+     - SKU: XT1921-7
+* F-Droid version (in the _About_ screen): 1.6.2
+* F-Droid privileged extension version (if installed): N/A
+
+Also, see Logcat below.
+
+Note: I also tested this bug on Motorola Moto E4 but it died before I wrote down any device info.
+
+## What did you do? (clear steps if possible)
+### Summary
+Changed orientation from landscape to portrait while Settings > Theme selector is open.
+### Reproduction steps
+0. Make sure orientation is not locked (you can tilt the device and it changes between landscape and portrait orientation).
+1. Open F-Droid
+2. Click "Settings" tab
+3. Scroll down to "Display" section and click on "Theme"
+4. With the theme selector open (you can see choices like "Light", "Dark", "Night") tilt the device to change the orientation. If device did not crash yet, tilt it back to change orientation back.
+
+Note: F-Droid seems to crash during change from landscape to portrait.
+
+### Video
+![F-Droid_-_Crash_if_chabged_orientation_while_Theme_selector_is_open](/uploads/ad491210bcfae77e78c01bdc0392b7c4/F-Droid_-_Crash_if_chabged_orientation_while_Theme_selector_is_open.mp4)
+## What did you expect to see?
+App does not crash and just goes from landscape to portrait orientation (or vise verso?).
+
+## What did you see instead?
+App crashed.
+
+## Logcat
+```
+PRODUCT=rjames_po_vzw_f
+AVAILABLE_MEM_SIZE=6953922560
+PHONE_MODEL=moto e5 play
+TOTAL_MEM_SIZE=11488178176
+STACK_TRACE=java.lang.IllegalStateException: Failure saving state: ListPreferenceDialogFragment{1e36af9 #2 android.support.v14.preference.PreferenceFragment.DIALOG} has target not in fragment manager: PreferencesFragment{c468a2c}
+at android.app.FragmentManagerImpl.saveAllState(FragmentManager.java:2725)
+at android.app.FragmentController.saveAllState(FragmentController.java:112)
+at android.app.Activity.onSaveInstanceState(Activity.java:1578)
+at android.support.v4.app.SupportActivity.onSaveInstanceState(SupportActivity.java:74)
+at android.support.v4.app.FragmentActivity.onSaveInstanceState(FragmentActivity.java:564)
+at android.support.v7.app.AppCompatActivity.onSaveInstanceState(AppCompatActivity.java:509)
+at org.fdroid.fdroid.views.main.MainActivity.onSaveInstanceState(MainActivity.java:195)
+at android.app.Activity.performSaveInstanceState(Activity.java:1505)
+at android.app.Instrumentation.callActivityOnSaveInstanceState(Instrumentation.java:1407)
+at android.app.ActivityThread.callCallActivityOnSaveInstanceState(ActivityThread.java:4962)
+at android.app.ActivityThread.handleRelaunchActivity(ActivityThread.java:4913)
+at android.app.ActivityThread.-wrap18(Unknown Source:0)
+at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1707)
+at android.os.Handler.dispatchMessage(Handler.java:105)
+at android.os.Looper.loop(Looper.java:164)
+at android.app.ActivityThread.main(ActivityThread.java:6797)
+at java.lang.reflect.Method.invoke(Native Method)
+at com.android.internal.os.Zygote$MethodAndArgsCaller.run(Zygote.java:240)
+at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:772)
+
+PACKAGE_NAME=org.fdroid.fdroid
+STACK_TRACE_HASH=b441949d
+APP_VERSION_NAME=1.6.2
+ANDROID_VERSION=8.0.0
+BRAND=motorola
+DISPLAY=0.currentSizeRange.smallest=[720,672]
+0.currentSizeRange.largest=[1184,1136]
+0.flags=FLAG_SUPPORTS_PROTECTED_BUFFERS+FLAG_SECURE
+0.height=1184
+0.metrics.density=2.0
+0.metrics.densityDpi=320
+0.metrics.scaledDensity=x2.0
+0.metrics.widthPixels=720
+0.metrics.heightPixels=1184
+0.metrics.xdpi=281.353
+0.metrics.ydpi=282.713
+0.name=Built-in Screen
+0.orientation=0
+0.pixelFormat=1
+0.realMetrics.density=2.0
+0.realMetrics.densityDpi=320
+0.realMetrics.scaledDensity=x2.0
+0.realMetrics.widthPixels=720
+0.realMetrics.heightPixels=1280
+0.realMetrics.xdpi=281.353
+0.realMetrics.ydpi=282.713
+0.realSize=[720,1280]
+0.rectSize=[0,0,720,1184]
+0.refreshRate=60.000004
+0.rotation=ROTATION_0
+0.size=[720,1184]
+0.width=720
+0.isValid=true
+
+USER_COMMENT=
+CUSTOM_DATA=
+```
+Comments:
+Comment#1:
+Note about the video: I changed orientation twice (portrait -> landscape -> portrait), but the video above changes orientation more than twice -- that is because of the recording software.
+---
+Comment#2:
+Yup, AOSP9 I can repro on 1.7-alpha2
+---
+Comment#3:
+@licaon-kter I don't think it is a I can reproduce it on Moto E5 Play on [the most recent commit on master](https://gitlab.com/fdroid/fdroidclient/commit/ec35f0c998364297fbb0915312248f35215aa9a30) at the time of writing.
+
+
+Also, when I build it, I get "F-Droid Basic" app that lacks "Categories" and "Nearby" tabs. How do I specify that I want to build F-Droid with those tabs included? (I'd like to make sure all translations are done correctly and context-appropriately).
+---
+Comment#4:
+@bershanskiy https://gitlab.com/fdroid/fdroiddata/blob/master/metadata/org.fdroid.fdroid.yml#L1370
+```
+    gradle:
+       - full
+```
+
+?
+---
+Comment#5:
+Thanks for the thorough bug report!  From the crash, I can see Fragments are the culprit.  They are a lifecycle nightmare.
+---
+Comment#6:
+@bershanskiy you have to select the "full" build flavor in Android Studio.
+---
+Comment#7:
+I've just rediscovered this for the antifeatures dialogue: from portrait, rotate 90° left, view changes to landscape, then rotate 90° right back to portrait.
+
+1.16.3, 1.16-294 Full/Basic Debug
+```
+FATAL EXCEPTION: main
+Process: org.fdroid.basic.debug, PID: 7632
+java.lang.RuntimeException: Unable to start activity ComponentInfo{org.fdroid.basic.debug/org.fdroid.fdroid.views.main.MainActivity}: java.lang.IllegalStateException: Target fragment must implement TargetFragment interface
+	at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:3432)
+	at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:3596)
+	at android.app.ActivityThread.handleRelaunchActivityInner(ActivityThread.java:5456)
+	at android.app.ActivityThread.handleRelaunchActivity(ActivityThread.java:5362)
+	at android.app.servertransaction.ActivityRelaunchItem.execute(ActivityRelaunchItem.java:69)
+	at android.app.servertransaction.TransactionExecutor.executeCallbacks(TransactionExecutor.java:135)
+	at android.app.servertransaction.TransactionExecutor.execute(TransactionExecutor.java:95)
+	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2067)
+	at android.os.Handler.dispatchMessage(Handler.java:106)
+	at android.os.Looper.loop(Looper.java:223)
+	at android.app.ActivityThread.main(ActivityThread.java:7705)
+	at java.lang.reflect.Method.invoke(Native Method)
+	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:592)
+	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:952)
+Caused by: java.lang.IllegalStateException: Target fragment must implement TargetFragment interface
+	at androidx.preference.PreferenceDialogFragmentCompat.onCreate(PreferenceDialogFragmentCompat.java:85)
+	at androidx.preference.MultiSelectListPreferenceDialogFragmentCompat.onCreate(MultiSelectListPreferenceDialogFragmentCompat.java:62)
+	at androidx.fragment.app.Fragment.performCreate(Fragment.java:2949)
+	at androidx.fragment.app.FragmentStateManager.create(FragmentStateManager.java:475)
+	at androidx.fragment.app.FragmentStateManager.moveToExpectedState(FragmentStateManager.java:278)
+	at androidx.fragment.app.FragmentStore.moveToExpectedState(FragmentStore.java:112)
+	at androidx.fragment.app.FragmentManager.moveToState(FragmentManager.java:1647)
+	at androidx.fragment.app.FragmentManager.dispatchStateChange(FragmentManager.java:3128)
+	at androidx.fragment.app.FragmentManager.dispatchCreate(FragmentManager.java:3061)
+	at androidx.fragment.app.FragmentController.dispatchCreate(FragmentController.java:240)
+	at androidx.fragment.app.FragmentActivity.onCreate(FragmentActivity.java:276)
+	at org.fdroid.fdroid.views.main.MainActivity.onCreate(MainActivity.java:113)
+	at android.app.Activity.performCreate(Activity.java:7994)
+	at android.app.Activity.performCreate(Activity.java:7978)
+	at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1310)
+	at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:3405)
+	... 13 more
+```
+---
+Comment#8:
+thanks for reporting.  Ah the joys of Fragments and screen rotation.  Is
+this new crash directly related to the theme one?
+---
+Comment#9:
+1.19-alpha0, portrait mode, open Theme, rotate to landscape, rotate to portrait, crash:
+```
+java.lang.RuntimeException: Unable to start activity ComponentInfo{org.fdroid.fdroid/org.fdroid.fdroid.views.main.MainActivity}: java.lang.IllegalStateException: Target fragment must implement TargetFragment interface
+	at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:3645)
+	at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:3782)
+	at android.app.ActivityThread.handleRelaunchActivityInner(ActivityThread.java:5783)
+	at android.app.ActivityThread.handleRelaunchActivity(ActivityThread.java:5674)
+	at android.app.servertransaction.ActivityRelaunchItem.execute(ActivityRelaunchItem.java:71)
+	at android.app.servertransaction.ActivityTransactionItem.execute(ActivityTransactionItem.java:45)
+	at android.app.servertransaction.TransactionExecutor.executeCallbacks(TransactionExecutor.java:138)
+	at android.app.servertransaction.TransactionExecutor.execute(TransactionExecutor.java:95)
+	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2307)
+	at android.os.Handler.dispatchMessage(Handler.java:106)
+	at android.os.Looper.loopOnce(Looper.java:201)
+	at android.os.Looper.loop(Looper.java:288)
+	at android.app.ActivityThread.main(ActivityThread.java:7924)
+	at java.lang.reflect.Method.invoke(Native Method)
+	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:548)
+	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:952)
+Caused by: java.lang.IllegalStateException: Target fragment must implement TargetFragment interface
+	at androidx.preference.PreferenceDialogFragmentCompat.onCreate(PreferenceDialogFragmentCompat.java:85)
+	at androidx.preference.ListPreferenceDialogFragmentCompat.onCreate(ListPreferenceDialogFragmentCompat.java:50)
+	at androidx.fragment.app.Fragment.performCreate(Fragment.java:2949)
+	at androidx.fragment.app.FragmentStateManager.create(FragmentStateManager.java:475)
+	at androidx.fragment.app.FragmentStateManager.moveToExpectedState(FragmentStateManager.java:278)
+	at androidx.fragment.app.FragmentStore.moveToExpectedState(FragmentStore.java:112)
+	at androidx.fragment.app.FragmentManager.moveToState(FragmentManager.java:1647)
+	at androidx.fragment.app.FragmentManager.dispatchStateChange(FragmentManager.java:3128)
+	at androidx.fragment.app.FragmentManager.dispatchCreate(FragmentManager.java:3061)
+	at androidx.fragment.app.FragmentController.dispatchCreate(FragmentController.java:240)
+	at androidx.fragment.app.FragmentActivity.onCreate(FragmentActivity.java:276)
+	at org.fdroid.fdroid.views.main.MainActivity.onCreate(MainActivity.java:110)
+	at android.app.Activity.performCreate(Activity.java:8342)
+	at android.app.Activity.performCreate(Activity.java:8321)
+	at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1417)
+	at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:3626)
+	... 15 more
+```
+---
+Comment#10:
+I would like to work on this. from what I have researched, this seems to be a [bug](https://stackoverflow.com/questions/69504256/preferencedialog-in-preferenceactivity-target-fragment-must-implement-targetfr) in Android itself. as stated [here](https://issuetracker.google.com/issues/181793702), we can override `PreferenceDialogFragmentCompat` & try to fix this issue, or can we can wrap `MainActivity#onCreate#super` on a try-catch block. What are your thoughts?
+
+edit: ignore the part about overriding, that doesn't work, I tried. :(
+---
+Comment#11:
+still an issue with latest https://gitlab.com/fdroid/fdroidclient/-/merge_requests/1520 just a fyi
+
+```
+java.lang.RuntimeException: Unable to start activity ComponentInfo{org.fdroid.basic.debug/org.fdroid.fdroid.views.main.MainActivity}: java.lang.IllegalStateException: Target fragment must implement TargetFragment interface
+	at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:3993)
+	at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:4180)
+	at android.app.ActivityThread.handleRelaunchActivityInner(ActivityThread.java:6251)
+	at android.app.ActivityThread.handleRelaunchActivity(ActivityThread.java:6142)
+	at android.app.servertransaction.ActivityRelaunchItem.execute(ActivityRelaunchItem.java:80)
+	at android.app.servertransaction.ActivityTransactionItem.execute(ActivityTransactionItem.java:60)
+	at android.app.servertransaction.TransactionExecutor.executeNonLifecycleItem(TransactionExecutor.java:231)
+	at android.app.servertransaction.TransactionExecutor.executeTransactionItems(TransactionExecutor.java:152)
+	at android.app.servertransaction.TransactionExecutor.execute(TransactionExecutor.java:93)
+	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2595)
+	at android.os.Handler.dispatchMessage(Handler.java:107)
+	at android.os.Looper.loopOnce(Looper.java:232)
+	at android.os.Looper.loop(Looper.java:317)
+	at android.app.ActivityThread.main(ActivityThread.java:8601)
+	at java.lang.reflect.Method.invoke(Native Method)
+	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:583)
+	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:863)
+Caused by: java.lang.IllegalStateException: Target fragment must implement TargetFragment interface
+	at androidx.preference.PreferenceDialogFragmentCompat.onCreate(PreferenceDialogFragmentCompat.java:85)
+	at androidx.preference.MultiSelectListPreferenceDialogFragmentCompat.onCreate(MultiSelectListPreferenceDialogFragmentCompat.java:62)
+	at androidx.fragment.app.Fragment.performCreate(Fragment.java:3094)
+	at androidx.fragment.app.FragmentStateManager.create(FragmentStateManager.java:504)
+	at androidx.fragment.app.FragmentStateManager.moveToExpectedState(FragmentStateManager.java:268)
+	at androidx.fragment.app.FragmentStore.moveToExpectedState(FragmentStore.java:114)
+	at androidx.fragment.app.FragmentManager.moveToState(FragmentManager.java:1455)
+	at androidx.fragment.app.FragmentManager.dispatchStateChange(FragmentManager.java:3034)
+	at androidx.fragment.app.FragmentManager.dispatchCreate(FragmentManager.java:2941)
+	at androidx.fragment.app.FragmentController.dispatchCreate(FragmentController.java:252)
+	at androidx.fragment.app.FragmentActivity.onCreate(FragmentActivity.java:219)
+	at org.fdroid.fdroid.views.main.MainActivity.onCreate(MainActivity.java:115)
+	at android.app.Activity.performCreate(Activity.java:8960)
+	at android.app.Activity.performCreate(Activity.java:8938)
+	at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1530)
+	at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:3975)
+	... 16 more
+```
+---
+Comment#12:
+Not an issue in 2.0
+---
