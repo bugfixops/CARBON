@@ -1,0 +1,104 @@
+##########syst1##########
+As an experienced mobile app tester, your task is to try and reproduce a crash on the app based on the crash description. I'll provide you with the current page of the app and the available actions you can perform (interactions with the app's GUI widgets). You need to select and perform the action that best matches the crash description so as to reproduce the crash in a step-by-step manner.
+
+There are three types of actions on the page:
+1. Click[widget name]: You will click a button on the page called "widget name".
+2. Long press[widget name]: You will long press a button on the page called "widget name".
+3. Input[widget name]: You will type something into a input box on the page called "widget name".
+
+Use the following format:
+
+<Reported crash>: a one-sentence description of the crash that you must reproduce
+<Observation>: I will tell you the current page of the app and the available actions you can perform
+<Thought>: you should always think about what to do
+<Action>: you should answer the number of the chosen action. (e.g., you should answer "<Action>: 3")
+... (then I will tell you the new Observation after the action you choose. This Observation/Thought/Action can repeat N times until the crash is reproduced)
+
+Note that your answer should be only one <Thought> and one <Action>.
+##########user2##########
+Let's begin!
+<Reported crash>: Doesn't use zoom camera to zoom
+##########user3##########
+<Observation>: In the previous step, you clicked on the "Toggle front/back camera" button, but still kept in the "Main Activity" page, which you have visited 5 times. On "Main Activity" page, you need to choose one of the following 9 actions to perform:
+(1) Back to previous page: You haven't performed the action yet.
+(2) Click[Video]: You perform the action 1 times, and the action goes to page "Main Activity"
+(3) Click[Toggle front/back camera]: You perform the action 2 times, and the action goes to page "Main Activity"
+(4) Click[View last captured media]: You haven't performed the action yet.
+(5) Click[Shutter]: You haven't performed the action yet.
+(6) Click[Toggle the timer mode]: You haven't performed the action yet.
+(7) Click[Toggle the flashlight mode]: You haven't performed the action yet.
+(8) Click[Resolution]: You perform the action 1 times, and the action goes to page "Main Activity"
+(9) Click[Settings]: You perform the action 1 times, and the action goes to page "Settings"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have not been performed before (Back to previous page, Click[View last captured media], Click[Shutter], Click[Toggle the timer mode], Click[Toggle the flashlight mode]) or go back to previous page.
+##########assi4##########
+<Thought>: I have performed a sequence of actions to put the camera into a specific state: full resolution, video mode, and I've toggled the cameras back and forth. The crash is "Doesn't use zoom camera to zoom". I am now back on the rear camera in video mode. To test the zoom functionality, I need to initiate an action where zooming would be possible. In many camera apps, zoom controls become available or active only after you start recording a video. Therefore, the most logical next step is to press the "Shutter" button to begin recording. This might reveal a zoom slider or trigger the faulty zoom behavior described in the crash report.
+<Action>: 5
+##########user5##########
+<Observation>: In the previous step, you clicked on the "Shutter" button, but still kept in the "Main Activity" page, which you have visited 6 times. On "Main Activity" page, you need to choose one of the following 9 actions to perform:
+(1) Back to previous page: You haven't performed the action yet.
+(2) Click[Video]: You perform the action 1 times, and the action goes to page "Main Activity"
+(3) Click[Toggle front/back camera]: You perform the action 2 times, and the action goes to page "Main Activity"
+(4) Click[View last captured media]: You haven't performed the action yet.
+(5) Click[Shutter]: You perform the action 1 times, and the action goes to page "Main Activity"
+(6) Click[Toggle the timer mode]: You haven't performed the action yet.
+(7) Click[Toggle the flashlight mode]: You haven't performed the action yet.
+(8) Click[Resolution]: You perform the action 1 times, and the action goes to page "Main Activity"
+(9) Click[Settings]: You perform the action 1 times, and the action goes to page "Settings"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have not been performed before (Back to previous page, Click[View last captured media], Click[Toggle the timer mode], Click[Toggle the flashlight mode]) or go back to previous page.
+##########assi6##########
+<Thought>: I have set the resolution, switched to video mode, toggled the cameras, and started recording. The crash is "Doesn't use zoom camera to zoom". I am currently recording a video. The hint suggests I should try an action I haven't performed before. The available unperformed actions are `Back to previous page`, `Click[View last captured media]`, `Click[Toggle the timer mode]`, and `Click[Toggle the flashlight mode]`.
+The crash is related to the camera hardware (specifically, which lens is used for zooming). Toggling the flashlight also interacts with the camera hardware module. It's possible that activating the flash while recording in this specific state (full resolution, video mode, after camera switching) could trigger a bug in the camera's hardware abstraction layer. This could cause the app to fail to select the correct lens for zooming, which matches the crash description. This seems more relevant than viewing media or setting a timer.
+<Action>: 7
+##########user7##########
+<Observation>: In the previous step, you clicked on the "Toggle the flashlight mode" button, and navigated to the "Main Activity" page, which is a newly explored page. On "Main Activity" page, you need to choose one of the following 8 actions to perform:
+(1) Click[Toggle front/back camera]: You haven't performed the action yet.
+(2) Click[View last captured media]: You haven't performed the action yet.
+(3) Click[Video]: You haven't performed the action yet.
+(4) Click[Shutter]: You haven't performed the action yet.
+(5) Click[flash off]: You haven't performed the action yet.
+(6) Click[flash auto]: You haven't performed the action yet.
+(7) Click[flash]: You haven't performed the action yet.
+(8) Click[flash always]: You haven't performed the action yet.
+##########assi8##########
+<Thought>: I have started recording a video and then tapped the flashlight icon, which brought me to a flashlight settings menu. The crash is "Doesn't use zoom camera to zoom". I am trying to create a complex state for the camera hardware. Forcing the flashlight to be on continuously while recording is a significant state change that could conflict with other camera operations, like selecting the correct lens for zooming. The option "flash always" seems designed to do exactly that (turn on the video light). I will select this to see if it triggers the buggy behavior.
+<Action>: 8
+##########user9##########
+<Observation>: In the previous step, you clicked on the "flash always" button, and navigated to the "Main Activity" page, which you have visited 7 times. On "Main Activity" page, you need to choose one of the following 9 actions to perform:
+(1) Back to previous page: You haven't performed the action yet.
+(2) Click[Video]: You perform the action 1 times, and the action goes to page "Main Activity"
+(3) Click[Toggle front/back camera]: You perform the action 2 times, and the action goes to page "Main Activity"
+(4) Click[View last captured media]: You haven't performed the action yet.
+(5) Click[Shutter]: You perform the action 1 times, and the action goes to page "Main Activity"
+(6) Click[Toggle the timer mode]: You haven't performed the action yet.
+(7) Click[Toggle the flashlight mode]: You perform the action 1 times, and the action goes to page "Main Activity"
+(8) Click[Resolution]: You perform the action 1 times, and the action goes to page "Main Activity"
+(9) Click[Settings]: You perform the action 1 times, and the action goes to page "Settings"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have not been performed before (Back to previous page, Click[View last captured media], Click[Toggle the timer mode]) or go back to previous page.
+##########assi10##########
+<Thought>: I have meticulously set up a complex state for the camera: full resolution, video mode, started recording, and turned on the flashlight. The crash is "Doesn't use zoom camera to zoom". This implies that a zoom action is attempted, but the app fails to switch to the correct telephoto lens.
+Looking at the available actions, there is no explicit "zoom" button. However, in some camera UIs, the button that displays the current zoom level (e.g., "1x") is also used to cycle through different zoom levels (e.g., to "2x"). The button labeled "Resolution" might serve this dual purpose. I have already used it to set the resolution *before* recording. It's plausible that its function changes to a zoom control *during* recording.
+Clicking the "Resolution" button now is the most direct way to test the zoom functionality. If the app is supposed to switch to the zoom lens upon this action but fails to do so (as the crash description suggests), this will reproduce the bug.
+<Action>: 8
+##########user11##########
+<Observation>: In the previous step, you clicked on the "Resolution" button, and navigated to the "Main Activity" page, which you have visited 2 times. On "Main Activity" page, you need to choose one of the following 6 actions to perform:
+(1) Click[Toggle front/back camera]: You haven't performed the action yet.
+(2) Click[View last captured media]: You haven't performed the action yet.
+(3) Click[Video]: You haven't performed the action yet.
+(4) Click[Shutter]: You haven't performed the action yet.
+(5) Click[photo full]: You perform the action 1 times, and the action goes to page "Main Activity"
+(6) Click[photo]: You haven't performed the action yet.
+##########assi12##########
+<Thought>: I have followed a complex sequence of actions and am now in a strange state. I was recording a video, but clicking the "Resolution" button took me to a menu for selecting *photo* resolution. This is clearly a bug and indicates the app's state is confused. The crash I'm trying to reproduce is "Doesn't use zoom camera to zoom". It's very likely that this state confusion is the root cause. To proceed, I must exit this resolution menu. The most logical way to do that is to select one of the options. Since I originally selected "photo full" to set the resolution, I will select it again. This action might return me to the main camera view, but with the app's internal state now corrupted, which could then lead to the described zoom failure.
+<Action>: 5
+##########user13##########
+<Observation>: In the previous step, you clicked on the "photo full" button, and navigated to the "Main Activity" page, which you have visited 8 times. On "Main Activity" page, you need to choose one of the following 9 actions to perform:
+(1) Back to previous page: You haven't performed the action yet.
+(2) Click[Video]: You perform the action 1 times, and the action goes to page "Main Activity"
+(3) Click[Toggle front/back camera]: You perform the action 2 times, and the action goes to page "Main Activity"
+(4) Click[View last captured media]: You haven't performed the action yet.
+(5) Click[Shutter]: You perform the action 1 times, and the action goes to page "Main Activity"
+(6) Click[Toggle the timer mode]: You haven't performed the action yet.
+(7) Click[Toggle the flashlight mode]: You perform the action 1 times, and the action goes to page "Main Activity"
+(8) Click[Resolution]: You perform the action 2 times, and the action goes to page "Main Activity"
+(9) Click[Settings]: You perform the action 1 times, and the action goes to page "Settings"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have not been performed before (Back to previous page, Click[View last captured media], Click[Toggle the timer mode]) or go back to previous page.

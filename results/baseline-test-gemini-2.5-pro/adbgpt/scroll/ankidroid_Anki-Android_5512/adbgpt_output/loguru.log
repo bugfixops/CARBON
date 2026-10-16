@@ -1,0 +1,77 @@
+2026-10-06 05:58:06.319 | INFO     | ChatGPT:infer:46 - Available actions: [tap, input, scroll, double tap, long tap]
+Action primitives: [Tap] [Component], [Scroll] [Direction], [Input] [Component] [Value], [Double-tap] [Component], [Long-tap] [Component]
+Question: Extract the entity from the following ->
+    "1. Open bookmark 
+    2. Tap "add new bookmark" and create a name with "a" 
+    3. Create another one with name "b" 
+    4. Click "a" 
+    5. Go back to bookmark after changing name "a" to "b" 
+    6. App crash"
+Answer: 
+    1st step is "Open bookmark". The action is "open" and the target component is "bookmark". However, there is no explicit "open" in the Available actions list. Therefore, we select the closest semantic action "tap". Following the Action primitives, the entity of the step is [Tap] ["bookmark"].
+    2nd step is "Tap 'add new bookmark' and create a name with 'a'". Due to the conjunction word "and", this step can be separated into two sub-steps, "Tap 'add new bookmark'" and "create a name with 'a'". For the first sub-step, following the Action primitives, the entity is [Tap] ["add new bookmark"]. For the second sub-step, there is no explicit "create" in the Available actions list. Therefore, we select the closest semantic action "input". Following the Action primitives, the entity of the sub-step is [Input] ["name"] ["a"].
+    3rd step is "Create another one with name 'b'". Due to its semantic meaning, this step is meant to repeat the previous steps to add another bookmark with name "b". Therefore, it should actually be the 2nd step, that is [Tap] ["add new bookmark"] and [Input] ["name"] ["b"].
+    4th step is "Click 'a'". The action is "click" and the target component is "a". However, there is no explicit "click" in the Available actions list. Therefore, we select the closest semantic action "tap". Following the Action primitives, the entity of the step is [Tap] ["a"].
+    5th step is "Go back to bookmark after changing name 'a' to 'b'". Due to the conjunction word "after", this step can be separated into two sub-steps, "Go back to bookmark" and "change name 'a' to 'b'". The conjunction word "after" also alters the temporal order of the sub-steps, that "change name 'a' to 'b'" should be executed first, followed by "go back to bookmark". For the first sub-step, there is no explicit "change" in the Available actions list. Therefore, we select the closest semantic action "input". Following the Action primitives, the entity of the sub-step is [Input] ["name"] ["b"]. For the second sub-step, there is no explicit "go back" in the Available actions list. Therefore, we select the closest semantic action "tap". Following the Action primitives, the entity of the sub-step is [Tap] ["back"].
+    6th step is "App crash". This step does not have any operations.
+    Overall, the extracted S2R entities are: 
+    1. [Tap] ["bookmark"]
+    2. [Tap] ["add new bookmark"]
+    3. [Input] ["name"] ["a"]
+    4. [Tap] ["add new bookmark"]
+    5. [Input] ["name"] ["b"]
+    6. [Tap] ["a"]
+    7. [Input] ["name"] ["b"]
+    8. [Tap] ["back"]
+
+    Question: Extract the entity from the following -> "AnkiDroid scroll bug
+
+App: ankidroid/Anki-Android
+Version: 2.9
+Issue: https://github.com/ankidroid/Anki-Android/issues/5512
+APK Tag: v2.9
+Gestures: scroll, swipe_region
+Primary Gesture: scroll
+Keywords: scroll; swipe_region
+
+Tested: yes
+
+
+Since yesterday and the update to 2.9, all the text on the cards are bigger. I tried to update the font settings (https://docs.ankidroid.org/manual.html#_fonts) but the text stays bigger than with the previous AnkiDroid version. I checked my phone settings, and font parameters were not updated.
+
+Likewise, in the card browser when you setup "Card browser font scaling" to 50% the text is actually bigger instead of smaller. Same issue for font scaling >= 30%. No issue for 10%, 20%.
+
+Debug info
+AnkiDroid Version = 2.9
+Android Version = 7.0
+ACRA UUID = 059134f9-ddeb-40b2-a884-ea18b8fb6b2c"
+ Answer:
+2026-10-06 05:58:49.968 | INFO     | ChatGPT:infer:50 - Based on the bug report, the user is experiencing an issue where setting the font scaling in the card browser to a value like 50% incorrectly increases the text size. The title and keywords strongly suggest that scrolling is involved in observing or triggering this bug.
+
+Here are the extracted steps to reproduce the issue:
+
+1.  "in the card browser": This phrase indicates the context where the bug occurs. To get into the card browser, the user must perform an action. The most logical action is to tap on it.
+    *   Action: `tap`
+    *   Component: `"card browser"`
+    *   Entity: `[Tap] ["card browser"]`
+
+2.  "when you setup 'Card browser font scaling'...": The action "setup" is not in the available actions list. It implies interacting with the setting. This is typically done by tapping the setting to open its options.
+    *   Action: `tap`
+    *   Component: `"Card browser font scaling"`
+    *   Entity: `[Tap] ["Card browser font scaling"]`
+
+3.  "...to 50%": This is the second part of the "setup" action, where the user selects the specific value for the setting. This is also a tap action.
+    *   Action: `tap`
+    *   Component: `"50%"`
+    *   Entity: `[Tap] ["50%"]`
+
+4.  "AnkiDroid scroll bug" / Primary Gesture: scroll: The title, keywords, and primary gesture all point to a `scroll` action. After changing the setting, the user would scroll through the list in the card browser to observe the incorrectly sized text.
+    *   Action: `scroll`
+    *   Direction: The direction is not specified, so we'll use a common direction like "down".
+    *   Entity: `[Scroll] ["down"]`
+
+Overall, the extracted S2R entities are:
+1.  [Tap] ["card browser"]
+2.  [Tap] ["Card browser font scaling"]
+3.  [Tap] ["50%"]
+4.  [Scroll] ["down"]

@@ -1,0 +1,79 @@
+##########syst1##########
+As an experienced mobile app tester, your task is to try and reproduce a crash on the app based on the crash description. I'll provide you with the current page of the app and the available actions you can perform (interactions with the app's GUI widgets). You need to select and perform the action that best matches the crash description so as to reproduce the crash in a step-by-step manner.
+
+There are three types of actions on the page:
+1. Click[widget name]: You will click a button on the page called "widget name".
+2. Long press[widget name]: You will long press a button on the page called "widget name".
+3. Input[widget name]: You will type something into a input box on the page called "widget name".
+
+Use the following format:
+
+<Reported crash>: a one-sentence description of the crash that you must reproduce
+<Observation>: I will tell you the current page of the app and the available actions you can perform
+<Thought>: you should always think about what to do
+<Action>: you should answer the number of the chosen action. (e.g., you should answer "<Action>: 3")
+... (then I will tell you the new Observation after the action you choose. This Observation/Thought/Action can repeat N times until the crash is reproduced)
+
+Note that your answer should be only one <Thought> and one <Action>.
+##########user2##########
+Let's begin!
+<Reported crash>: [BUG] Incomplete Predictive Back Animation
+##########user3##########
+<Observation>: In the previous step, you filled in the "Discover" input box, but still kept in the "Discover" page, which is a newly explored page. On "Discover" page, you need to choose one of the following 3 actions to perform:
+(1) Click[HelloWorld!]: You perform the action 1 times, and the action goes to page "Discover"
+(2) Click[Refresh]: You perform the action 1 times, and the action goes to page "Discover"
+(3) Click[Done]: You haven't performed the action yet.
+##########assi4##########
+<Thought>: I have just edited the search query on the search results page. Now, a new "Done" button has appeared. The crash I'm trying to reproduce is "Incomplete Predictive Back Animation". A "Done" button, especially after editing text in a search field, often serves to dismiss the keyboard and finalize the search, which can involve a UI transition similar to a back gesture (dismissing the search overlay). This action is the most likely candidate to trigger an animation that dismisses the current view. The bug could be in the animation that plays when the search UI is dismissed via the "Done" button. The other options, clicking a result or refreshing, would either navigate forward or reload the current state, which I've already tried and are less likely to trigger a *back* animation. Therefore, clicking "Done" is the most logical next step.
+<Action>: 3
+##########user5##########
+<Observation>: In the previous step, you clicked on the "Done" button, but still kept in the "Discover" page, which you have visited 2 times. On "Discover" page, you need to choose one of the following 3 actions to perform:
+(1) Click[HelloWorld!]: You perform the action 1 times, and the action goes to page "Discover"
+(2) Click[Refresh]: You perform the action 1 times, and the action goes to page "Discover"
+(3) Click[Done]: You perform the action 1 times, and the action goes to page "Discover"
+##########assi6##########
+<Thought>: I have tried multiple actions on the search results page (refreshing, editing the search, clicking "Done") and none have triggered the crash. The crash is about "Incomplete Predictive Back Animation," which is triggered by a back gesture. Since I cannot perform this gesture myself, the test environment must be handling it. My task is to get the app into the specific state where this implicit back gesture will fail.
+I am currently on a search results page. My options are to click a search result ("HelloWorld!"), refresh, or click "Done" again. I've already tried the latter two. Clicking the "HelloWorld!" search result will navigate me one level deeper in the app's hierarchy. It's very plausible that the buggy back animation occurs when trying to navigate *back from* a detail page *to* the search results page. By navigating forward one more time, I create a new "back" transition that hasn't been tested yet. This is the most logical next step to explore a new potential failure point for the back animation.
+<Action>: 1
+##########user7##########
+<Observation>: In the previous step, you clicked on the "HelloWorld!" button, and navigated to the "Discover" page, which you have visited 3 times. On "Discover" page, you need to choose one of the following 6 actions to perform:
+(1) Input[Search for feeds]: You haven't filled this input box yet, please first fill it in.
+(2) Click[The latest from www.wired.com]: You haven't performed the action yet.
+(3) Click[The Verge]: You haven't performed the action yet.
+(4) Click[Technology]: You haven't performed the action yet.
+(5) Click[TechCrunch]: You haven't performed the action yet.
+(6) Click[Refresh]: You perform the action 1 times, and the action goes to page "Discover"
+##########assi8##########
+<Thought>: I have gone through a complex search flow which ultimately led me back to the starting "Discover" page without triggering the crash. This suggests the bug might not be related to the search functionality. The crash is about "Incomplete Predictive Back Animation," which happens during a back gesture. I need to navigate the app to a state where a subsequent (implicit) back gesture will fail.
+I am back on the main "Discover" page. I have several options to navigate to different content sections ("www.wired.com", "The Verge", "Technology", "TechCrunch"). Navigating into one of these sections and then performing a back gesture is a very standard user flow. It's possible the animation bug occurs when transitioning back from one of these feed pages. Since the search path was a dead end, I will now try navigating into a feed category. I'll choose "The Verge".
+<Action>: 3
+##########user9##########
+<Observation>: In the previous step, you clicked on the "The Verge" button, and navigated to the "Main Activity Dark Jade" page, which is a newly explored page. On "Main Activity Dark Jade" page, you need to choose one of the following 3 actions to perform:
+(1) Click[WIRED]: You haven't performed the action yet.
+(2) Long press[WIRED]: You haven't performed the action yet.
+(3) Click[Close sheet]: You haven't performed the action yet.
+##########assi10##########
+<Thought>: I have navigated to a page called "Main Activity Dark Jade" after clicking on "The Verge". The crash I'm trying to reproduce is related to a "Predictive Back Animation". This type of animation occurs when navigating backward. On the current page, I have three options. Two involve interacting with a "WIRED" element, which would likely be a forward navigation or a context action. The third option is "Click[Close sheet]". Closing a sheet is an action that dismisses the current view and returns to the previous one, which is functionally equivalent to a back gesture. This action is the most likely to trigger a dismissal or back animation. Therefore, if there's a bug in the back animation, this is the most probable action to expose it.
+<Action>: 3
+##########user11##########
+<Observation>: In the previous step, you clicked on the "Close sheet" button, and navigated to the "Discover" page, which you have visited 4 times. On "Discover" page, you need to choose one of the following 6 actions to perform:
+(1) Input[Search for feeds]: You haven't filled this input box yet, please first fill it in.
+(2) Click[The latest from www.wired.com]: You haven't performed the action yet.
+(3) Click[The Verge]: You perform the action 1 times, and the action goes to page "Main Activity Dark Jade"
+(4) Click[Technology]: You haven't performed the action yet.
+(5) Click[TechCrunch]: You haven't performed the action yet.
+(6) Click[Refresh]: You perform the action 1 times, and the action goes to page "Discover"
+##########assi12##########
+<Thought>: I have returned to the "Discover" page after opening and closing a sheet. This action, which is similar to a back gesture, did not cause the crash. This suggests the bug is not on that specific path.
+The crash is about "Incomplete Predictive Back Animation". I need to find the specific screen transition that triggers this faulty animation. I have already tried the search flow and navigating into "The Verge".
+I am back on the main "Discover" page with several navigation options. Since the "The Verge" path didn't work, I should try a different navigation path. The bug might be specific to the page loaded for another category. I will now try clicking on the "Technology" category. This will take me to a new screen, and the subsequent back transition from *that* screen might be the one that is bugged. This is a systematic way to test different parts of the app for the reported animation issue.
+<Action>: 4
+##########user13##########
+<Observation>: In the previous step, you clicked on the "Technology" button, but still kept in the "Discover" page, which you have visited 5 times. On "Discover" page, you need to choose one of the following 6 actions to perform:
+(1) Input[Search for feeds]: You haven't filled this input box yet, please first fill it in.
+(2) Click[The latest from www.wired.com]: You haven't performed the action yet.
+(3) Click[The Verge]: You perform the action 1 times, and the action goes to page "Main Activity Dark Jade"
+(4) Click[Technology]: You perform the action 1 times, and the action goes to page "Discover"
+(5) Click[TechCrunch]: You haven't performed the action yet.
+(6) Click[Refresh]: You perform the action 1 times, and the action goes to page "Discover"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have not been performed before (Back to previous page, Click[The latest from www.wired.com], Click[TechCrunch], Click[Go back], Click[Done]) or go back to previous page.

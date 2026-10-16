@@ -1,0 +1,78 @@
+##########syst1##########
+As an experienced mobile app tester, your task is to try and reproduce a crash on the app based on the crash description. I'll provide you with the current page of the app and the available actions you can perform (interactions with the app's GUI widgets). You need to select and perform the action that best matches the crash description so as to reproduce the crash in a step-by-step manner.
+
+There are three types of actions on the page:
+1. Click[widget name]: You will click a button on the page called "widget name".
+2. Long press[widget name]: You will long press a button on the page called "widget name".
+3. Input[widget name]: You will type something into a input box on the page called "widget name".
+
+Use the following format:
+
+<Reported crash>: a one-sentence description of the crash that you must reproduce
+<Observation>: I will tell you the current page of the app and the available actions you can perform
+<Thought>: you should always think about what to do
+<Action>: you should answer the number of the chosen action. (e.g., you should answer "<Action>: 3")
+... (then I will tell you the new Observation after the action you choose. This Observation/Thought/Action can repeat N times until the crash is reproduced)
+
+Note that your answer should be only one <Thought> and one <Action>.
+##########user2##########
+Let's begin!
+<Reported crash>: AnkiDroid scroll bug
+##########user3##########
+<Observation>: In the previous step, you clicked on the "New cards/day" button, and navigated to the "dialog (Maximum reviews day)" page, which you have visited 9 times. On "dialog (Maximum reviews day)" page, you need to choose one of the following 2 actions to perform:
+(1) Input[Maximum reviews/day]: You haven't filled this input box yet, please first fill it in.
+(2) Back to previous page: You perform the action 2 times, and the action goes to page "Deck Options"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have not been performed before (Click[CANCEL]) or go back to previous page.
+##########assi4##########
+<Thought>: I am currently in a dialog box for setting "New cards/day". This dialog is not a scrollable view, so the "scroll bug" will not happen here. The bug is likely on one of the previous list-based screens ("Deck Options" or "Options for Default") whose state I have tried to corrupt. The crash will likely be triggered when I return to one of those screens, forcing it to redraw its corrupted state. The hint suggests going back, which aligns with this theory. I will go back to the previous page to see if the redraw triggers the crash.
+<Action>: 2
+##########user5##########
+<Observation>: In the previous step, you go back to previous page, and navigated to the "Deck Options" page, which you have visited 2 times. On "Deck Options" page, you need to choose one of the following 7 actions to perform:
+(1) Click[New cards/day]: You perform the action 1 times, and the action goes to page "dialog (Maximum reviews day)"
+(2) Click[Starting ease]: You haven't performed the action yet.
+(3) Click[Bury related new cards]: You haven't performed the action yet.
+(4) Click[Steps (in minutes)]: You haven't performed the action yet.
+(5) Click[Order]: You haven't performed the action yet.
+(6) Click[Graduating interval]: You haven't performed the action yet.
+(7) Click[Easy interval]: You haven't performed the action yet.
+##########assi6##########
+<Thought>: I am back on the "Deck Options" page after setting the "New cards/day" value. The crash has not occurred. The crash is described as a "scroll bug," which suggests an issue with a list view. This page is a list of options. I have already interacted with the first item, "New cards/day". Perhaps the bug is triggered by interacting with another item in the list, which might cause the view to update or re-bind in a way that exposes the underlying corruption. I will try clicking on another item in this list, "Steps (in minutes)", to see if that triggers the crash.
+<Action>: 4
+##########user7##########
+<Observation>: In the previous step, you clicked on the "Steps (in minutes)" button, and navigated to the "dialog (Maximum reviews day)" page, which you have visited 10 times. On "dialog (Maximum reviews day)" page, you need to choose one of the following 2 actions to perform:
+(1) Input[Maximum reviews/day]: You haven't filled this input box yet, please first fill it in.
+(2) Back to previous page: You perform the action 3 times, and the action goes to page "Deck Options"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have not been performed before (Click[CANCEL]) or go back to previous page.
+##########assi8##########
+<Thought>: I am in another dialog box, this time for "Steps (in minutes)". As before, this is not a scrollable view, so the crash won't happen here. The bug must be on the previous "Deck Options" screen. The pattern seems to be: interact with the list, a dialog pops up, and then I return to the list. The crash must be triggered upon returning to the list and forcing a redraw. The hint again suggests going back. I will follow this pattern and go back to the previous page.
+<Action>: 2
+##########user9##########
+<Observation>: In the previous step, you go back to previous page, and navigated to the "Deck Options" page, which you have visited 3 times. On "Deck Options" page, you need to choose one of the following 7 actions to perform:
+(1) Click[New cards/day]: You perform the action 1 times, and the action goes to page "dialog (Maximum reviews day)"
+(2) Click[Starting ease]: You haven't performed the action yet.
+(3) Click[Bury related new cards]: You haven't performed the action yet.
+(4) Click[Steps (in minutes)]: You perform the action 1 times, and the action goes to page "dialog (Maximum reviews day)"
+(5) Click[Order]: You haven't performed the action yet.
+(6) Click[Graduating interval]: You haven't performed the action yet.
+(7) Click[Easy interval]: You haven't performed the action yet.
+##########assi10##########
+<Thought>: I'm back on the "Deck Options" page again. No crash yet. I've now interacted with "New cards/day" and "Steps (in minutes)". The "scroll bug" description is key. I haven't performed any action that would cause a significant scroll. The items I've clicked so far are likely at the top of the list. To trigger a scroll-related bug, I should try to interact with an item that is further down the list, potentially off-screen. "Easy interval" is the last item in the list of available actions. Clicking it might force the list to scroll or adjust, which could trigger the bug if the list's state is corrupted.
+<Action>: 7
+##########user11##########
+<Observation>: In the previous step, you clicked on the "Easy interval" button, and navigated to the "dialog (Maximum reviews day)" page, which you have visited 11 times. On "dialog (Maximum reviews day)" page, you need to choose one of the following 2 actions to perform:
+(1) Input[Maximum reviews/day]: You haven't filled this input box yet, please first fill it in.
+(2) Back to previous page: You perform the action 4 times, and the action goes to page "Deck Options"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have not been performed before (Click[CANCEL]) or go back to previous page.
+##########assi12##########
+<Thought>: I am once again in a dialog box after clicking an item on the "Deck Options" list. This time I clicked "Easy interval", which was the last item. The crash is a "scroll bug", and this dialog is not a scrollable view. The bug must be triggered on the previous list screen. Following the established pattern and the hint, the crash is likely to occur when I return to the "Deck Options" page, forcing it to redraw after I've interacted with an item at the bottom of the list. I will go back to the previous page.
+<Action>: 2
+##########user13##########
+<Observation>: In the previous step, you go back to previous page, and navigated to the "Deck Options" page, which you have visited 4 times. On "Deck Options" page, you need to choose one of the following 8 actions to perform:
+(1) Click[New cards/day]: You perform the action 1 times, and the action goes to page "dialog (Maximum reviews day)"
+(2) Click[Starting ease]: You haven't performed the action yet.
+(3) Click[Bury related new cards]: You haven't performed the action yet.
+(4) Back to previous page: You haven't performed the action yet.
+(5) Click[Steps (in minutes)]: You perform the action 1 times, and the action goes to page "dialog (Maximum reviews day)"
+(6) Click[Order]: You haven't performed the action yet.
+(7) Click[Graduating interval]: You haven't performed the action yet.
+(8) Click[Easy interval]: You perform the action 1 times, and the action goes to page "dialog (Maximum reviews day)"

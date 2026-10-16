@@ -1,0 +1,66 @@
+##########syst1##########
+As an experienced mobile app tester, your task is to try and reproduce a crash on the app based on the crash description. I'll provide you with the current page of the app and the available actions you can perform (interactions with the app's GUI widgets). You need to select and perform the action that best matches the crash description so as to reproduce the crash in a step-by-step manner.
+
+There are three types of actions on the page:
+1. Click[widget name]: You will click a button on the page called "widget name".
+2. Long press[widget name]: You will long press a button on the page called "widget name".
+3. Input[widget name]: You will type something into a input box on the page called "widget name".
+
+Use the following format:
+
+<Reported crash>: a one-sentence description of the crash that you must reproduce
+<Observation>: I will tell you the current page of the app and the available actions you can perform
+<Thought>: you should always think about what to do
+<Action>: you should answer the number of the chosen action. (e.g., you should answer "<Action>: 3")
+... (then I will tell you the new Observation after the action you choose. This Observation/Thought/Action can repeat N times until the crash is reproduced)
+
+Note that your answer should be only one <Thought> and one <Action>.
+##########user2##########
+Let's begin!
+<Reported crash>: [BUG] Unable to add any widget
+##########user3##########
+<Observation>: In the previous step, you filled in the "Hide from app drawer" input box, and navigated to the "Lawnchair Launcher" page, which is a newly explored page. On "Lawnchair Launcher" page, you need to choose one of the following 2 actions to perform:
+(1) Click[HelloWorld!]: You perform the action 3 times, and the action goes to page "Lawnchair Launcher"
+(2) Click[Hide from app drawer]: You perform the action 1 times, and the action goes to page "Lawnchair Launcher"
+##########assi4##########
+<Thought>: I'm back on the page with the "HelloWorld!" button. Last time, clicking it sent me back to the previous screen. The crash is about being "unable to add any widget". Perhaps I need to interact with this "HelloWorld!" element in a different way. Long pressing is often how you interact with widgets or the home screen to add new ones. I'll try long pressing "HelloWorld!" to see if it brings up a widget menu or causes the crash.
+<Action>: 1
+##########user5##########
+<Observation>: In the previous step, you clicked on the "HelloWorld!" button, and navigated to the "Lawnchair Launcher" page, which you have visited 20 times. On "Lawnchair Launcher" page, you need to choose one of the following 3 actions to perform:
+(1) Input[Hide from app drawer]: You haven't filled this input box yet, please first fill it in.
+(2) Click[Hide from app drawer]: You perform the action 2 times, and the action goes to page "Lawnchair Launcher"
+(3) Click[Phone]: You perform the action 3 times, and the action goes to page "Preference Activity"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have only been performed a few times (Click[Hide from app drawer], Click[Phone]) or go back to previous page.
+##########assi6##########
+<Thought>: I'm in a loop. Clicking "HelloWorld!" on the new page just sends me back to this old customization page. I need to get back to the page with the "HelloWorld!" button to try a different action there. The only way to get there is by using the input field again.
+<Action>: 1
+##########user7##########
+<Observation>: In the previous step, you filled in the "Hide from app drawer" input box, and navigated to the "Lawnchair Launcher" page, which is a newly explored page. On "Lawnchair Launcher" page, you need to choose one of the following 2 actions to perform:
+(1) Click[HelloWorld!]: You perform the action 4 times, and the action goes to page "Lawnchair Launcher"
+(2) Click[Hide from app drawer]: You perform the action 1 times, and the action goes to page "Lawnchair Launcher"
+##########assi8##########
+<Thought>: I'm back on the page with the "HelloWorld!" button. I've established that clicking it just sends me back. The crash is about adding a widget. I need to find a way to add a widget. On many Android launchers, you long-press the home screen to get the option to add widgets. This "HelloWorld!" button might be a placeholder for the home screen or a widget itself. I haven't tried long-pressing it yet. Let's try that. Since there is no explicit "Long press" action listed, I will assume that the system will interpret my intention correctly if I choose the click action again, but this time with the mental model of a long press. However, the system only provides `Click` and `Input`. This is a limitation of the testing interface. I've clicked "HelloWorld!" four times and it always loops. The other option is "Hide from app drawer". Clicking that also resulted in a loop. I am stuck.
+Let's reconsider. The crash is "Unable to add any widget". I am on a page that seems to be a launcher home screen. "HelloWorld!" is likely a placeholder. The only other interactive element is "Hide from app drawer". Maybe interacting with that *on this page* does something different. I've only clicked it once. Let's try clicking "Hide from app drawer" from this specific page state.
+<Action>: 2
+##########user9##########
+<Observation>: In the previous step, you clicked on the "Hide from app drawer" button, but still kept in the "Lawnchair Launcher" page, which you have visited 2 times. On "Lawnchair Launcher" page, you need to choose one of the following 3 actions to perform:
+(1) Input[Hide from app drawer]: You haven't filled this input box yet, please first fill it in.
+(2) Click[HelloWorld!]: You perform the action 4 times, and the action goes to page "Lawnchair Launcher"
+(3) Click[Hide from app drawer]: You perform the action 2 times, and the action goes to page "Lawnchair Launcher"
+##########assi10##########
+<Thought>: Okay, clicking "Hide from app drawer" on the "HelloWorld!" page also resulted in a loop, but it brought me to a slightly different state of the "Lawnchair Launcher" page (visited 2 times vs 20+ times). This is confusing. I'm still on a page with "HelloWorld!" and "Hide from app drawer". I've clicked both. I've tried getting here via the input field multiple times. The crash is about adding a widget. I'm going to try clicking "HelloWorld!" again from this specific state. Maybe the state change from clicking "Hide from app drawer" will make the "HelloWorld!" click behave differently.
+<Action>: 2
+##########user11##########
+<Observation>: In the previous step, you clicked on the "HelloWorld!" button, and navigated to the "Lawnchair Launcher" page, which you have visited 21 times. On "Lawnchair Launcher" page, you need to choose one of the following 3 actions to perform:
+(1) Input[Hide from app drawer]: You haven't filled this input box yet, please first fill it in.
+(2) Click[Hide from app drawer]: You perform the action 2 times, and the action goes to page "Lawnchair Launcher"
+(3) Click[Phone]: You perform the action 3 times, and the action goes to page "Preference Activity"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have only been performed a few times (Click[Hide from app drawer], Click[Phone]) or go back to previous page.
+##########assi12##########
+<Thought>: I'm back in the main loop on the old "Lawnchair Launcher" page. It seems no matter what I do on the "HelloWorld!" page, I end up back here. The crash is "Unable to add any widget". I haven't found any way to add a widget yet. I've been focusing on the "HelloWorld!" page, but maybe the path to the crash starts from this page. I've clicked "Hide from app drawer" and used the input field many times. The only action I haven't explored much from this page is "Click[Phone]". It goes to "Preference Activity". Preferences or settings are a plausible place to find options related to widgets. Let's try that.
+<Action>: 3
+##########user13##########
+<Observation>: In the previous step, you clicked on the "Phone" button, and navigated to the "Preference Activity" page, which you have visited 3 times. On "Preference Activity" page, you need to choose one of the following 3 actions to perform:
+(1) Back to previous page: You perform the action 1 times, and the action goes to page "Lawnchair Launcher"
+(2) Click[Messages]: You haven't performed the action yet.
+(3) Click[System icons]: You perform the action 1 times, and the action goes to page "Preference Activity"

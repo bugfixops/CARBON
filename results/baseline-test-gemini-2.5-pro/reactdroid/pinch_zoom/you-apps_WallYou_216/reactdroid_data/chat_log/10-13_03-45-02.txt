@@ -1,0 +1,59 @@
+##########syst1##########
+As an experienced mobile app tester, your task is to try and reproduce a crash on the app based on the crash description. I'll provide you with the current page of the app and the available actions you can perform (interactions with the app's GUI widgets). You need to select and perform the action that best matches the crash description so as to reproduce the crash in a step-by-step manner.
+
+There are three types of actions on the page:
+1. Click[widget name]: You will click a button on the page called "widget name".
+2. Long press[widget name]: You will long press a button on the page called "widget name".
+3. Input[widget name]: You will type something into a input box on the page called "widget name".
+
+Use the following format:
+
+<Reported crash>: a one-sentence description of the crash that you must reproduce
+<Observation>: I will tell you the current page of the app and the available actions you can perform
+<Thought>: you should always think about what to do
+<Action>: you should answer the number of the chosen action. (e.g., you should answer "<Action>: 3")
+... (then I will tell you the new Observation after the action you choose. This Observation/Thought/Action can repeat N times until the crash is reproduced)
+
+Note that your answer should be only one <Thought> and one <Action>.
+##########user2##########
+Let's begin!
+<Reported crash>: Improper edge-to-edge implementation
+##########user3##########
+<Observation>: In the previous step, you clicked on the "Wallhaven" button, and navigated to the "Wall You" page, which is a newly explored page. On "Wall You" page, you need to choose one of the following 2 actions to perform:
+(1) Click[Close navigation menu]: You haven't performed the action yet.
+(2) Click[Wall You]: You haven't performed the action yet.
+##########assi4##########
+<Thought>: The crash is about "Improper edge-to-edge implementation". I have navigated from "Wallhaven" to "Wall You". This suggests I am moving through different sections of the app. The "Wall You" button likely leads to another main screen or content area. Such a navigation action is a good candidate for revealing UI rendering issues, especially those related to how the app's content is drawn with respect to the system bars (status and navigation). Clicking "Close navigation menu" would likely just dismiss an overlay, which is a less significant UI change. Therefore, I'll click "Wall You" to continue exploring the app's main screens and hopefully trigger the rendering bug.
+<Action>: 2
+##########user5##########
+<Observation>: In the previous step, you clicked on the "Wall You" button, and navigated to the "OWalls" page, which is a newly explored page. On "OWalls" page, you need to choose one of the following 2 actions to perform:
+(1) Back to previous page: You haven't performed the action yet.
+(2) Click[OWalls]: You haven't performed the action yet.
+##########assi6##########
+<Thought>: I am continuing to navigate through the main sections of the app to find the "Improper edge-to-edge implementation" crash. I've gone from "Wallhaven" to "Wall You", and now I'm on "OWalls". Clicking "OWalls" will take me to another main content screen, which is a good place to look for UI rendering issues. Going back is less likely to reveal a new problem than moving forward to an unexplored part of the app. Therefore, I will click "OWalls".
+<Action>: 2
+##########user7##########
+<Observation>: In the previous step, you clicked on the "OWalls" button, and navigated to the "Wall You" page, which is a newly explored page. On "Wall You" page, you need to choose one of the following 2 actions to perform:
+(1) Click[Close navigation menu]: You haven't performed the action yet.
+(2) Click[Wall You]: You haven't performed the action yet.
+##########assi8##########
+<Thought>: I have been navigating through what appears to be a side menu or navigation drawer (Wallhaven -> Wall You -> OWalls). My last action, clicking "OWalls", brought me back to the "Wall You" page, which reinforces the idea that I'm in a navigation menu and "Wall You" is the currently selected item. The crash is related to "Improper edge-to-edge implementation," a UI rendering issue. Clicking "Wall You" again is unlikely to do anything new. However, clicking "Close navigation menu" will dismiss this menu and reveal the main content screen underneath. This transition is a very common place for edge-to-edge implementation bugs to appear, as the app has to recalculate its layout and insets. Therefore, closing the menu is the most promising action to reproduce the crash.
+<Action>: 1
+##########user9##########
+<Observation>: In the previous step, you clicked on the "Close navigation menu" button, and navigated to the "OWalls" page, which you have visited 2 times. On "OWalls" page, you need to choose one of the following 2 actions to perform:
+(1) Back to previous page: You haven't performed the action yet.
+(2) Click[OWalls]: You perform the action 1 times, and the action goes to page "Wall You"
+##########assi10##########
+<Thought>: I have successfully closed the navigation menu and am now on the main content page, "OWalls". The crash is related to "Improper edge-to-edge implementation". This kind of UI bug often appears when the layout changes, for example, when a navigation drawer is opened or closed, as this affects the window insets. I just closed the drawer. Now, I have the option to go back or to click "OWalls", which the observation states will take me to the "Wall You" page (likely re-opening the navigation drawer). Toggling the navigation drawer is a very common way to trigger edge-to-edge rendering issues. Therefore, I will click "OWalls" to open the navigation drawer again and see if this UI state change causes the crash.
+<Action>: 2
+##########user11##########
+<Observation>: In the previous step, you clicked on the "OWalls" button, and navigated to the "Wall You" page, which you have visited 2 times. On "Wall You" page, you need to choose one of the following 2 actions to perform:
+(1) Click[Close navigation menu]: You perform the action 1 times, and the action goes to page "OWalls"
+(2) Click[Wall You]: You haven't performed the action yet.
+##########assi12##########
+<Thought>: I am back in the navigation menu on the "Wall You" page. My previous steps involved opening and closing this menu. The crash is about "Improper edge-to-edge implementation". I just opened the menu by clicking "OWalls". Now, to continue testing the UI state changes that might trigger this rendering bug, the logical next step is to close the menu again. This action of repeatedly opening and closing the navigation drawer is a classic way to test for layout and inset handling bugs. Clicking "Wall You" would likely navigate within the drawer, which is less likely to trigger the crash than closing the drawer and revealing the main content again.
+<Action>: 1
+##########user13##########
+<Observation>: In the previous step, you clicked on the "Close navigation menu" button, and navigated to the "OWalls" page, which you have visited 3 times. On "OWalls" page, you need to choose one of the following 2 actions to perform:
+(1) Back to previous page: You haven't performed the action yet.
+(2) Click[OWalls]: You perform the action 2 times, and the action goes to page "Wall You"

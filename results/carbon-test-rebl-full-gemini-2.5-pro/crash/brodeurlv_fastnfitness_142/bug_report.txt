@@ -1,0 +1,51 @@
+Bug Report Title:
+Crash after deleting a program that is in progress
+Bug Report Issue:
+If you start a program, then go to delete it without first stopping it, then the next time you go back into "Workout" the application will crash. It will be stuck in a crash loop.
+
+**To Reproduce**
+Steps to reproduce the behavior:
+1. Create a test program with any exercise.
+2. Go to Workout -> Program, select your new program and click "Start Program".
+3. Go to Program list, select your test program and delete it.
+4. Go back to Workout. The application will crash.
+
+**Expected behavior**
+If a workout that is in progress gets deleted, simply stop it.
+
+**Additional context**
+I reproduced this one while playing around a bit. It looks like when you go back into the Workout page, there is a refresh that happens and it is trying to access a Program that does not exist anymore. Problem is that even if the program was deleted, it is still inside the mDbWorkoutHistory and set as running.
+
+I can look into this and fix it, it will help me familiarize myself with the code.
+Comments:
+Comment#1:
+Hi @sdriv3r,
+Thank you for raising this issue and for proposing to fix it. That ok for me. I have a new version 0.19.1 ongoing, I'm planning to release before the end of next week. Do you think you can address this bug before that?
+
+Concerning the bug, I haven't looked at it but I think the approach should be, more than just avoiding the crash, to consider the Deleted program as closed and to update the Program Status in the ProgramHistory DB. The best would be to do this proactively when the program is deleted.
+
+Let me know if you have questions.
+---
+Comment#2:
+Hi @brodeurlv ,
+
+Thats the approach I was looking at taking, having the ProgramHistoryDB updated when the program is deleted. I can have this done by the end of this weekend, probably sooner. I'm mostly messing around, familiarizing myself with the code as well as android studio.
+
+I will let you know if I have any questions.
+
+Thanks!
+---
+Comment#3:
+Hi @brodeurlv ,
+So I looked into it and got the hang of it. One question I had: should we update the ProgramHistory and set the status to closed so that this way there is still a trace of it, or should we simply delete all history related to that program, whether open or close?
+
+I think I would go with the deleting all history. My reasoning is that the ProgramHistory really just tracks the start and end times of a program, along with a status. If the program gets deleted, then the ProgramHistory really tracks nothing since the ID is now invalid. You just have an accumulation of useless entries in the database then.
+---
+Comment#4:
+Hi @sdriv3r,
+
+I agree with your analysis. I don't see a reason to keep the ProgramHistory if the program is deleted. 
+I was thinking maybe for future statistics but even there, this would not be really useful.
+So go for deleting all history related to that program. 
+Thanks.
+---

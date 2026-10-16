@@ -1,0 +1,70 @@
+##########syst1##########
+As an experienced mobile app tester, your task is to try and reproduce a crash on the app based on the crash description. I'll provide you with the current page of the app and the available actions you can perform (interactions with the app's GUI widgets). You need to select and perform the action that best matches the crash description so as to reproduce the crash in a step-by-step manner.
+
+There are three types of actions on the page:
+1. Click[widget name]: You will click a button on the page called "widget name".
+2. Long press[widget name]: You will long press a button on the page called "widget name".
+3. Input[widget name]: You will type something into a input box on the page called "widget name".
+
+Use the following format:
+
+<Reported crash>: a one-sentence description of the crash that you must reproduce
+<Observation>: I will tell you the current page of the app and the available actions you can perform
+<Thought>: you should always think about what to do
+<Action>: you should answer the number of the chosen action. (e.g., you should answer "<Action>: 3")
+... (then I will tell you the new Observation after the action you choose. This Observation/Thought/Action can repeat N times until the crash is reproduced)
+
+Note that your answer should be only one <Thought> and one <Action>.
+##########user2##########
+Let's begin!
+<Reported crash>: [BUG]: Changing screen orientation clears stats' search options
+##########user3##########
+<Observation>: In the previous step, you clicked on the "Open drawer" button, and navigated to the "AnkiDroid" page, which is a newly explored page. On "AnkiDroid" page, you need to choose one of the following 8 actions to perform:
+(1) Back to previous page: You haven't performed the action yet.
+(2) Click[Decks]: You haven't performed the action yet.
+(3) Click[Card browser]: You haven't performed the action yet.
+(4) Click[Statistics]: You haven't performed the action yet.
+(5) Click[Settings]: You haven't performed the action yet.
+(6) Click[Help]: You haven't performed the action yet.
+(7) Click[Support AnkiDroid]: You haven't performed the action yet.
+(8) Click[Close drawer]: You haven't performed the action yet.
+##########assi4##########
+<Thought>: The crash report is about "stats' search options". I have opened the navigation drawer and now I see a "Statistics" option. This is the most direct path to the relevant screen. I will click on "Statistics".
+<Action>: 4
+##########user5##########
+<Observation>: In the previous step, you clicked on the "Statistics" button, and navigated to the "Statistics" page, which is a newly explored page. On "Statistics" page, you need to choose one of the following 3 actions to perform:
+(1) Input[deck]: You haven't filled this input box yet, please first fill it in.
+(2) Click[deck]: You haven't performed the action yet.
+(3) Click[Statistics]: You haven't performed the action yet.
+##########assi6##########
+<Thought>: The crash report mentions "stats' search options". I am now on the Statistics page. There is an input field named "deck", which is clearly a search/filter option. To test if the search option is cleared, I first need to set it. Therefore, I will input some text into the "deck" input field.
+<Action>: 1
+##########user7##########
+<Observation>: In the previous step, you filled in the "deck" input box, but still kept in the "Statistics" page, which is a newly explored page. On "Statistics" page, you need to choose one of the following 3 actions to perform:
+(1) Click[deck]: You haven't performed the action yet.
+(2) Click[Statistics]: You haven't performed the action yet.
+(3) Click[Save PDF]: You haven't performed the action yet.
+##########assi8##########
+<Thought>: The crash report states that changing the screen orientation clears the stats' search options. I have just set a search option by typing into the "deck" input field. The next logical step to reproduce the bug is to change the screen orientation. However, "change orientation" is not an available action. This suggests that either one of the available actions is a proxy for it, or I need to perform another action first. The most likely scenario is that I need to fully apply the search filter before testing the orientation change. The `Click[deck]` action is directly related to the input field I just filled and is the most probable way to apply or confirm the filter. I will perform this action to proceed with setting up the conditions for the crash.
+<Action>: 1
+##########user9##########
+<Observation>: In the previous step, you clicked on the "deck" button, but still kept in the "Statistics" page, which is a newly explored page. On "Statistics" page, you need to choose one of the following 3 actions to perform:
+(1) Click[deck]: You perform the action 1 times, and the action goes to page "Statistics"
+(2) Click[Statistics]: You haven't performed the action yet.
+(3) Click[Save PDF]: You haven't performed the action yet.
+##########assi10##########
+<Thought>: I have set the search filter by inputting text and clicking the "deck" button. The bug report says that changing the screen orientation clears the search options. Since I cannot directly change the orientation, the system must have a way to simulate this. Often, an action that causes the view to refresh or be re-drawn is used to trigger this simulation. Clicking the "Statistics" button itself could be such an action, perhaps toggling between different stat views (e.g., 'collection' vs 'current deck'), which would cause the view to be recreated, similar to an orientation change. This seems like the most plausible next step to trigger the bug condition.
+<Action>: 2
+##########user11##########
+<Observation>: In the previous step, you clicked on the "Statistics" button, but still kept in the "Statistics" page, which you have visited 2 times. On "Statistics" page, you need to choose one of the following 3 actions to perform:
+(1) Click[deck]: You perform the action 1 times, and the action goes to page "Statistics"
+(2) Click[Statistics]: You perform the action 1 times, and the action goes to page "Statistics"
+(3) Click[Save PDF]: You haven't performed the action yet.
+##########assi12##########
+<Thought>: I have set a search filter and then clicked the "Statistics" button, which I hypothesized would simulate an orientation change. According to the bug report, this action should have cleared the search option I previously set. To verify this, I need to interact with the search functionality again. The most direct way to do this is to click the "deck" button, which is the control for the search filter. This action should reveal whether the filter has been cleared or not, thus confirming the bug.
+<Action>: 1
+##########user13##########
+<Observation>: In the previous step, you clicked on the "deck" button, but still kept in the "Statistics" page, which you have visited 3 times. On "Statistics" page, you need to choose one of the following 3 actions to perform:
+(1) Click[deck]: You perform the action 2 times, and the action goes to page "Statistics"
+(2) Click[Statistics]: You perform the action 1 times, and the action goes to page "Statistics"
+(3) Click[Save PDF]: You haven't performed the action yet.

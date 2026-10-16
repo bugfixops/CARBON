@@ -1,0 +1,120 @@
+##########syst1##########
+As an experienced mobile app tester, your task is to try and reproduce a crash on the app based on the crash description. I'll provide you with the current page of the app and the available actions you can perform (interactions with the app's GUI widgets). You need to select and perform the action that best matches the crash description so as to reproduce the crash in a step-by-step manner.
+
+There are three types of actions on the page:
+1. Click[widget name]: You will click a button on the page called "widget name".
+2. Long press[widget name]: You will long press a button on the page called "widget name".
+3. Input[widget name]: You will type something into a input box on the page called "widget name".
+
+Use the following format:
+
+<Reported crash>: a one-sentence description of the crash that you must reproduce
+<Observation>: I will tell you the current page of the app and the available actions you can perform
+<Thought>: you should always think about what to do
+<Action>: you should answer the number of the chosen action. (e.g., you should answer "<Action>: 3")
+... (then I will tell you the new Observation after the action you choose. This Observation/Thought/Action can repeat N times until the crash is reproduced)
+
+Note that your answer should be only one <Thought> and one <Action>.
+##########user2##########
+Let's begin!
+<Reported crash>: You can touch some buttons during animations
+##########user3##########
+<Observation>: In the previous step, you clicked on the "More options" button, and navigated to the "menu (Font size, Capitalize sentences, Show toolbar, Scroll toolbar)" page, which you have visited 12 times. On "menu (Font size, Capitalize sentences, Show toolbar, Scroll toolbar)" page, you need to choose one of the following 5 actions to perform:
+(1) Click[Show toolbar]: You perform the action 7 times, and the action goes to page "Add"
+(2) Back to previous page: You haven't performed the action yet.
+(3) Click[Font size]: You perform the action 3 times, and the action goes to page "dialog of Single Fragment Activity"
+(4) Click[Capitalize sentences]: You haven't performed the action yet.
+(5) Click[Scroll toolbar]: You perform the action 1 times, and the action goes to page "Add"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have not been performed before (Back to previous page, Click[Capitalize sentences]) or go back to previous page.
+##########assi4##########
+<Thought>: I've clicked "More options" right after clicking "expand", and it just took me to the menu page without a crash. This line of inquiry seems to be a dead end. The app seems robust against clicking buttons during toolbar animations or menu transitions.
+Let's re-read the crash description: "You can touch some buttons during animations". I've exhausted the obvious animations on the "Add" page. Maybe the animation is on a different page.
+From this menu, I can go to a "dialog of Single Fragment Activity" by clicking "Font size" (3). Dialogs often have an animation when they appear. What if I click something *in the dialog* while it's still animating into view?
+New plan:
+1. Click "Font size" to open the dialog.
+2. The system will present the dialog page. I will immediately click an action on that new page, assuming it's appearing with an animation.
+Let's try step 1.
+<Action>: 3
+##########user5##########
+<Observation>: In the previous step, you clicked on the "Font size" button, and navigated to the "dialog of Single Fragment Activity" page, which you have visited 4 times. On "dialog of Single Fragment Activity" page, you need to choose one of the following 1 actions to perform:
+(1) Input[dialog input]: You haven't filled this input box yet, please first fill it in.
+##########assi6##########
+<Thought>: I've opened the "Font size" dialog. The only available action is to input text into "dialog input". The crash description is "You can touch some buttons during animations". There are no buttons to touch here, only an input field.
+However, the dialog itself likely animated into view. The system is now waiting for my input. What if the crash happens when I try to *dismiss* the dialog while another animation is happening?
+This is getting complex. Let's simplify. I'm on a dialog page. The most common action is to either confirm or cancel. Since there are no buttons, maybe typing something and hitting the system "back" button would be the way to go. But the system doesn't offer a "back" button as a numbered action.
+Let's try the only action available. Maybe interacting with the input field is the key. I'll input some text. This might enable other buttons like "OK" or "Cancel" which I can then use in my animation-interruption tests.
+<Action>: 1
+##########user7##########
+<Observation>: In the previous step, you filled in the "dialog input" input box, but still kept in the "dialog of Single Fragment Activity" page, which you have visited 4 times. On "dialog of Single Fragment Activity" page, you need to choose one of the following 1 actions to perform:
+(1) Click[OK]: You perform the action 3 times, and the action goes to page "Add"
+##########assi8##########
+<Thought>: Okay, after inputting text, an "OK" button has appeared. This is progress.
+Now I can test interactions with this dialog. The dialog appeared with an animation. What if I dismiss it, and then quickly try to do something else?
+Let's try this sequence:
+1. Click "OK" to dismiss the dialog. This will trigger a dismiss animation.
+2. The app will navigate back to the "Add" page.
+3. As soon as I'm on the "Add" page, I'll try to click a button, like "More options", while the dialog is still animating *out*.
+Let's execute step 1: Click "OK".
+<Action>: 1
+##########user9##########
+<Observation>: In the previous step, you clicked on the "OK" button, and navigated to the "Add" page, which you have visited 7 times. On "Add" page, you need to choose one of the following 14 actions to perform:
+(1) Click[More options]: You perform the action 5 times, and the action goes to page "menu (Font size, Capitalize sentences, Show toolbar, Scroll toolbar)"
+(2) Input[Front]: You haven't filled this input box yet, please first fill it in.
+(3) Input[Back]: You haven't filled this input box yet, please first fill it in.
+(4) Back to previous page: You haven't performed the action yet.
+(5) Click[Default]: You haven't performed the action yet.
+(6) Long press[Default]: You haven't performed the action yet.
+(7) Click[Basic]: You haven't performed the action yet.
+(8) Long press[Basic]: You haven't performed the action yet.
+(9) Click[Tags:]: You haven't performed the action yet.
+(10) Click[Cards: Card 1]: You haven't performed the action yet.
+(11) Click[Make field Front sticky]: You haven't performed the action yet.
+(12) Click[Attach multimedia content to the Front ...]: You haven't performed the action yet.
+(13) Click[expand]: You perform the action 1 times, and the action goes to page "Add"
+(14) Click[Preview]: You haven't performed the action yet.
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have not been performed before (Back to previous page, Click[Default], Long press[Default], Click[Basic], Long press[Basic], Click[Tags:], Click[Cards: Card 1], Click[Make field Front sticky], Click[Attach multimedia content to the Front ...], Click[Make field Back sticky], Click[Attach multimedia content to the Back ...], Click[Save], Click[Preview], Click[Navigate up], Input[Front], Input[Back]) or go back to previous page.
+##########assi10##########
+<Thought>: I'm back on the "Add" page after dismissing the "Font size" dialog. I'm assuming the dialog's dismiss animation just finished or is still in progress. The crash description is "You can touch some buttons during animations".
+My plan was to click a button on this page immediately. The "More options" button is a good candidate as it opens another UI element. Let's try clicking it right now, hoping to catch the tail end of the dialog's dismiss animation.
+<Action>: 1
+##########user11##########
+<Observation>: In the previous step, you clicked on the "More options" button, and navigated to the "menu (Font size, Capitalize sentences, Show toolbar, Scroll toolbar)" page, which you have visited 13 times. On "menu (Font size, Capitalize sentences, Show toolbar, Scroll toolbar)" page, you need to choose one of the following 5 actions to perform:
+(1) Click[Show toolbar]: You perform the action 7 times, and the action goes to page "Add"
+(2) Back to previous page: You haven't performed the action yet.
+(3) Click[Font size]: You perform the action 4 times, and the action goes to page "dialog of Single Fragment Activity"
+(4) Click[Capitalize sentences]: You haven't performed the action yet.
+(5) Click[Scroll toolbar]: You perform the action 1 times, and the action goes to page "Add"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have not been performed before (Back to previous page, Click[Capitalize sentences]) or go back to previous page.
+##########assi12##########
+<Thought>: I've tried interrupting various animations (toolbar expand, dialog dismiss) by clicking "More options", and it hasn't crashed. I'm back in the menu.
+Let's reconsider the crash: "You can touch some buttons during animations". I've been focusing on animations *caused* by my actions. What if the animation is something else?
+Looking at the options in this menu, "Show toolbar" and "Scroll toolbar" both seem related to UI animations on the "Add" page. I've clicked "Show toolbar" many times. I've clicked "Scroll toolbar" once.
+Let's try a new sequence. I'll click "Show toolbar", which will take me back to the "Add" page and presumably animate the toolbar into view. Then, *during that animation*, I will immediately click "More options" again. This is a tight loop of actions that might expose a race condition.
+1. Click "Show toolbar" (1).
+2. On the "Add" page, immediately click "More options".
+<Action>: 1
+##########user13##########
+<Observation>: In the previous step, you clicked on the "Show toolbar" button, and navigated to the "Add" page, which you have visited 16 times. On "Add" page, you need to choose one of the following 22 actions to perform:
+(1) Click[More options]: You perform the action 7 times, and the action goes to page "menu (Font size, Capitalize sentences, Show toolbar, Scroll toolbar)"
+(2) Input[Front]: You haven't filled this input box yet, please first fill it in.
+(3) Input[Back]: You haven't filled this input box yet, please first fill it in.
+(4) Back to previous page: You haven't performed the action yet.
+(5) Click[Default]: You haven't performed the action yet.
+(6) Long press[Default]: You haven't performed the action yet.
+(7) Click[Basic]: You haven't performed the action yet.
+(8) Long press[Basic]: You haven't performed the action yet.
+(9) Click[Tags:]: You haven't performed the action yet.
+(10) Click[Cards: Card 1]: You haven't performed the action yet.
+(11) Click[Make field Front sticky]: You haven't performed the action yet.
+(12) Click[Attach multimedia content to the Front ...]: You haven't performed the action yet.
+(13) Click[expand]: You perform the action 4 times, and the action goes to page "Add"
+(14) Click[Format as Bold]: You perform the action 2 times, and the action goes to page "Add"
+(15) Click[Format as Italic]: You perform the action 2 times, and the action goes to page "Add"
+(16) Click[Format as Underline]: You haven't performed the action yet.
+(17) Click[Insert Horizontal Line]: You haven't performed the action yet.
+(18) Click[Insert Heading]: You haven't performed the action yet.
+(19) Click[Change Font Size]: You haven't performed the action yet.
+(20) Click[Insert MathJax Equation]: You haven't performed the action yet.
+(21) Long press[Insert MathJax Equation]: You haven't performed the action yet.
+(22) Click[Preview]: You haven't performed the action yet.
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have not been performed before (Back to previous page, Click[Default], Long press[Default], Click[Basic], Long press[Basic], Click[Tags:], Click[Cards: Card 1], Click[Make field Front sticky], Click[Attach multimedia content to the Front ...], Click[Make field Back sticky], Click[Attach multimedia content to the Back ...], Click[Format as Underline], Click[Insert Horizontal Line], Click[Insert Heading], Click[Change Font Size], Click[Insert MathJax Equation], Long press[Insert MathJax Equation], Click[Create Toolbar Item], Click[Save], Click[Preview], Click[Navigate up], Input[Front], Input[Back]) or go back to previous page.

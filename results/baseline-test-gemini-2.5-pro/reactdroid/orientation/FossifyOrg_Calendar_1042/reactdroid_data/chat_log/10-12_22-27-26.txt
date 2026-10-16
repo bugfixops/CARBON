@@ -1,0 +1,101 @@
+##########syst1##########
+As an experienced mobile app tester, your task is to try and reproduce a crash on the app based on the crash description. I'll provide you with the current page of the app and the available actions you can perform (interactions with the app's GUI widgets). You need to select and perform the action that best matches the crash description so as to reproduce the crash in a step-by-step manner.
+
+There are three types of actions on the page:
+1. Click[widget name]: You will click a button on the page called "widget name".
+2. Long press[widget name]: You will long press a button on the page called "widget name".
+3. Input[widget name]: You will type something into a input box on the page called "widget name".
+
+Use the following format:
+
+<Reported crash>: a one-sentence description of the crash that you must reproduce
+<Observation>: I will tell you the current page of the app and the available actions you can perform
+<Thought>: you should always think about what to do
+<Action>: you should answer the number of the chosen action. (e.g., you should answer "<Action>: 3")
+... (then I will tell you the new Observation after the action you choose. This Observation/Thought/Action can repeat N times until the crash is reproduced)
+
+Note that your answer should be only one <Thought> and one <Action>.
+##########user2##########
+Let's begin!
+<Reported crash>: The current selected day, month, week, year is not preserved after rotating
+##########user3##########
+<Observation>: In the previous step, you clicked on the "OK" button, and navigated to the "New Event" page, which is a newly explored page. On "New Event" page, you need to choose one of the following 13 actions to perform:
+(1) Click[event show map]: You haven't performed the action yet.
+(2) Input[event title]: You haven't filled this input box yet, please first fill it in.
+(3) Input[event description]: You haven't filled this input box yet, please first fill it in.
+(4) Click[11:00 PM]: You haven't performed the action yet.
+(5) Click[October 11 (Sun)]: You haven't performed the action yet.
+(6) Click[Event color]: You haven't performed the action yet.
+(7) Click[Location]: You haven't performed the action yet.
+(8) Long press[Location]: You haven't performed the action yet.
+(9) Click[No repetition]: You haven't performed the action yet.
+(10) Click[Confirmed]: You haven't performed the action yet.
+(11) Click[10 minutes before]: You haven't performed the action yet.
+(12) Click[Local calendar]: You haven't performed the action yet.
+(13) Click[All-day]: You haven't performed the action yet.
+##########assi4##########
+<Thought>: I've returned to the "New Event" page after selecting a date from the corrupted calendar. The app still hasn't crashed. The date field now shows "October 11 (Sun)" again, which is incorrect, as I selected October 17, 2026. This further confirms the state preservation issue. The app is clearly struggling to handle the date correctly. To force the issue, I will now try to save the event with this inconsistent state. The "Save" button is not explicitly listed, but there is a "More options" button (not listed here, but was on the previous screen) or a checkmark icon that usually saves the event. Since I don't see a "Save" button, I will look for an action that finalizes the event creation. The "Confirmed" button seems like a good candidate for this. It likely relates to the event's status and saving it might trigger the final check that causes the crash.
+<Action>: 10
+##########user5##########
+<Observation>: In the previous step, you clicked on the "Confirmed" button, and navigated to the "dialog of Event Activity" page, which is a newly explored page. On "dialog of Event Activity" page, you need to choose one of the following 1 actions to perform:
+(1) Click[Tentative]: You haven't performed the action yet.
+##########assi6##########
+<Thought>: I have been trying to save the event to trigger the crash. Clicking "Confirmed" opened a dialog to change the event's status, and the only option presented is "Tentative". This is likely a sub-menu for setting the event's confirmation status. To proceed with creating the event and hopefully trigger the crash, I must interact with this dialog. I will select "Tentative" to change the status and continue the process of saving this event with its corrupted date information.
+<Action>: 1
+##########user7##########
+<Observation>: In the previous step, you clicked on the "Tentative" button, and navigated to the "New Event" page, which you have visited 2 times. On "New Event" page, you need to choose one of the following 13 actions to perform:
+(1) Click[event show map]: You haven't performed the action yet.
+(2) Input[event title]: You haven't filled this input box yet, please first fill it in.
+(3) Input[event description]: You haven't filled this input box yet, please first fill it in.
+(4) Click[11:00 PM]: You haven't performed the action yet.
+(5) Click[October 11 (Sun)]: You haven't performed the action yet.
+(6) Click[Event color]: You haven't performed the action yet.
+(7) Click[Location]: You haven't performed the action yet.
+(8) Long press[Location]: You haven't performed the action yet.
+(9) Click[No repetition]: You haven't performed the action yet.
+(10) Click[Confirmed]: You perform the action 1 times, and the action goes to page "dialog of Event Activity"
+(11) Click[10 minutes before]: You haven't performed the action yet.
+(12) Click[Local calendar]: You haven't performed the action yet.
+(13) Click[All-day]: You haven't performed the action yet.
+##########assi8##########
+<Thought>: I've returned to the "New Event" page after setting the event status to "Tentative". The app still hasn't crashed, and the date remains displayed incorrectly as "October 11 (Sun)". My attempts to save or finalize the event have so far led me through sub-menus. It's highly probable that the app requires a title before it can be saved. Without a title, the save action might be disabled or non-functional. To proceed and force the app to process the corrupted date state during a save operation, I must first fulfill the basic requirements for creating an event. Therefore, I will now input a title for the event.
+<Action>: 2
+##########user9##########
+<Observation>: In the previous step, you filled in the "event title" input box, and navigated to the "New Event" page, which is a newly explored page. On "New Event" page, you need to choose one of the following 8 actions to perform:
+(1) Click[event show map]: You haven't performed the action yet.
+(2) Input[event description]: You haven't filled this input box yet, please first fill it in.
+(3) Click[11:00 PM]: You haven't performed the action yet.
+(4) Click[October 11 (Sun)]: You perform the action 1 times, and the action goes to page "Event Activity"
+(5) Click[Location]: You haven't performed the action yet.
+(6) Long press[Location]: You haven't performed the action yet.
+(7) Click[10 minutes before]: You haven't performed the action yet.
+(8) Click[All-day]: You haven't performed the action yet.
+##########assi10##########
+<Thought>: I have successfully created a state where the event date is corrupted due to a rotation bug. I've returned to the "New Event" screen and provided a title, which is often a prerequisite for saving. The app still hasn't crashed. Now I need to perform an action that forces the app to process this inconsistent date state. The "Save" button is not available, but there is an "All-day" toggle. Toggling an event to "All-day" directly modifies its time properties and forces the system to re-evaluate the date. Given that the date is already in a known bad state ("October 11 (Sun)" displayed, but I selected a date in 2026), this interaction is a prime candidate to expose the underlying bug and trigger the crash.
+<Action>: 8
+##########user11##########
+<Observation>: In the previous step, you clicked on the "All-day" button, and navigated to the "New Event" page, which is a newly explored page. On "New Event" page, you need to choose one of the following 12 actions to perform:
+(1) Click[event show map]: You haven't performed the action yet.
+(2) Input[event title]: You haven't filled this input box yet, please first fill it in.
+(3) Input[event description]: You haven't filled this input box yet, please first fill it in.
+(4) Click[October 17 (Sat)]: You haven't performed the action yet.
+(5) Click[Event color]: You haven't performed the action yet.
+(6) Click[Location]: You haven't performed the action yet.
+(7) Long press[Location]: You haven't performed the action yet.
+(8) Click[No repetition]: You haven't performed the action yet.
+(9) Click[Confirmed]: You haven't performed the action yet.
+(10) Click[10 minutes before]: You haven't performed the action yet.
+(11) Click[Local calendar]: You haven't performed the action yet.
+(12) Click[All-day]: You haven't performed the action yet.
+##########assi12##########
+<Thought>: I've encountered another state inconsistency. After clicking "All-day", the event title I previously entered has been cleared, and the date display has changed again, this time to "October 17 (Sat)". This confirms the app is in a very unstable state regarding event data. To proceed towards saving the event and triggering the crash, I must first satisfy the app's requirement for an event title. I will input a title again, which should then allow me to perform the final action that saves the event and causes the crash.
+<Action>: 2
+##########user13##########
+<Observation>: In the previous step, you filled in the "event title" input box, and navigated to the "New Event" page, which is a newly explored page. On "New Event" page, you need to choose one of the following 7 actions to perform:
+(1) Click[event show map]: You haven't performed the action yet.
+(2) Input[event description]: You haven't filled this input box yet, please first fill it in.
+(3) Click[October 17 (Sat)]: You haven't performed the action yet.
+(4) Click[Location]: You haven't performed the action yet.
+(5) Long press[Location]: You haven't performed the action yet.
+(6) Click[10 minutes before]: You haven't performed the action yet.
+(7) Click[All-day]: You haven't performed the action yet.

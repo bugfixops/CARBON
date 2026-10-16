@@ -1,0 +1,77 @@
+##########syst1##########
+As an experienced mobile app tester, your task is to try and reproduce a crash on the app based on the crash description. I'll provide you with the current page of the app and the available actions you can perform (interactions with the app's GUI widgets). You need to select and perform the action that best matches the crash description so as to reproduce the crash in a step-by-step manner.
+
+There are three types of actions on the page:
+1. Click[widget name]: You will click a button on the page called "widget name".
+2. Long press[widget name]: You will long press a button on the page called "widget name".
+3. Input[widget name]: You will type something into a input box on the page called "widget name".
+
+Use the following format:
+
+<Reported crash>: a one-sentence description of the crash that you must reproduce
+<Observation>: I will tell you the current page of the app and the available actions you can perform
+<Thought>: you should always think about what to do
+<Action>: you should answer the number of the chosen action. (e.g., you should answer "<Action>: 3")
+... (then I will tell you the new Observation after the action you choose. This Observation/Thought/Action can repeat N times until the crash is reproduced)
+
+Note that your answer should be only one <Thought> and one <Action>.
+##########user2##########
+Let's begin!
+<Reported crash>: Can't scroll or see participants on conversation details page
+##########user3##########
+<Observation>: In the previous step, you clicked on the "More options" button, and navigated to the "menu (Archive, Conversation details, Add number to..., Block number, Mark as Unread)" page, which you have visited 3 times. On "menu (Archive, Conversation details, Add number to..., Block number, Mark as Unread)" page, you need to choose one of the following 5 actions to perform:
+(1) Click[Add number to contact]: You haven't performed the action yet.
+(2) Click[Archive]: You haven't performed the action yet.
+(3) Click[Conversation details]: You perform the action 2 times, and the action goes to page "Conversation details"
+(4) Click[Block number]: You haven't performed the action yet.
+(5) Click[Mark as Unread]: You haven't performed the action yet.
+##########assi4##########
+<Thought>: I am back in the options menu. The goal is to get back to the "Conversation details" page to see if the repeated entry and exit from this corrupted state will finally trigger the crash. The only logical next step is to click on "Conversation details".
+<Action>: 3
+##########user5##########
+<Observation>: In the previous step, you clicked on the "Conversation details" button, and navigated to the "Conversation details" page, which you have visited 9 times. On "Conversation details" page, you need to choose one of the following 6 actions to perform:
+(1) Back to previous page: You perform the action 1 times, and the action goes to page "5551234"
+(2) Click[Enable custom notifications]: You perform the action 1 times, and the action goes to page "Conversation details"
+(3) Click[5551234]: You perform the action 1 times, and the action goes to page "dialog (Rename conversation)"
+(4) Click[Back]: You perform the action 1 times, and the action goes to page "5551234"
+(5) Click[item frame]: You perform the action 2 times, and the action goes to page "Conversation details"
+(6) Long press[item frame]: You perform the action 2 times, and the action goes to page "Conversation details"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have only been performed a few times (Back to previous page, Click[Enable custom notifications], Click[5551234], Click[Back], Click[item frame], Long press[item frame]) or go back to previous page.
+##########assi6##########
+<Thought>: I am back on the corrupted "Conversation details" page. I have tried many actions, including going back and forth, and interacting with the participant list (`item frame`). The hint suggests trying actions that have been performed only a few times. I have only clicked "Enable custom notifications" once. Toggling a setting like this often forces the UI to redraw itself. Since the crash is a rendering issue ("Can't scroll or see participants"), an action that forces a redraw is a very strong candidate for the trigger. I will click "Enable custom notifications" again to see if toggling this setting causes the crash.
+<Action>: 2
+##########user7##########
+<Observation>: In the previous step, you clicked on the "Enable custom notifications" button, and navigated to the "Conversation details" page, which you have visited 6 times. On "Conversation details" page, you need to choose one of the following 7 actions to perform:
+(1) Back to previous page: You haven't performed the action yet.
+(2) Click[Customize notifications]: You haven't performed the action yet.
+(3) Click[Enable custom notifications]: You perform the action 1 times, and the action goes to page "Conversation details"
+(4) Click[foo@bar.123]: You perform the action 1 times, and the action goes to page "dialog (Rename conversation)"
+(5) Click[Back]: You haven't performed the action yet.
+(6) Click[item frame]: You perform the action 2 times, and the action goes to page "Conversation details"
+(7) Long press[item frame]: You perform the action 1 times, and the action goes to page "Conversation details"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have not been performed before (Back to previous page, Click[Customize notifications], Click[Back]) or go back to previous page.
+##########assi8##########
+<Thought>: I've enabled custom notifications, which has altered the state of the "Conversation details" page. The participant's name has changed from a phone number to the strange string "foo@bar.123", and a new "Customize notifications" button has appeared. The crash is about the participant list not rendering correctly. The most direct way to interact with the corrupted participant data is to click on the participant's name itself. This action directly targets the element that is described as being broken in the crash report. I will click on "foo@bar.123" to see if interacting with this corrupted data triggers the crash.
+<Action>: 4
+##########user9##########
+<Observation>: In the previous step, you clicked on the "foo@bar.123" button, and navigated to the "dialog (Rename conversation)" page, which you have visited 3 times. On "dialog (Rename conversation)" page, you need to choose one of the following 1 actions to perform:
+(1) Input[rename conv]: You haven't filled this input box yet, please first fill it in.
+##########assi10##########
+<Thought>: I've clicked on the corrupted participant name and a "Rename conversation" dialog has appeared. This is an interesting development. The crash is about not being able to see or scroll participants on the details page. It's possible that the crash occurs when trying to *save* a change to the corrupted participant data. The only action available is to input text into the "rename conv" field. I will input some text to proceed.
+<Action>: 1
+##########user11##########
+<Observation>: In the previous step, you filled in the "rename conv" input box, but still kept in the "dialog (Rename conversation)" page, which you have visited 3 times. On "dialog (Rename conversation)" page, you need to choose one of the following 1 actions to perform:
+(1) Click[OK]: You perform the action 2 times, and the action goes to page "Conversation details"
+##########assi12##########
+<Thought>: I have entered text into the rename dialog. The next logical step is to confirm this change by clicking "OK". This action will likely try to update the participant list on the previous "Conversation details" page. Given that the participant data was already corrupted ("foo@bar.123"), attempting to modify it further by renaming it is a very likely trigger for the crash, as the app might not be able to handle this operation on the malformed data.
+<Action>: 1
+##########user13##########
+<Observation>: In the previous step, you clicked on the "OK" button, and navigated to the "Conversation details" page, which you have visited 7 times. On "Conversation details" page, you need to choose one of the following 7 actions to perform:
+(1) Back to previous page: You haven't performed the action yet.
+(2) Click[Customize notifications]: You haven't performed the action yet.
+(3) Click[Enable custom notifications]: You perform the action 1 times, and the action goes to page "Conversation details"
+(4) Click[foo@bar.123]: You perform the action 2 times, and the action goes to page "dialog (Rename conversation)"
+(5) Click[Back]: You haven't performed the action yet.
+(6) Click[item frame]: You perform the action 2 times, and the action goes to page "Conversation details"
+(7) Long press[item frame]: You perform the action 1 times, and the action goes to page "Conversation details"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have not been performed before (Back to previous page, Click[Customize notifications], Click[Back]) or go back to previous page.

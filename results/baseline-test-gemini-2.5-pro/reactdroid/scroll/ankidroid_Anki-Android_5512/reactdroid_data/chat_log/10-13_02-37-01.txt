@@ -1,0 +1,92 @@
+##########syst1##########
+As an experienced mobile app tester, your task is to try and reproduce a crash on the app based on the crash description. I'll provide you with the current page of the app and the available actions you can perform (interactions with the app's GUI widgets). You need to select and perform the action that best matches the crash description so as to reproduce the crash in a step-by-step manner.
+
+There are three types of actions on the page:
+1. Click[widget name]: You will click a button on the page called "widget name".
+2. Long press[widget name]: You will long press a button on the page called "widget name".
+3. Input[widget name]: You will type something into a input box on the page called "widget name".
+
+Use the following format:
+
+<Reported crash>: a one-sentence description of the crash that you must reproduce
+<Observation>: I will tell you the current page of the app and the available actions you can perform
+<Thought>: you should always think about what to do
+<Action>: you should answer the number of the chosen action. (e.g., you should answer "<Action>: 3")
+... (then I will tell you the new Observation after the action you choose. This Observation/Thought/Action can repeat N times until the crash is reproduced)
+
+Note that your answer should be only one <Thought> and one <Action>.
+##########user2##########
+Let's begin!
+<Reported crash>: AnkiDroid scroll bug
+##########user3##########
+<Observation>: In the previous step, you long pressed the "Default" button, and navigated to the "dialog (Default)" page, which you have visited 2 times. On "dialog (Default)" page, you need to choose one of the following 6 actions to perform:
+(1) Click[Options]: You perform the action 1 times, and the action goes to page "Options for Default"
+(2) Back to previous page: You haven't performed the action yet.
+(3) Click[Rename deck]: You haven't performed the action yet.
+(4) Click[Custom study]: You haven't performed the action yet.
+(5) Click[Delete deck]: You haven't performed the action yet.
+(6) Click[Export deck]: You haven't performed the action yet.
+##########assi4##########
+<Thought>: I have long-pressed the "Default" deck and a dialog with several options has appeared. The crash still hasn't occurred. The crash is described as a "scroll bug". It's possible the bug is triggered when the app tries to update or re-render the deck list after an action is performed on a deck. The "Options" action seems like a good candidate. It will navigate to a new screen, and when I return from that screen, the deck list will need to be redrawn. If the state is corrupted, this redrawing process, which involves the scrollable list view, might trigger the crash.
+<Action>: 1
+##########user5##########
+<Observation>: In the previous step, you clicked on the "Options" button, and navigated to the "Options for Default" page, which you have visited 6 times. On "Options for Default" page, you need to choose one of the following 11 actions to perform:
+(1) Click[New cards]: You haven't performed the action yet.
+(2) Click[Changes to deck group options will ...]: You haven't performed the action yet.
+(3) Click[Options group]: You haven't performed the action yet.
+(4) Back to previous page: You haven't performed the action yet.
+(5) Click[Group management]: You perform the action 4 times, and the action goes to page "Deck Options"
+(6) Click[Reviews]: You haven't performed the action yet.
+(7) Click[Lapses]: You haven't performed the action yet.
+(8) Click[General]: You haven't performed the action yet.
+(9) Click[Reminders]: You haven't performed the action yet.
+(10) Click[Deck description (affects current deck only)]: You haven't performed the action yet.
+(11) Click[Navigate up]: You perform the action 1 times, and the action goes to page "AnkiDroid"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have not been performed before (Back to previous page, Click[New cards], Click[Reviews], Click[Lapses], Click[General], Click[Reminders], Click[Deck description (affects current deck only)], Click[Changes to deck group options will ...], Click[Options group]) or go back to previous page.
+##########assi6##########
+<Thought>: I am now in the "Options for Default" screen. The crash still hasn't happened. The crash is described as a "scroll bug". I came here from the deck list, and the theory is that the crash will happen when I return to the deck list and it tries to redraw itself. The most direct way to return to the previous screen is to use the "Navigate up" button. This will take me back to the "AnkiDroid" (deck list) page. If the state is corrupted as suspected, this transition back to the scrollable list view is the most likely point for the crash to occur.
+<Action>: 11
+##########user7##########
+<Observation>: In the previous step, you clicked on the "Navigate up" button, and navigated to the "AnkiDroid" page, which you have visited 5 times. On "AnkiDroid" page, you need to choose one of the following 7 actions to perform:
+(1) Click[More options]: You haven't performed the action yet.
+(2) Click[Add]: You haven't performed the action yet.
+(3) Back to previous page: You haven't performed the action yet.
+(4) Click[20]: You haven't performed the action yet.
+(5) Click[Default]: You perform the action 3 times, and the action goes to page "Default"
+(6) Long press[Default]: You perform the action 2 times, and the action goes to page "dialog (Default)"
+(7) Click[Synchronization]: You haven't performed the action yet.
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have not been performed before (Back to previous page, Click[20], Click[More options], Click[Synchronization], Click[Navigate up], Click[Add]) or go back to previous page.
+##########assi8##########
+<Thought>: I have returned to the main deck list, but the crash still hasn't occurred. The crash is described as a "scroll bug," and this page contains a scrollable list of decks. My previous actions (getting stuck in a review loop) may have corrupted the state of this list. The hint suggests trying an action I haven't performed before. The `Click[Synchronization]` action is a strong candidate. Synchronization forces the app to refresh its data and update the UI, including this deck list. If the list's state is corrupted, this forced redraw/update process is a very likely trigger for a crash related to a "scroll bug".
+<Action>: 7
+##########user9##########
+<Observation>: In the previous step, you clicked on the "Synchronization" button, and navigated to the "dialog (Log in to AnkiWeb)" page, which is a newly explored page. On "dialog (Log in to AnkiWeb)" page, you need to choose one of the following 2 actions to perform:
+(1) Back to previous page: You haven't performed the action yet.
+(2) Click[LOG IN]: You haven't performed the action yet.
+##########assi10##########
+<Thought>: I've clicked the synchronization button, which has brought up a login dialog. The crash, described as a "scroll bug," has not yet occurred. This dialog is a modal, and the underlying page is the scrollable deck list which I suspect is in a corrupted state. The most logical action for a user who doesn't want to log in is to dismiss this dialog. By selecting "Back to previous page," I will return to the "AnkiDroid" deck list. The app will have to handle the dismissal of this dialog and restore the state of the previous screen. This process of returning focus to the potentially corrupted scrollable list is a prime candidate for triggering the crash.
+<Action>: 1
+##########user11##########
+<Observation>: In the previous step, you go back to previous page, and navigated to the "AnkiDroid" page, which you have visited 6 times. On "AnkiDroid" page, you need to choose one of the following 7 actions to perform:
+(1) Click[More options]: You haven't performed the action yet.
+(2) Click[Add]: You haven't performed the action yet.
+(3) Back to previous page: You haven't performed the action yet.
+(4) Click[20]: You haven't performed the action yet.
+(5) Click[Default]: You perform the action 3 times, and the action goes to page "Default"
+(6) Long press[Default]: You perform the action 2 times, and the action goes to page "dialog (Default)"
+(7) Click[Synchronization]: You perform the action 1 times, and the action goes to page "dialog (Log in to AnkiWeb)"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have not been performed before (Back to previous page, Click[20], Click[More options], Click[Navigate up], Click[Add]) or go back to previous page.
+##########assi12##########
+<Thought>: I'm back on the main deck list screen, and the "scroll bug" crash has not occurred. I've tried interacting with the existing deck item ("Default") and a global action ("Synchronization") and returning, but nothing has triggered the crash. The hint suggests trying an action I haven't performed yet. The "Add" button is a strong candidate. Clicking "Add" will likely navigate me to a new screen to add a card or a deck. When I return from that screen, the deck list will need to be refreshed to show any potential changes. This refresh of a scrollable list, especially if its underlying data state was corrupted by the earlier reviewer loop, is a very plausible trigger for a "scroll bug".
+<Action>: 2
+##########user13##########
+<Observation>: In the previous step, you clicked on the "Add" button, and navigated to the "AnkiDroid" page, which is a newly explored page. On "AnkiDroid" page, you need to choose one of the following 9 actions to perform:
+(1) Click[More options]: You haven't performed the action yet.
+(2) Click[Create deck]: You haven't performed the action yet.
+(3) Click[Add]: You haven't performed the action yet.
+(4) Back to previous page: You haven't performed the action yet.
+(5) Click[18]: You haven't performed the action yet.
+(6) Click[Default]: You haven't performed the action yet.
+(7) Long press[Default]: You haven't performed the action yet.
+(8) Click[Synchronization]: You haven't performed the action yet.
+(9) Click[Get shared decks]: You haven't performed the action yet.

@@ -1,0 +1,73 @@
+##########syst1##########
+As an experienced mobile app tester, your task is to try and reproduce a crash on the app based on the crash description. I'll provide you with the current page of the app and the available actions you can perform (interactions with the app's GUI widgets). You need to select and perform the action that best matches the crash description so as to reproduce the crash in a step-by-step manner.
+
+There are three types of actions on the page:
+1. Click[widget name]: You will click a button on the page called "widget name".
+2. Long press[widget name]: You will long press a button on the page called "widget name".
+3. Input[widget name]: You will type something into a input box on the page called "widget name".
+
+Use the following format:
+
+<Reported crash>: a one-sentence description of the crash that you must reproduce
+<Observation>: I will tell you the current page of the app and the available actions you can perform
+<Thought>: you should always think about what to do
+<Action>: you should answer the number of the chosen action. (e.g., you should answer "<Action>: 3")
+... (then I will tell you the new Observation after the action you choose. This Observation/Thought/Action can repeat N times until the crash is reproduced)
+
+Note that your answer should be only one <Thought> and one <Action>.
+##########user2##########
+Let's begin!
+<Reported crash>: [BUG]: IO Cards Go to the Wrong Deck
+##########user3##########
+<Observation>: In the previous step, you filled in the "password" input box, but still kept in the "AnkiWeb account" page, which is a newly explored page. On "AnkiWeb account" page, you need to choose one of the following 3 actions to perform:
+(1) Click[Show password]: You perform the action 1 times, and the action goes to page "AnkiWeb account"
+(2) Input[username]: You haven't filled this input box yet, please first fill it in.
+(3) Click[Clear text]: You haven't performed the action yet.
+##########assi4##########
+<Thought>: I've entered the username and password again. Just like before, the "Log in" button is missing. I need to interact with the username field again to make it appear.
+<Action>: 2
+##########user5##########
+<Observation>: In the previous step, you filled in the "username" input box, but still kept in the "AnkiWeb account" page, which is a newly explored page. On "AnkiWeb account" page, you need to choose one of the following 3 actions to perform:
+(1) Click[Show password]: You perform the action 1 times, and the action goes to page "AnkiWeb account"
+(2) Click[Log in]: You perform the action 4 times, and the action goes to page "dialog of Login Activity"
+(3) Click[Clear text]: You haven't performed the action yet.
+##########assi6##########
+<Thought>: The "Log in" button has appeared again. I am still stuck in this login loop, but it's the only path forward presented to me. I must click "Log in" to see if I can break out of this loop and get to the main application where I can interact with decks and cards to reproduce the reported crash.
+<Action>: 2
+##########user7##########
+<Observation>: In the previous step, you clicked on the "Log in" button, and navigated to the "dialog of Login Activity" page, which you have visited 5 times. On "dialog of Login Activity" page, you need to choose one of the following 1 actions to perform:
+(1) Click[OK]: You perform the action 4 times, and the action goes to page "AnkiWeb account"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have not been performed before (Back to previous page) or go back to previous page.
+##########assi8##########
+<Thought>: I'm back at the "dialog of Login Activity" page for the 5th time. The hint suggests I'm in a loop and should try something different, like going back. However, there is no "Back" action available. The only action is "Click[OK]". I am forced to click it, even though I know it will likely take me back to the login screen. I have no other choice.
+<Action>: 1
+##########user9##########
+<Observation>: In the previous step, you clicked on the "OK" button, and navigated to the "AnkiWeb account" page, which you have visited 5 times. On "AnkiWeb account" page, you need to choose one of the following 7 actions to perform:
+(1) Click[Show password]: You haven't performed the action yet.
+(2) Input[username]: You haven't filled this input box yet, please first fill it in.
+(3) Input[password]: You haven't filled this input box yet, please first fill it in.
+(4) Click[Privacy]: You haven't performed the action yet.
+(5) Click[Forgot Email?]: You haven't performed the action yet.
+(6) Click[Reset password]: You haven't performed the action yet.
+(7) Click[Clear text]: You haven't performed the action yet.
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have not been performed before (Back to previous page, Click[Privacy], Click[Forgot Email?], Click[Reset password], Click[Log in], Input[password], Click[Clear text], Click[Show password], Click[Navigate up]) or go back to previous page.
+##########assi10##########
+<Thought>: I am stuck in a login loop. I've been on this "AnkiWeb account" page five times, and the login process always fails and brings me back here. The hint strongly suggests that I'm in a loop and need to try something different, specifically an action I haven't performed before or to go back. Since there is no explicit "back" action available, I must choose one of the unexplored actions on the current page to break the cycle.
+The available actions I haven't tried are `Click[Show password]`, `Click[Privacy]`, `Click[Forgot Email?]`, `Click[Reset password]`, and `Click[Clear text]`.
+- `Click[Show password]` and `Click[Clear text]` only affect the input fields and are unlikely to change the screen.
+- `Click[Forgot Email?]` and `Click[Reset password]` will likely take me deeper into an account recovery flow, which is not my goal. My goal is to get to the decks to reproduce a bug with "IO Cards".
+- `Click[Privacy]` is the most promising option. It might open a new screen (like a privacy policy page) from which I might be able to navigate back to the main application screen, thus breaking the login loop.
+Therefore, I will choose to click the "Privacy" button.
+<Action>: 4
+##########user11##########
+<Observation>: In the previous step, you clicked on the "Privacy" button, and navigated to the "dialog of Login Activity" page, which is a newly explored page. On "dialog of Login Activity" page, you need to choose one of the following 3 actions to perform:
+(1) Click[AnkiDroid Privacy Policy]: You haven't performed the action yet.
+(2) Click[AnkiWeb Privacy Policy]: You haven't performed the action yet.
+(3) Click[AnkiWeb Terms and Conditions]: You haven't performed the action yet.
+##########assi12##########
+<Thought>: I've clicked "Privacy" and now I'm on a dialog with three options related to policies and terms. None of these seem directly related to the crash about "IO Cards". However, I need to get past this screen to continue. Clicking any of these will likely open a web view or another informational page. I'll just pick the first one, "AnkiDroid Privacy Policy", to see where it leads. My goal is still to get back to the main app flow.
+<Action>: 1
+##########user13##########
+<Observation>: In the previous step, you clicked on the "AnkiDroid Privacy Policy" button, and navigated to the "Introduction Activity" page, which is a newly explored page. On "Introduction Activity" page, you need to choose one of the following 2 actions to perform:
+(1) Click[Get Started]: You haven't performed the action yet.
+(2) Click[Sync from AnkiWeb]: You perform the action 1 times, and the action goes to page "AnkiWeb account"

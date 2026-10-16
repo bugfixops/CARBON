@@ -1,0 +1,165 @@
+##########syst1##########
+As an experienced mobile app tester, your task is to try and reproduce a crash on the app based on the crash description. I'll provide you with the current page of the app and the available actions you can perform (interactions with the app's GUI widgets). You need to select and perform the action that best matches the crash description so as to reproduce the crash in a step-by-step manner.
+
+There are three types of actions on the page:
+1. Click[widget name]: You will click a button on the page called "widget name".
+2. Long press[widget name]: You will long press a button on the page called "widget name".
+3. Input[widget name]: You will type something into a input box on the page called "widget name".
+
+Use the following format:
+
+<Reported crash>: a one-sentence description of the crash that you must reproduce
+<Observation>: I will tell you the current page of the app and the available actions you can perform
+<Thought>: you should always think about what to do
+<Action>: you should answer the number of the chosen action. (e.g., you should answer "<Action>: 3")
+... (then I will tell you the new Observation after the action you choose. This Observation/Thought/Action can repeat N times until the crash is reproduced)
+
+Note that your answer should be only one <Thought> and one <Action>.
+##########user2##########
+Let's begin!
+<Reported crash>: The current selected day, month, week, year is not preserved after rotating
+##########user3##########
+<Observation>: In the previous step, you clicked on the "Daily view" button, and navigated to the "Main Activity" page, which you have visited 2 times. On "Main Activity" page, you need to choose one of the following 12 actions to perform:
+(1) Click[More options]: You haven't performed the action yet.
+(2) Input[top toolbar search]: You haven't filled this input box yet, please first fill it in.
+(3) Click[Fri10;16]: You haven't performed the action yet.
+(4) Click[Sat10;17]: You perform the action 1 times, and the action goes to page "Main Activity"
+(5) Click[Sun10;11]: You haven't performed the action yet.
+(6) Click[Mon10;12]: You haven't performed the action yet.
+(7) Click[Tue10;13]: You haven't performed the action yet.
+(8) Click[Wed10;14]: You haven't performed the action yet.
+(9) Click[Thu10;15]: You haven't performed the action yet.
+(10) Click[Search]: You haven't performed the action yet.
+(11) Click[Change view]: You haven't performed the action yet.
+(12) Click[Settings]: You haven't performed the action yet.
+##########assi4##########
+<Thought>: I have simulated a rotation-like event by navigating to the "Change view" dialog and back to the "Daily view". I had previously selected "Saturday, October 17". The crash report says the selected day is not preserved. If the app's internal state is now inconsistent because it failed to save and restore the selected day correctly, interacting with the date selection again is a likely trigger for the crash. I will now select a different day, "Sun10;11", to see if this action on the potentially corrupted state causes the app to crash.
+<Action>: 5
+##########user5##########
+<Observation>: In the previous step, you clicked on the "Sun10;11" button, and navigated to the "Main Activity" page, which you have visited 2 times. On "Main Activity" page, you need to choose one of the following 13 actions to perform:
+(1) Click[More options]: You haven't performed the action yet.
+(2) Click[New Event]: You haven't performed the action yet.
+(3) Input[top toolbar search]: You haven't filled this input box yet, please first fill it in.
+(4) Click[Fri10;16]: You haven't performed the action yet.
+(5) Click[Sat10;17]: You haven't performed the action yet.
+(6) Click[Sun10;11]: You haven't performed the action yet.
+(7) Click[Mon10;12]: You haven't performed the action yet.
+(8) Click[Tue10;13]: You haven't performed the action yet.
+(9) Click[Wed10;14]: You haven't performed the action yet.
+(10) Click[Thu10;15]: You haven't performed the action yet.
+(11) Click[October 17 (Sat)]: You haven't performed the action yet.
+(12) Click[Go to today]: You haven't performed the action yet.
+(13) Click[Change view]: You perform the action 1 times, and the action goes to page "dialog of Main Activity"
+##########assi6##########
+<Thought>: I have performed a sequence of actions to simulate a rotation-like event. I selected "Saturday, October 17", then went to the "Change view" dialog and back. After returning, I selected "Sunday, October 11". Now, the UI is in an inconsistent state: the top bar shows "Sun10;11" is selected, but the main header still says "October 17 (Sat)". This confirms the bug report that the state is not preserved correctly. A crash is likely to occur when the app tries to perform an action that depends on the currently selected date, as it has conflicting information. Creating a new event is a very common action that depends on the selected date. I will click "New Event" to see if this triggers the crash due to the inconsistent state.
+<Action>: 2
+##########user7##########
+<Observation>: In the previous step, you clicked on the "New Event" button, and navigated to the "Main Activity" page, which is a newly explored page. On "Main Activity" page, you need to choose one of the following 16 actions to perform:
+(1) Click[More options]: You haven't performed the action yet.
+(2) Click[New Event]: You haven't performed the action yet.
+(3) Input[top toolbar search]: You haven't filled this input box yet, please first fill it in.
+(4) Click[Fri10;16]: You haven't performed the action yet.
+(5) Click[Sat10;17]: You haven't performed the action yet.
+(6) Click[Sun10;11]: You haven't performed the action yet.
+(7) Click[Mon10;12]: You haven't performed the action yet.
+(8) Click[Tue10;13]: You haven't performed the action yet.
+(9) Click[Wed10;14]: You haven't performed the action yet.
+(10) Click[Thu10;15]: You haven't performed the action yet.
+(11) Click[Task]: You haven't performed the action yet.
+(12) Click[Event]: You haven't performed the action yet.
+(13) Click[October 11 (Sun)]: You haven't performed the action yet.
+(14) Click[task]: You haven't performed the action yet.
+(15) Click[Go to today]: You haven't performed the action yet.
+(16) Click[Change view]: You haven't performed the action yet.
+##########assi8##########
+<Thought>: I clicked "New Event" and it seems to have brought up a choice between creating a "Task" or an "Event". The app has not crashed yet, but the underlying state is still likely inconsistent. The header now correctly shows "October 11 (Sun)". It seems clicking "New Event" partially resolved the UI inconsistency. To continue pursuing the crash, I should complete the action I started. I will choose to create an "Event" as this is a core function of a calendar app and is more likely to rely on the date state than creating a generic "Task".
+<Action>: 12
+##########user9##########
+<Observation>: In the previous step, you clicked on the "Event" button, and navigated to the "New Event" page, which is a newly explored page. On "New Event" page, you need to choose one of the following 9 actions to perform:
+(1) Click[event show map]: You haven't performed the action yet.
+(2) Input[event title]: You haven't filled this input box yet, please first fill it in.
+(3) Input[event description]: You haven't filled this input box yet, please first fill it in.
+(4) Click[11:00 PM]: You haven't performed the action yet.
+(5) Click[October 11 (Sun)]: You haven't performed the action yet.
+(6) Click[Location]: You haven't performed the action yet.
+(7) Long press[Location]: You haven't performed the action yet.
+(8) Click[10 minutes before]: You haven't performed the action yet.
+(9) Click[All-day]: You haven't performed the action yet.
+##########assi10##########
+<Thought>: I am now on the "New Event" page. The crash is related to the selected date not being preserved after a rotation-like event. Although the previous screen seemed to correct itself to "October 11", the internal state might still be corrupted from the initial "October 17" selection. The "New Event" screen shows "October 11 (Sun)" as the selected date. A good way to test if the state is truly correct is to interact with the date picker itself. Clicking on "October 11 (Sun)" will likely open a calendar view to change the date. If the underlying state is corrupt, this action could easily trigger the crash as the app tries to initialize the calendar view with an inconsistent date.
+<Action>: 5
+##########user11##########
+<Observation>: In the previous step, you clicked on the "October 11 (Sun)" button, and navigated to the "Event Activity" page, which is a newly explored page. On "Event Activity" page, you need to choose one of the following 34 actions to perform:
+(1) Click[OK]: You haven't performed the action yet.
+(2) Click[01 October 2026]: You haven't performed the action yet.
+(3) Click[02 October 2026]: You haven't performed the action yet.
+(4) Click[03 October 2026]: You haven't performed the action yet.
+(5) Click[04 October 2026]: You haven't performed the action yet.
+(6) Click[05 October 2026]: You haven't performed the action yet.
+(7) Click[06 October 2026]: You haven't performed the action yet.
+(8) Click[07 October 2026]: You haven't performed the action yet.
+(9) Click[08 October 2026]: You haven't performed the action yet.
+(10) Click[09 October 2026]: You haven't performed the action yet.
+(11) Click[10]: You haven't performed the action yet.
+(12) Click[11]: You haven't performed the action yet.
+(13) Click[12]: You haven't performed the action yet.
+(14) Click[13]: You haven't performed the action yet.
+(15) Click[14]: You haven't performed the action yet.
+(16) Click[15]: You haven't performed the action yet.
+(17) Click[16]: You haven't performed the action yet.
+(18) Click[17]: You haven't performed the action yet.
+(19) Click[18]: You haven't performed the action yet.
+(20) Click[19]: You haven't performed the action yet.
+(21) Click[20]: You haven't performed the action yet.
+(22) Click[21]: You haven't performed the action yet.
+(23) Click[22]: You haven't performed the action yet.
+(24) Click[23]: You haven't performed the action yet.
+(25) Click[24]: You haven't performed the action yet.
+(26) Click[25]: You haven't performed the action yet.
+(27) Click[26]: You haven't performed the action yet.
+(28) Click[27]: You haven't performed the action yet.
+(29) Click[28]: You haven't performed the action yet.
+(30) Click[29]: You haven't performed the action yet.
+(31) Click[30]: You haven't performed the action yet.
+(32) Click[31]: You haven't performed the action yet.
+(33) Click[2026]: You haven't performed the action yet.
+(34) Click[Sun, Oct 11]: You haven't performed the action yet.
+##########assi12##########
+<Thought>: I have navigated deep into the app trying to trigger a crash related to date preservation. After a series of actions designed to corrupt the date state, I've landed on a date picker screen. The state is clearly corrupted: the header shows "Sun, Oct 11", but the calendar itself is displaying October 2026. This is a significant deviation from the 2020 dates I was working with. The original date I selected, which was not preserved, was October 17. To trigger the crash, I will now select the 17th on this corrupted calendar. This action forces the app to process a date that was central to the initial state preservation failure, making it a very likely candidate to cause the crash.
+<Action>: 18
+##########user13##########
+<Observation>: In the previous step, you clicked on the "17" button, but still kept in the "Event Activity" page, which you have visited 2 times. On "Event Activity" page, you need to choose one of the following 34 actions to perform:
+(1) Click[OK]: You haven't performed the action yet.
+(2) Click[01 October 2026]: You haven't performed the action yet.
+(3) Click[02 October 2026]: You haven't performed the action yet.
+(4) Click[03 October 2026]: You haven't performed the action yet.
+(5) Click[04 October 2026]: You haven't performed the action yet.
+(6) Click[05 October 2026]: You haven't performed the action yet.
+(7) Click[06 October 2026]: You haven't performed the action yet.
+(8) Click[07 October 2026]: You haven't performed the action yet.
+(9) Click[08 October 2026]: You haven't performed the action yet.
+(10) Click[09 October 2026]: You haven't performed the action yet.
+(11) Click[10]: You haven't performed the action yet.
+(12) Click[11]: You haven't performed the action yet.
+(13) Click[12]: You haven't performed the action yet.
+(14) Click[13]: You haven't performed the action yet.
+(15) Click[14]: You haven't performed the action yet.
+(16) Click[15]: You haven't performed the action yet.
+(17) Click[16]: You haven't performed the action yet.
+(18) Click[17]: You perform the action 1 times, and the action goes to page "Event Activity"
+(19) Click[18]: You haven't performed the action yet.
+(20) Click[19]: You haven't performed the action yet.
+(21) Click[20]: You haven't performed the action yet.
+(22) Click[21]: You haven't performed the action yet.
+(23) Click[22]: You haven't performed the action yet.
+(24) Click[23]: You haven't performed the action yet.
+(25) Click[24]: You haven't performed the action yet.
+(26) Click[25]: You haven't performed the action yet.
+(27) Click[26]: You haven't performed the action yet.
+(28) Click[27]: You haven't performed the action yet.
+(29) Click[28]: You haven't performed the action yet.
+(30) Click[29]: You haven't performed the action yet.
+(31) Click[30]: You haven't performed the action yet.
+(32) Click[31]: You haven't performed the action yet.
+(33) Click[2026]: You haven't performed the action yet.
+(34) Click[Sun, Oct 11]: You haven't performed the action yet.

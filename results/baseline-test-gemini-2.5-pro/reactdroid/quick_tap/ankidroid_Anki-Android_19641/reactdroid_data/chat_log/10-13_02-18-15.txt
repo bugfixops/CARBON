@@ -1,0 +1,72 @@
+##########syst1##########
+As an experienced mobile app tester, your task is to try and reproduce a crash on the app based on the crash description. I'll provide you with the current page of the app and the available actions you can perform (interactions with the app's GUI widgets). You need to select and perform the action that best matches the crash description so as to reproduce the crash in a step-by-step manner.
+
+There are three types of actions on the page:
+1. Click[widget name]: You will click a button on the page called "widget name".
+2. Long press[widget name]: You will long press a button on the page called "widget name".
+3. Input[widget name]: You will type something into a input box on the page called "widget name".
+
+Use the following format:
+
+<Reported crash>: a one-sentence description of the crash that you must reproduce
+<Observation>: I will tell you the current page of the app and the available actions you can perform
+<Thought>: you should always think about what to do
+<Action>: you should answer the number of the chosen action. (e.g., you should answer "<Action>: 3")
+... (then I will tell you the new Observation after the action you choose. This Observation/Thought/Action can repeat N times until the crash is reproduced)
+
+Note that your answer should be only one <Thought> and one <Action>.
+##########user2##########
+Let's begin!
+<Reported crash>: [New study screen] Card was modified error when tapping the answer buttons quickly
+##########user3##########
+<Observation>: In the previous step, you clicked on the "Custom study" button, and navigated to the "dialog of Study Options Activity" page, which you have visited 7 times. On "dialog of Study Options Activity" page, you need to choose one of the following 7 actions to perform:
+(1) Click[Increase today's new card limit]: You haven't performed the action yet.
+(2) Click[Preview new cards]: You perform the action 2 times, and the action goes to page "dialog of Study Options Activity"
+(3) Back to previous page: You perform the action 1 times, and the action goes to page "Study Options Activity"
+(4) Click[Increase today's review card limit]: You haven't performed the action yet.
+(5) Click[Review forgotten cards]: You perform the action 1 times, and the action goes to page "dialog of Study Options Activity"
+(6) Click[Review ahead]: You perform the action 1 times, and the action goes to page "dialog of Study Options Activity"
+(7) Click[Study by card state or tag]: You perform the action 1 times, and the action goes to page "dialog of Study Options Activity"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have not been performed before (Click[Increase today's new card limit], Click[Increase today's review card limit]) or go back to previous page.
+##########assi4##########
+<Thought>: I'm in the "Custom study" dialog. The crash is related to a "Card was modified error" on the "New study screen". I need to create a new study session. The option "Preview new cards" seems like a good way to start a new type of session. Since I've already performed this action twice without a crash, and the hint suggests trying new actions, I will try a different option. "Study by card state or tag" is another way to create a custom session. This might interact with the card state in a way that triggers the error, especially since the state might be corrupted from the rapid review.
+<Action>: 7
+##########user5##########
+<Observation>: In the previous step, you clicked on the "Study by card state or tag" button, and navigated to the "dialog of Study Options Activity" page, which you have visited 5 times. On "dialog of Study Options Activity" page, you need to choose one of the following 6 actions to perform:
+(1) Click[New cards only]: You perform the action 2 times, and the action goes to page "menu of Study Options Activity"
+(2) Long press[New cards only]: You perform the action 1 times, and the action goes to page "menu of Study Options Activity"
+(3) Input[custom study details]: You haven't filled this input box yet, please first fill it in.
+(4) Back to previous page: You haven't performed the action yet.
+(5) Click[Cancel]: You perform the action 1 times, and the action goes to page "Study Options Activity"
+(6) Click[Choose tags]: You haven't performed the action yet.
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have not been performed before (Back to previous page, Click[Choose tags]) or go back to previous page.
+##########assi6##########
+<Thought>: I'm now in the "Study by card state or tag" dialog. The crash is "Card was modified error". I need to start a study session. I've tried "New cards only" before. The hint suggests trying new actions. "Choose tags" is a new action. Selecting tags to study might involve reading the card data in a way that exposes the inconsistency caused by the rapid review session. This seems like a plausible path to trigger the crash.
+<Action>: 6
+##########user7##########
+<Observation>: In the previous step, you clicked on the "Choose tags" button, and navigated to the "Select tags" page, which is a newly explored page. On "Select tags" page, you need to choose one of the following 3 actions to perform:
+(1) Click[Select]: You haven't performed the action yet.
+(2) Click[Filter tags]: You haven't performed the action yet.
+(3) Click[Check/uncheck all tags]: You haven't performed the action yet.
+##########assi8##########
+<Thought>: I'm on the "Select tags" page. To proceed with creating a custom study session by tag, I need to actually select some tags. The "Select" button is likely disabled until I choose a tag, and "Filter tags" is for searching. The most logical action to take is to select all tags using the "Check/uncheck all tags" button. This will select all available tags and should enable the "Select" button, allowing me to proceed and hopefully trigger the crash when the app tries to load the cards for this new session.
+<Action>: 3
+##########user9##########
+<Observation>: In the previous step, you clicked on the "Check/uncheck all tags" button, but still kept in the "Select tags" page, which you have visited 2 times. On "Select tags" page, you need to choose one of the following 3 actions to perform:
+(1) Click[Select]: You haven't performed the action yet.
+(2) Click[Filter tags]: You haven't performed the action yet.
+(3) Click[Check/uncheck all tags]: You perform the action 1 times, and the action goes to page "Select tags"
+##########assi10##########
+<Thought>: I have checked all the tags. Now I need to confirm this selection to create the custom study session. The "Select" button is the logical next step to finalize the tag selection and move forward with creating the study deck. This action should trigger the app to process the selected cards, which I suspect will lead to the "Card was modified error" due to the previously corrupted state.
+<Action>: 1
+##########user11##########
+<Observation>: In the previous step, you clicked on the "Select" button, and navigated to the "dialog of Study Options Activity" page, which is a newly explored page. On "dialog of Study Options Activity" page, you need to choose one of the following 1 actions to perform:
+(1) Click[OK]: You haven't performed the action yet.
+##########assi12##########
+<Thought>: I have selected the tags and returned to the custom study dialog. The only remaining action is to click "OK". This will finalize the creation of the custom study session based on the tags I've chosen. The app will then attempt to build the new study deck. This is the moment I expect the "Card was modified error" to occur, as the app will process the potentially corrupted card data.
+<Action>: 1
+##########user13##########
+<Observation>: In the previous step, you clicked on the "OK" button, and navigated to the "Study Options Activity" page, which you have visited 2 times. On "Study Options Activity" page, you need to choose one of the following 3 actions to perform:
+(1) Click[Deck options]: You haven't performed the action yet.
+(2) Click[Default]: You haven't performed the action yet.
+(3) Click[Custom study]: You perform the action 1 times, and the action goes to page "dialog of Study Options Activity"

@@ -1,0 +1,32 @@
+Bug Report Title:
+Fragment injection does not occur. NullPointerException for Android versions 22 (Lollipop 5.1) and below.
+Bug Report Issue:
+## Crash
+
+The following crash occurs on devices running API 22 (Lollipop 5.1) and below.
+
+```
+   java.lang.NullPointerException: Attempt to invoke interface method 'void com.vestrel00.daggerbutterknifemvp.ui.main.view.MainFragmentListener.onExample1Clicked()' on a null object reference
+       at com.vestrel00.daggerbutterknifemvp.ui.main.view.MainFragment.onExample1Clicked(MainFragment.java:63)
+      ...
+```
+
+The crash does not occur for API 23 (Marshmallow 6.0) and above.
+
+#### Steps to Reproduce
+
+1. Open the app
+2. Click on Example 1 button
+
+Observe the crash. Note that clicking on any of the example buttons will cause the crash.
+
+## Analysis
+
+The issue is that the `MainFragmentListener listener` in `MainFragment` is null for some reason. This suggests a bug with Dagger 2.11. 
+
+The issue is that the injection is currently happening in [onAttach(Context)](https://developer.android.com/reference/android/app/Fragment.html#onAttach(android.content.Context)), which is added in API level 23. This means that API level 22 and below will not invoke `onAttach(Context)`, thereby bypassing the injection. 
+
+## Solutions
+
+1. Perform fragment injection in [onAttach(Activity)](https://developer.android.com/reference/android/app/Fragment.html#onAttach(android.app.Activity)).
+2. Use AppCompat Activity and support Fragment with *dagger.android.support* injection frameworks.

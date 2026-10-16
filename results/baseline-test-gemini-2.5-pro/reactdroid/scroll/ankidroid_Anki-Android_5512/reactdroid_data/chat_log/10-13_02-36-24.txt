@@ -1,0 +1,96 @@
+##########syst1##########
+As an experienced mobile app tester, your task is to try and reproduce a crash on the app based on the crash description. I'll provide you with the current page of the app and the available actions you can perform (interactions with the app's GUI widgets). You need to select and perform the action that best matches the crash description so as to reproduce the crash in a step-by-step manner.
+
+There are three types of actions on the page:
+1. Click[widget name]: You will click a button on the page called "widget name".
+2. Long press[widget name]: You will long press a button on the page called "widget name".
+3. Input[widget name]: You will type something into a input box on the page called "widget name".
+
+Use the following format:
+
+<Reported crash>: a one-sentence description of the crash that you must reproduce
+<Observation>: I will tell you the current page of the app and the available actions you can perform
+<Thought>: you should always think about what to do
+<Action>: you should answer the number of the chosen action. (e.g., you should answer "<Action>: 3")
+... (then I will tell you the new Observation after the action you choose. This Observation/Thought/Action can repeat N times until the crash is reproduced)
+
+Note that your answer should be only one <Thought> and one <Action>.
+##########user2##########
+Let's begin!
+<Reported crash>: AnkiDroid scroll bug
+##########user3##########
+<Observation>: In the previous step, you clicked on the "SHOW ANSWER" button, and navigated to the "Default" page, which you have visited 3 times. On "Default" page, you need to choose one of the following 7 actions to perform:
+(1) Click[More options]: You haven't performed the action yet.
+(2) Click[< 1 min]: You perform the action 1 times, and the action goes to page "Default"
+(3) Click[< 10 min]: You perform the action 1 times, and the action goes to page "Default"
+(4) Click[4 d]: You haven't performed the action yet.
+(5) Long press[HelloWorld!]: You haven't performed the action yet.
+(6) Click[Undo]: You haven't performed the action yet.
+(7) Click[Mark note]: You haven't performed the action yet.
+##########assi4##########
+<Thought>: I have successfully re-entered the reviewer and am now on the answer side of the same problematic card. The crash is described as a "scroll bug". I have not been able to trigger it by interacting with buttons. The bug might be related to the content view itself. The answer, "HelloWorld!", is now displayed. Interacting directly with this content area is the most logical way to test for a scroll-related issue. A long press is a distinct gesture from a tap and often triggers different UI behavior, such as text selection or context menus, which could interact with the scrolling mechanism of the view. Given that all other button-based interactions have failed to reproduce the crash, `Long press[HelloWorld!]` is the most promising action to try.
+<Action>: 5
+##########user5##########
+<Observation>: In the previous step, you long pressed the "HelloWorld!" button, but still kept in the "Default" page, which you have visited 4 times. On "Default" page, you need to choose one of the following 9 actions to perform:
+(1) Click[More options]: You haven't performed the action yet.
+(2) Back to previous page: You haven't performed the action yet.
+(3) Click[< 1 min]: You perform the action 1 times, and the action goes to page "Default"
+(4) Click[< 10 min]: You perform the action 1 times, and the action goes to page "Default"
+(5) Click[4 d]: You haven't performed the action yet.
+(6) Long press[HelloWorld!]: You perform the action 1 times, and the action goes to page "Default"
+(7) Click[Undo]: You haven't performed the action yet.
+(8) Click[Mark note]: You haven't performed the action yet.
+(9) Click[Navigate up]: You haven't performed the action yet.
+##########assi6##########
+<Thought>: I've long-pressed the answer text, but the app hasn't crashed. I'm still on the answer side of the problematic card. The crash is described as a "scroll bug." It's plausible the crash doesn't occur while viewing the card, but when transitioning *away* from it. The primary way to transition to the next card in a review session is to rate the current one. This action typically involves an animation that could be considered a form of scrolling or view transition. If the current card's view is in a corrupted state, attempting to transition away from it could trigger the crash. I have three rating options: `< 1 min`, `< 10 min`, and `4 d`. I will select the first one, `< 1 min`, to see if the transition to the next card reproduces the scroll-related crash.
+<Action>: 3
+##########user7##########
+<Observation>: In the previous step, you clicked on the "< 1 min" button, and navigated to the "Default" page, which you have visited 11 times. On "Default" page, you need to choose one of the following 7 actions to perform:
+(1) Click[SHOW ANSWER]: You perform the action 3 times, and the action goes to page "Default"
+(2) Click[More options]: You perform the action 2 times, and the action goes to page "menu (Edit note, Replay audio, Bury card, Suspend card, Delete note, Reschedule, Enable whiteboard, Options)"
+(3) Back to previous page: You perform the action 1 times, and the action goes to page "AnkiDroid"
+(4) Long press[France]: You perform the action 1 times, and the action goes to page "Default"
+(5) Click[Undo]: You perform the action 2 times, and the action goes to page "Default"
+(6) Click[Mark note]: You perform the action 1 times, and the action goes to page "Default"
+(7) Click[Navigate up]: You perform the action 1 times, and the action goes to page "Default"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have only been performed a few times (Back to previous page, Click[SHOW ANSWER], Long press[France], Click[More options], Click[Undo], Click[Mark note], Click[Navigate up]) or go back to previous page.
+##########assi8##########
+<Thought>: I am stuck in a loop. After rating the card, I was brought back to the very same card front ("France"). This indicates the reviewer is in a broken state and cannot advance. The crash is described as a "scroll bug," which I haven't been able to trigger by interacting with the card's content. It's possible the crash occurs not while *on* the broken card, but when trying to *leave* the broken reviewer state. A user stuck in a loop like this would naturally try to go back to the previous screen. The "Back to previous page" action is the most logical way to attempt this. This action will force the app to tear down the current reviewer activity, and if its state is corrupted, this process might fail and trigger the crash.
+<Action>: 3
+##########user9##########
+<Observation>: In the previous step, you go back to previous page, and navigated to the "AnkiDroid" page, which you have visited 4 times. On "AnkiDroid" page, you need to choose one of the following 7 actions to perform:
+(1) Click[More options]: You haven't performed the action yet.
+(2) Click[Add]: You haven't performed the action yet.
+(3) Back to previous page: You haven't performed the action yet.
+(4) Click[20]: You haven't performed the action yet.
+(5) Click[Default]: You perform the action 3 times, and the action goes to page "Default"
+(6) Long press[Default]: You perform the action 1 times, and the action goes to page "dialog (Default)"
+(7) Click[Synchronization]: You haven't performed the action yet.
+##########assi10##########
+<Thought>: I've successfully returned to the deck list screen after being stuck in a loop in the reviewer. The crash hasn't happened yet. The crash is described as a "scroll bug". It's possible the crash is not in the reviewer itself, but in the deck list, and is triggered by a corrupted state left behind by the broken reviewer session. The deck list is a scrollable view. If the previous session corrupted some data related to the "Default" deck, trying to interact with the list, especially by scrolling, might trigger the crash. While there's no explicit "scroll" action, the most common way to interact with a list is to tap an item. I've already tried clicking "Default" which takes me back into the broken reviewer. The only other direct interaction with the "Default" deck item is a long press. A long press often initiates a different action or context menu, and this interaction with the list item might be what triggers the underlying scroll-related bug.
+<Action>: 6
+##########user11##########
+<Observation>: In the previous step, you long pressed the "Default" button, and navigated to the "dialog (Default)" page, which you have visited 2 times. On "dialog (Default)" page, you need to choose one of the following 6 actions to perform:
+(1) Click[Options]: You perform the action 1 times, and the action goes to page "Options for Default"
+(2) Back to previous page: You haven't performed the action yet.
+(3) Click[Rename deck]: You haven't performed the action yet.
+(4) Click[Custom study]: You haven't performed the action yet.
+(5) Click[Delete deck]: You haven't performed the action yet.
+(6) Click[Export deck]: You haven't performed the action yet.
+##########assi12##########
+<Thought>: I have long-pressed the "Default" deck and a dialog with several options has appeared. The crash still hasn't occurred. The crash is described as a "scroll bug". It's possible the bug is triggered when the app tries to update or re-render the deck list after an action is performed on a deck. The "Options" action seems like a good candidate. It will navigate to a new screen, and when I return from that screen, the deck list will need to be redrawn. If the state is corrupted, this redrawing process, which involves the scrollable list view, might trigger the crash.
+<Action>: 1
+##########user13##########
+<Observation>: In the previous step, you clicked on the "Options" button, and navigated to the "Options for Default" page, which you have visited 6 times. On "Options for Default" page, you need to choose one of the following 11 actions to perform:
+(1) Click[New cards]: You haven't performed the action yet.
+(2) Click[Changes to deck group options will ...]: You haven't performed the action yet.
+(3) Click[Options group]: You haven't performed the action yet.
+(4) Back to previous page: You haven't performed the action yet.
+(5) Click[Group management]: You perform the action 4 times, and the action goes to page "Deck Options"
+(6) Click[Reviews]: You haven't performed the action yet.
+(7) Click[Lapses]: You haven't performed the action yet.
+(8) Click[General]: You haven't performed the action yet.
+(9) Click[Reminders]: You haven't performed the action yet.
+(10) Click[Deck description (affects current deck only)]: You haven't performed the action yet.
+(11) Click[Navigate up]: You perform the action 1 times, and the action goes to page "AnkiDroid"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have not been performed before (Back to previous page, Click[New cards], Click[Reviews], Click[Lapses], Click[General], Click[Reminders], Click[Deck description (affects current deck only)], Click[Changes to deck group options will ...], Click[Options group]) or go back to previous page.

@@ -1,0 +1,124 @@
+##########syst1##########
+As an experienced mobile app tester, your task is to try and reproduce a crash on the app based on the crash description. I'll provide you with the current page of the app and the available actions you can perform (interactions with the app's GUI widgets). You need to select and perform the action that best matches the crash description so as to reproduce the crash in a step-by-step manner.
+
+There are three types of actions on the page:
+1. Click[widget name]: You will click a button on the page called "widget name".
+2. Long press[widget name]: You will long press a button on the page called "widget name".
+3. Input[widget name]: You will type something into a input box on the page called "widget name".
+
+Use the following format:
+
+<Reported crash>: a one-sentence description of the crash that you must reproduce
+<Observation>: I will tell you the current page of the app and the available actions you can perform
+<Thought>: you should always think about what to do
+<Action>: you should answer the number of the chosen action. (e.g., you should answer "<Action>: 3")
+... (then I will tell you the new Observation after the action you choose. This Observation/Thought/Action can repeat N times until the crash is reproduced)
+
+Note that your answer should be only one <Thought> and one <Action>.
+##########user2##########
+Let's begin!
+<Reported crash>: talkback can't see sometimes front, sometimes back and sometimes both sides of anki cards during a study session.
+##########user3##########
+<Observation>: In the previous step, you clicked on the "Disable whiteboard" button, and navigated to the "Reviewer" page, which you have visited 15 times. On "Reviewer" page, you need to choose one of the following 13 actions to perform:
+(1) Click[More options]: You perform the action 3 times, and the action goes to page "Reviewer"
+(2) Back to previous page: You haven't performed the action yet.
+(3) Click[< 1 m]: You perform the action 6 times, and the action goes to page "Reviewer"
+(4) Click[< 6 m]: You haven't performed the action yet.
+(5) Click[< 10 m]: You haven't performed the action yet.
+(6) Click[3 d]: You haven't performed the action yet.
+(7) Long press[HelloWorld!]: You perform the action 1 times, and the action goes to page "Reviewer"
+(8) Click[Flag card]: You haven't performed the action yet.
+(9) Long press[Flag card]: You haven't performed the action yet.
+(10) Click[Record voice]: You perform the action 2 times, and the action goes to page "Reviewer"
+(11) Long press[Record voice]: You haven't performed the action yet.
+(12) Click[cancel recording]: You perform the action 2 times, and the action goes to page "Reviewer"
+(13) Click[Open drawer]: You haven't performed the action yet.
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have not been performed before (Back to previous page, Click[< 6 m], Click[< 10 m], Click[3 d], Click[Flag card], Long press[Flag card], Long press[Record voice], Click[Open drawer]) or go back to previous page.
+##########assi4##########
+<Thought>: I have performed a very specific and complex sequence of actions: enabling the whiteboard, hiding it, starting and canceling a recording, opening the "More options" menu, and finally disabling the whiteboard. I believe the view is now in the corrupted state described in the crash report. The report says TalkBack can't see the card content. The next logical step is to advance to the next card to see if the corrupted state persists and causes a crash when the new card is loaded. Clicking one of the answer buttons (`< 1 m`, `< 6 m`, `< 10 m`, `3 d`) will load the next card. I've used `< 1 m` before, so I'll try a different one, `< 6 m`, to ensure I'm not just repeating a non-crashing path. This action will transition the state and likely expose the underlying bug.
+<Action>: 4
+##########user5##########
+<Observation>: In the previous step, you clicked on the "< 6 m" button, and navigated to the "Reviewer" page, which you have visited 12 times. On "Reviewer" page, you need to choose one of the following 10 actions to perform:
+(1) Click[Show answer]: You perform the action 8 times, and the action goes to page "Reviewer"
+(2) Click[More options]: You haven't performed the action yet.
+(3) Back to previous page: You haven't performed the action yet.
+(4) Long press[HelloWorld!]: You haven't performed the action yet.
+(5) Click[Flag card]: You haven't performed the action yet.
+(6) Long press[Flag card]: You haven't performed the action yet.
+(7) Click[Record]: You perform the action 2 times, and the action goes to page "Reviewer"
+(8) Long press[Record]: You haven't performed the action yet.
+(9) Click[cancel recording]: You perform the action 1 times, and the action goes to page "Reviewer"
+(10) Click[Open drawer]: You haven't performed the action yet.
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have not been performed before (Back to previous page, Long press[HelloWorld!], Click[More options], Click[Flag card], Long press[Flag card], Long press[Record], Click[Open drawer]) or go back to previous page.
+##########assi6##########
+<Thought>: I have performed a long and specific sequence of actions to corrupt the view state related to the whiteboard and audio recording. I just advanced to a new card. The crash report states that "talkback can't see sometimes front, sometimes back and sometimes both sides of anki cards". I am currently seeing the front of the card ("HelloWorld!"). The most direct way to check if the back of the card is also affected is to reveal it. The action "Show answer" will do exactly that. Given the corrupted state I've likely induced, attempting to render the back of the card could easily trigger the crash.
+<Action>: 1
+##########user7##########
+<Observation>: In the previous step, you clicked on the "Show answer" button, and navigated to the "Reviewer" page, which you have visited 16 times. On "Reviewer" page, you need to choose one of the following 13 actions to perform:
+(1) Click[More options]: You perform the action 3 times, and the action goes to page "Reviewer"
+(2) Back to previous page: You haven't performed the action yet.
+(3) Click[< 1 m]: You perform the action 6 times, and the action goes to page "Reviewer"
+(4) Click[< 6 m]: You perform the action 1 times, and the action goes to page "Reviewer"
+(5) Click[< 10 m]: You haven't performed the action yet.
+(6) Click[3 d]: You haven't performed the action yet.
+(7) Long press[HelloWorld!]: You perform the action 1 times, and the action goes to page "Reviewer"
+(8) Click[Flag card]: You haven't performed the action yet.
+(9) Long press[Flag card]: You haven't performed the action yet.
+(10) Click[Record voice]: You perform the action 2 times, and the action goes to page "Reviewer"
+(11) Long press[Record voice]: You haven't performed the action yet.
+(12) Click[cancel recording]: You perform the action 2 times, and the action goes to page "Reviewer"
+(13) Click[Open drawer]: You haven't performed the action yet.
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have not been performed before (Back to previous page, Click[< 10 m], Click[3 d], Click[Flag card], Long press[Flag card], Long press[Record voice], Click[Open drawer]) or go back to previous page.
+##########assi8##########
+<Thought>: I have followed a very specific sequence of actions to corrupt the view state, involving the whiteboard, audio recording, and advancing to a new card. I just clicked "Show answer" to reveal the back of the card. The crash report mentions that TalkBack can't see the card content. This implies a problem with the view hierarchy. I've manipulated the view extensively. Now that both the front and back of the card are theoretically visible (even if one is obscured), interacting with the main content area itself is a good way to trigger a crash if the view is truly broken. A long press on the card content ("HelloWorld!") is an interaction that might trigger a context menu or other action that requires the system to properly understand the view's properties. Given the likely corrupted state, this action could easily cause a crash.
+<Action>: 7
+##########user9##########
+<Observation>: In the previous step, you long pressed the "HelloWorld!" button, but still kept in the "Reviewer" page, which you have visited 17 times. On "Reviewer" page, you need to choose one of the following 13 actions to perform:
+(1) Click[More options]: You perform the action 3 times, and the action goes to page "Reviewer"
+(2) Back to previous page: You haven't performed the action yet.
+(3) Click[< 1 m]: You perform the action 6 times, and the action goes to page "Reviewer"
+(4) Click[< 6 m]: You perform the action 1 times, and the action goes to page "Reviewer"
+(5) Click[< 10 m]: You haven't performed the action yet.
+(6) Click[3 d]: You haven't performed the action yet.
+(7) Long press[HelloWorld!]: You perform the action 2 times, and the action goes to page "Reviewer"
+(8) Click[Flag card]: You haven't performed the action yet.
+(9) Long press[Flag card]: You haven't performed the action yet.
+(10) Click[Record voice]: You perform the action 2 times, and the action goes to page "Reviewer"
+(11) Long press[Record voice]: You haven't performed the action yet.
+(12) Click[cancel recording]: You perform the action 2 times, and the action goes to page "Reviewer"
+(13) Click[Open drawer]: You haven't performed the action yet.
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have not been performed before (Back to previous page, Click[< 10 m], Click[3 d], Click[Flag card], Long press[Flag card], Long press[Record voice], Click[Open drawer]) or go back to previous page.
+##########assi10##########
+<Thought>: I've performed a long and complex sequence of actions designed to corrupt the view state, including enabling/disabling the whiteboard, recording audio, advancing the card, showing the answer, and long-pressing the content. I'm still on the Reviewer page, and the app hasn't crashed. The hint indicates I'm stuck. The crash is related to TalkBack, an accessibility service. My previous actions have focused on manipulating the visual UI components. I haven't directly interacted with anything that would explicitly trigger an accessibility-related event flow. The "Open drawer" action is a major UI navigation event. Opening the navigation drawer while the main content view is in this potentially corrupted state could force the accessibility service to re-evaluate the entire screen layout. This re-evaluation, when faced with the inconsistent view hierarchy I've created, is a very plausible trigger for the crash. It's a high-impact UI change that I haven't tried yet.
+<Action>: 13
+##########user11##########
+<Observation>: In the previous step, you clicked on the "Open drawer" button, and navigated to the "Reviewer" page, which you have visited 6 times. On "Reviewer" page, you need to choose one of the following 11 actions to perform:
+(1) Back to previous page: You perform the action 1 times, and the action goes to page "Reviewer"
+(2) Click[< 1 m]: You perform the action 1 times, and the action goes to page "Reviewer"
+(3) Click[< 6 m]: You haven't performed the action yet.
+(4) Click[< 10 m]: You haven't performed the action yet.
+(5) Click[Decks]: You perform the action 1 times, and the action goes to page "AnkiDroid"
+(6) Click[Card browser]: You haven't performed the action yet.
+(7) Click[Statistics]: You haven't performed the action yet.
+(8) Click[Settings]: You haven't performed the action yet.
+(9) Click[Help]: You haven't performed the action yet.
+(10) Click[Support AnkiDroid]: You haven't performed the action yet.
+(11) Click[Close drawer]: You perform the action 2 times, and the action goes to page "Reviewer"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have not been performed before (Click[< 6 m], Click[< 10 m], Click[Card browser], Click[Statistics], Click[Settings], Click[Help], Click[Support AnkiDroid]) or go back to previous page.
+##########assi12##########
+<Thought>: I have opened the navigation drawer while the main reviewer view is in a potentially corrupted state. The crash is related to TalkBack not being able to see the card content. Opening the drawer was a good step to force a re-evaluation of the screen's accessibility tree. Now, to complete the cycle and potentially trigger the crash, I need to close the drawer and return focus to the main content. The "Close drawer" action will do this. This action will force the system to shift focus back to the main `Reviewer` page, which I believe is in a broken state. The accessibility service (TalkBack) will have to re-read the contents of this page, and if the view hierarchy is indeed corrupted as I suspect, this is the moment the crash is most likely to occur.
+<Action>: 11
+##########user13##########
+<Observation>: In the previous step, you clicked on the "Close drawer" button, but still kept in the "Reviewer" page, which you have visited 7 times. On "Reviewer" page, you need to choose one of the following 11 actions to perform:
+(1) Back to previous page: You perform the action 1 times, and the action goes to page "Reviewer"
+(2) Click[< 1 m]: You perform the action 1 times, and the action goes to page "Reviewer"
+(3) Click[< 6 m]: You haven't performed the action yet.
+(4) Click[< 10 m]: You haven't performed the action yet.
+(5) Click[Decks]: You perform the action 1 times, and the action goes to page "AnkiDroid"
+(6) Click[Card browser]: You haven't performed the action yet.
+(7) Click[Statistics]: You haven't performed the action yet.
+(8) Click[Settings]: You haven't performed the action yet.
+(9) Click[Help]: You haven't performed the action yet.
+(10) Click[Support AnkiDroid]: You haven't performed the action yet.
+(11) Click[Close drawer]: You perform the action 3 times, and the action goes to page "Reviewer"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have not been performed before (Click[< 6 m], Click[< 10 m], Click[Card browser], Click[Statistics], Click[Settings], Click[Help], Click[Support AnkiDroid]) or go back to previous page.

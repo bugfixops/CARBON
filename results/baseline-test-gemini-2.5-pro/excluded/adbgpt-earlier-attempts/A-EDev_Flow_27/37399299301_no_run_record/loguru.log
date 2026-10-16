@@ -1,0 +1,63 @@
+2026-10-06 01:31:55.043 | INFO     | ChatGPT:infer:46 - Available actions: [tap, input, scroll, double tap, long tap]
+Action primitives: [Tap] [Component], [Scroll] [Direction], [Input] [Component] [Value], [Double-tap] [Component], [Long-tap] [Component]
+Question: Extract the entity from the following ->
+    "1. Open bookmark 
+    2. Tap "add new bookmark" and create a name with "a" 
+    3. Create another one with name "b" 
+    4. Click "a" 
+    5. Go back to bookmark after changing name "a" to "b" 
+    6. App crash"
+Answer: 
+    1st step is "Open bookmark". The action is "open" and the target component is "bookmark". However, there is no explicit "open" in the Available actions list. Therefore, we select the closest semantic action "tap". Following the Action primitives, the entity of the step is [Tap] ["bookmark"].
+    2nd step is "Tap 'add new bookmark' and create a name with 'a'". Due to the conjunction word "and", this step can be separated into two sub-steps, "Tap 'add new bookmark'" and "create a name with 'a'". For the first sub-step, following the Action primitives, the entity is [Tap] ["add new bookmark"]. For the second sub-step, there is no explicit "create" in the Available actions list. Therefore, we select the closest semantic action "input". Following the Action primitives, the entity of the sub-step is [Input] ["name"] ["a"].
+    3rd step is "Create another one with name 'b'". Due to its semantic meaning, this step is meant to repeat the previous steps to add another bookmark with name "b". Therefore, it should actually be the 2nd step, that is [Tap] ["add new bookmark"] and [Input] ["name"] ["b"].
+    4th step is "Click 'a'". The action is "click" and the target component is "a". However, there is no explicit "click" in the Available actions list. Therefore, we select the closest semantic action "tap". Following the Action primitives, the entity of the step is [Tap] ["a"].
+    5th step is "Go back to bookmark after changing name 'a' to 'b'". Due to the conjunction word "after", this step can be separated into two sub-steps, "Go back to bookmark" and "change name 'a' to 'b'". The conjunction word "after" also alters the temporal order of the sub-steps, that "change name 'a' to 'b'" should be executed first, followed by "go back to bookmark". For the first sub-step, there is no explicit "change" in the Available actions list. Therefore, we select the closest semantic action "input". Following the Action primitives, the entity of the sub-step is [Input] ["name"] ["b"]. For the second sub-step, there is no explicit "go back" in the Available actions list. Therefore, we select the closest semantic action "tap". Following the Action primitives, the entity of the sub-step is [Tap] ["back"].
+    6th step is "App crash". This step does not have any operations.
+    Overall, the extracted S2R entities are: 
+    1. [Tap] ["bookmark"]
+    2. [Tap] ["add new bookmark"]
+    3. [Input] ["name"] ["a"]
+    4. [Tap] ["add new bookmark"]
+    5. [Input] ["name"] ["b"]
+    6. [Tap] ["a"]
+    7. [Input] ["name"] ["b"]
+    8. [Tap] ["back"]
+
+    Question: Extract the entity from the following -> "Fullscreen gesture conflict — brightness/volume gestures trigger when opening control panel
+
+App: A-EDev/Flow
+Version: 1.3.4
+Issue: https://github.com/A-EDev/Flow/issues/27
+APK: https://github.com/A-EDev/Flow/releases/download/v2.0.5/flow-foss.apk
+APK Tag: v2.0.5
+Gestures: swipe, volume gesture, brightness gesture
+
+Steps to Reproduce:
+  1. Play a video in fullscreen mode
+  2. Try to open the control panel (swipe down from top for notifications)
+
+Expected Behavior:
+  The notification/control panel should open without triggering brightness or volume gestures.
+
+Actual Behavior:
+  When trying to use the control panel to see notifications while in fullscreen mode, the gestures for brightness and volume get triggered instead. The gesture sensitivity is too high and doesn't distinguish between a notification panel pull and a media control swipe.
+
+--- Full Issue Body ---
+When you want to use the control panel to see your notifications, etc., and you are in full-screen mode, the gestures for brightness and volume get triggered. It might be a good idea to check the sensitivity of these gestures."
+ Answer:
+2026-10-06 01:32:07.647 | INFO     | ChatGPT:infer:50 - 1st step is "Play a video in fullscreen mode". Due to the conjunction word "in", this step can be separated into two sub-steps, "Play a video" and "go to fullscreen mode". For the first sub-step, there is no explicit action. Therefore, we select the closest semantic action "tap". Following the Action primitives, the entity of the sub-step is [Tap] ["video"]. For the second sub-step, there is no explicit action. Therefore, we select the closest semantic action "tap". Following the Action primitives, the entity of the sub-step is [Tap] ["fullscreen button"].
+2nd step is "Try to open the control panel (swipe down from top for notifications)". The action is "swipe" and the direction is "down". However, there is no explicit "swipe" in the Available actions list. Therefore, we select the closest semantic action "scroll". Following the Action primitives, the entity of the step is [Scroll] ["down"].
+Overall, the extracted S2R entities are:
+1. [Tap] ["video"]
+2. [Tap] ["fullscreen button"]
+3. [Scroll] ["down"]
+2026-10-06 01:32:07.648 | INFO     | extract_step:infer:89 - 
+1. [Tap] ["video"] 
+  >>>> STEP-1: [Tap] ["video"] [None]
+2026-10-06 01:32:07.649 | INFO     | extract_step:infer:89 - 
+2. [Tap] ["fullscreen button"] 
+  >>>> STEP-2: [Tap] ["fullscreen button"] [None]
+2026-10-06 01:32:07.649 | INFO     | extract_step:infer:89 - 
+3. [Scroll] ["down"] 
+  >>>> STEP-3: [Scroll] ["down"] [None]

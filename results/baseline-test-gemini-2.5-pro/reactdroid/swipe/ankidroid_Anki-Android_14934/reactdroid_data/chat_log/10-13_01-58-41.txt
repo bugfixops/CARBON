@@ -1,0 +1,129 @@
+##########syst1##########
+As an experienced mobile app tester, your task is to try and reproduce a crash on the app based on the crash description. I'll provide you with the current page of the app and the available actions you can perform (interactions with the app's GUI widgets). You need to select and perform the action that best matches the crash description so as to reproduce the crash in a step-by-step manner.
+
+There are three types of actions on the page:
+1. Click[widget name]: You will click a button on the page called "widget name".
+2. Long press[widget name]: You will long press a button on the page called "widget name".
+3. Input[widget name]: You will type something into a input box on the page called "widget name".
+
+Use the following format:
+
+<Reported crash>: a one-sentence description of the crash that you must reproduce
+<Observation>: I will tell you the current page of the app and the available actions you can perform
+<Thought>: you should always think about what to do
+<Action>: you should answer the number of the chosen action. (e.g., you should answer "<Action>: 3")
+... (then I will tell you the new Observation after the action you choose. This Observation/Thought/Action can repeat N times until the crash is reproduced)
+
+Note that your answer should be only one <Thought> and one <Action>.
+##########user2##########
+Let's begin!
+<Reported crash>: talkback can't see sometimes front, sometimes back and sometimes both sides of anki cards during a study session.
+##########user3##########
+<Observation>: In the previous step, you clicked on the "Open drawer" button, and navigated to the "Reviewer" page, which you have visited 6 times. On "Reviewer" page, you need to choose one of the following 9 actions to perform:
+(1) Click[Show answer]: You perform the action 2 times, and the action goes to page "Reviewer"
+(2) Back to previous page: You perform the action 1 times, and the action goes to page "Reviewer"
+(3) Click[Decks]: You perform the action 1 times, and the action goes to page "AnkiDroid"
+(4) Click[Card browser]: You haven't performed the action yet.
+(5) Click[Statistics]: You haven't performed the action yet.
+(6) Click[Settings]: You haven't performed the action yet.
+(7) Click[Help]: You haven't performed the action yet.
+(8) Click[Support AnkiDroid]: You haven't performed the action yet.
+(9) Click[Close drawer]: You perform the action 1 times, and the action goes to page "Reviewer"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have not been performed before (Click[Card browser], Click[Statistics], Click[Settings], Click[Help], Click[Support AnkiDroid]) or go back to previous page.
+##########assi4##########
+<Thought>: I have successfully opened the drawer, and the UI is in its familiar broken state. My plan is to navigate away from the review session using a drawer link, hoping to corrupt the session state, and then trigger the crash by starting a new review.
+The most logical navigation target to leave the review session is "Decks". This will take me back to the main deck list screen. From there, I can start a new review, which I hypothesize will then crash because it will try to load a corrupted state from the session I'm about to abandon.
+<Action>: 3
+##########user5##########
+<Observation>: In the previous step, you clicked on the "Decks" button, and navigated to the "AnkiDroid" page, which you have visited 4 times. On "AnkiDroid" page, you need to choose one of the following 10 actions to perform:
+(1) Click[More options]: You haven't performed the action yet.
+(2) Click[Add]: You haven't performed the action yet.
+(3) Back to previous page: You haven't performed the action yet.
+(4) Click[Default]: You perform the action 4 times, and the action goes to page "Reviewer"
+(5) Long press[Default]: You haven't performed the action yet.
+(6) Click[HelloWorld!]: You haven't performed the action yet.
+(7) Long press[HelloWorld!]: You haven't performed the action yet.
+(8) Click[Sync]: You haven't performed the action yet.
+(9) Click[Open drawer]: You haven't performed the action yet.
+(10) Click[Open the deck overview page containing ...]: You haven't performed the action yet.
+##########assi6##########
+<Thought>: I have successfully navigated back to the "AnkiDroid" (deck list) page from the broken reviewer state. My hypothesis is that the previous review session was not terminated cleanly and has left behind a corrupted state.
+Now, to trigger the crash, I need to start a new review session. The app will likely try to resume or initialize the reviewer with the corrupted state from the previous, improperly-exited session. This is where I expect the `NullPointerException` to occur, as the app tries to access a card view that was not properly cleaned up or re-initialized.
+The most direct way to start a new review session is to click on a deck. I've been using the "Default" deck throughout this process. Clicking on "Default" will start the review for that deck.
+<Action>: 4
+##########user7##########
+<Observation>: In the previous step, you clicked on the "Default" button, and navigated to the "Reviewer" page, which you have visited 14 times. On "Reviewer" page, you need to choose one of the following 7 actions to perform:
+(1) Click[Show answer]: You perform the action 4 times, and the action goes to page "Reviewer"
+(2) Click[More options]: You perform the action 1 times, and the action goes to page "Reviewer"
+(3) Back to previous page: You perform the action 1 times, and the action goes to page "AnkiDroid"
+(4) Click[Flag card]: You perform the action 1 times, and the action goes to page "menu (No Flag, Red, Orange, Green, Blue, Pink, Turquoise, Purple)"
+(5) Long press[Flag card]: You perform the action 1 times, and the action goes to page "Reviewer"
+(6) Click[Open drawer]: You perform the action 3 times, and the action goes to page "Reviewer"
+(7) Long press[touch layer]: You perform the action 2 times, and the action goes to page "Reviewer"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have only been performed a few times (Back to previous page, Click[More options], Click[Flag card], Long press[Flag card], Click[Open drawer], Long press[touch layer]) or go back to previous page.
+##########assi8##########
+<Thought>: My previous attempt to crash the app by starting a new review session didn't work on initialization. However, I'm now in a new review session that was started immediately after I improperly exited a previous one. My hypothesis is that while the reviewer UI loaded, the underlying state for the current card (`mCard`) is null or corrupted.
+The crash happens when the app tries to access the card's view, which is a `NullPointerException` on `mCard.getCard()`. A very common time to access the card's data is when transitioning from the question to the answer.
+Therefore, the most logical action to trigger this crash is to ask the app to show the answer. This will force it to access the (potentially null) card object to retrieve and display the answer content. If my hypothesis is correct, this action will cause the crash.
+<Action>: 1
+##########user9##########
+<Observation>: In the previous step, you clicked on the "Show answer" button, and navigated to the "Reviewer" page, which you have visited 8 times. On "Reviewer" page, you need to choose one of the following 10 actions to perform:
+(1) Click[More options]: You perform the action 1 times, and the action goes to page "Reviewer"
+(2) Back to previous page: You haven't performed the action yet.
+(3) Click[< 1 m]: You perform the action 2 times, and the action goes to page "Reviewer"
+(4) Click[< 6 m]: You perform the action 1 times, and the action goes to page "Reviewer"
+(5) Click[< 10 m]: You haven't performed the action yet.
+(6) Click[5 d]: You haven't performed the action yet.
+(7) Long press[HelloWorld!]: You perform the action 1 times, and the action goes to page "Reviewer"
+(8) Click[Flag card]: You haven't performed the action yet.
+(9) Long press[Flag card]: You haven't performed the action yet.
+(10) Click[Open drawer]: You perform the action 2 times, and the action goes to page "Reviewer"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have not been performed before (Back to previous page, Click[< 10 m], Click[5 d], Click[Flag card], Long press[Flag card]) or go back to previous page.
+##########assi10##########
+<Thought>: I clicked "Show answer" and the app didn't crash, which means the current card object is valid. My hypothesis is that the state corruption from improperly exiting the previous session will manifest when the app tries to load the *next* card. This happens after I provide an answer for the current card. By clicking one of the answer buttons (like "Again", "Good", or "Easy"), I will trigger the transition to the next card. It is during this transition that the app might try to access a null card object, leading to the crash. I will choose the first available answer option, "< 1 m", to proceed to the next card.
+<Action>: 3
+##########user11##########
+<Observation>: In the previous step, you clicked on the "< 1 m" button, and navigated to the "Reviewer" page, which you have visited 15 times. On "Reviewer" page, you need to choose one of the following 7 actions to perform:
+(1) Click[Show answer]: You perform the action 5 times, and the action goes to page "Reviewer"
+(2) Click[More options]: You perform the action 1 times, and the action goes to page "Reviewer"
+(3) Back to previous page: You perform the action 1 times, and the action goes to page "AnkiDroid"
+(4) Click[Flag card]: You perform the action 1 times, and the action goes to page "menu (No Flag, Red, Orange, Green, Blue, Pink, Turquoise, Purple)"
+(5) Long press[Flag card]: You perform the action 1 times, and the action goes to page "Reviewer"
+(6) Click[Open drawer]: You perform the action 3 times, and the action goes to page "Reviewer"
+(7) Long press[touch layer]: You perform the action 2 times, and the action goes to page "Reviewer"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have only been performed a few times (Back to previous page, Click[More options], Click[Flag card], Long press[Flag card], Click[Open drawer], Long press[touch layer]) or go back to previous page.
+##########assi12##########
+<Thought>: I've tried a full cycle: open drawer -> navigate away -> start new review -> show answer -> answer card. This brought me to a new card, but still no crash. The app seems to be recovering from the state corruption.
+Let's re-examine the sequence.
+1. Start review.
+2. Open drawer (breaks UI).
+3. Navigate away via drawer link ("Decks").
+4. Start new review.
+5. Show answer.
+6. Answer card.
+This didn't work. The state seems to be correctly re-initialized when starting the new review.
+What if the corruption happens not when starting a *new* review, but when returning to the *interrupted* one? The app might be holding onto the broken reviewer activity in the back stack.
+Let's try this sequence:
+1. Start review (I'm already in one, so this step is done).
+2. Open drawer to break the UI.
+3. Navigate away via drawer link ("Decks").
+4. Instead of starting a *new* review, use the system "Back" button to return to the previous activity. This should bring me back to the broken reviewer session I just left.
+The app might crash upon resuming this broken activity, as it tries to re-render the card that was displayed when I navigated away.
+So, the plan is:
+1. Open drawer.
+2. Navigate to "Decks".
+3. Press "Back".
+I'm currently on the reviewer page. First step is to open the drawer.
+<Action>: 6
+##########user13##########
+<Observation>: In the previous step, you clicked on the "Open drawer" button, and navigated to the "Reviewer" page, which you have visited 7 times. On "Reviewer" page, you need to choose one of the following 9 actions to perform:
+(1) Click[Show answer]: You perform the action 2 times, and the action goes to page "Reviewer"
+(2) Back to previous page: You perform the action 1 times, and the action goes to page "Reviewer"
+(3) Click[Decks]: You perform the action 2 times, and the action goes to page "AnkiDroid"
+(4) Click[Card browser]: You haven't performed the action yet.
+(5) Click[Statistics]: You haven't performed the action yet.
+(6) Click[Settings]: You haven't performed the action yet.
+(7) Click[Help]: You haven't performed the action yet.
+(8) Click[Support AnkiDroid]: You haven't performed the action yet.
+(9) Click[Close drawer]: You perform the action 1 times, and the action goes to page "Reviewer"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have not been performed before (Click[Card browser], Click[Statistics], Click[Settings], Click[Help], Click[Support AnkiDroid]) or go back to previous page.

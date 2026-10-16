@@ -1,0 +1,310 @@
+2026-10-06 06:55:11.379 | INFO     | ChatGPT:infer:46 - Available actions: [tap, input, scroll, double tap, long tap]
+Action primitives: [Tap] [Component], [Scroll] [Direction], [Input] [Component] [Value], [Double-tap] [Component], [Long-tap] [Component]
+Question: Extract the entity from the following ->
+    "1. Open bookmark 
+    2. Tap "add new bookmark" and create a name with "a" 
+    3. Create another one with name "b" 
+    4. Click "a" 
+    5. Go back to bookmark after changing name "a" to "b" 
+    6. App crash"
+Answer: 
+    1st step is "Open bookmark". The action is "open" and the target component is "bookmark". However, there is no explicit "open" in the Available actions list. Therefore, we select the closest semantic action "tap". Following the Action primitives, the entity of the step is [Tap] ["bookmark"].
+    2nd step is "Tap 'add new bookmark' and create a name with 'a'". Due to the conjunction word "and", this step can be separated into two sub-steps, "Tap 'add new bookmark'" and "create a name with 'a'". For the first sub-step, following the Action primitives, the entity is [Tap] ["add new bookmark"]. For the second sub-step, there is no explicit "create" in the Available actions list. Therefore, we select the closest semantic action "input". Following the Action primitives, the entity of the sub-step is [Input] ["name"] ["a"].
+    3rd step is "Create another one with name 'b'". Due to its semantic meaning, this step is meant to repeat the previous steps to add another bookmark with name "b". Therefore, it should actually be the 2nd step, that is [Tap] ["add new bookmark"] and [Input] ["name"] ["b"].
+    4th step is "Click 'a'". The action is "click" and the target component is "a". However, there is no explicit "click" in the Available actions list. Therefore, we select the closest semantic action "tap". Following the Action primitives, the entity of the step is [Tap] ["a"].
+    5th step is "Go back to bookmark after changing name 'a' to 'b'". Due to the conjunction word "after", this step can be separated into two sub-steps, "Go back to bookmark" and "change name 'a' to 'b'". The conjunction word "after" also alters the temporal order of the sub-steps, that "change name 'a' to 'b'" should be executed first, followed by "go back to bookmark". For the first sub-step, there is no explicit "change" in the Available actions list. Therefore, we select the closest semantic action "input". Following the Action primitives, the entity of the sub-step is [Input] ["name"] ["b"]. For the second sub-step, there is no explicit "go back" in the Available actions list. Therefore, we select the closest semantic action "tap". Following the Action primitives, the entity of the sub-step is [Tap] ["back"].
+    6th step is "App crash". This step does not have any operations.
+    Overall, the extracted S2R entities are: 
+    1. [Tap] ["bookmark"]
+    2. [Tap] ["add new bookmark"]
+    3. [Input] ["name"] ["a"]
+    4. [Tap] ["add new bookmark"]
+    5. [Input] ["name"] ["b"]
+    6. [Tap] ["a"]
+    7. [Input] ["name"] ["b"]
+    8. [Tap] ["back"]
+
+    Question: Extract the entity from the following -> "Two finger detection need improvement 
+
+App: saber-notes/saber
+Version: 0.5.2
+Issue: https://github.com/saber-notes/saber/issues/192
+APK: https://github.com/saber-notes/saber/releases/download/v0.5.2/Saber.apk
+APK Tag: v0.5.2
+Gestures: zoom in, zoom, two finger
+Primary Gesture: pinch_zoom
+
+Steps to Reproduce:
+  1. Toggle Finger Drawing mode
+  2. Select pen
+  3. Zoom in
+  4. Then Use two finger to navigate on page
+  5. You will be dot will be created on page **Expected behavior** Tools should not working during navigation on zoomed page **Screenshots** https://user-images.githubusercontent.com/84625092/210138829-99238edb-cf28-46ab-a649-5f5b15124585.mp4 **Device (please complete the following information):** - Device: Redmi 9t - OS: Android 13 - Version: 0.5.2 - Browser (if applicable):
+
+Expected Behavior:
+  (see full report below)
+
+Actual Behavior:
+  (see full report below)
+
+--- Full Issue Body ---
+**Describe the bug**
+As navigation is done by 2 finger gesture, it works but leave dots specially with pen. Lets say moving with eraser it might remove object
+
+**To Reproduce**
+Steps to reproduce the behavior:
+1. Toggle Finger Drawing mode
+2. Select pen
+3. Zoom in 
+4. Then Use two finger to navigate on page
+5. You will be dot will be created on page
+
+**Expected behavior**
+Tools should not working during navigation on zoomed page
+
+**Screenshots**
+
+https://user-images.githubusercontent.com/84625092/210138829-99238edb-cf28-46ab-a649-5f5b15124585.mp4
+
+
+**Device (please complete the following information):**
+ - Device: Redmi 9t
+ - OS: Android 13
+ - Version: 0.5.2
+ - Browser (if applicable):"
+ Answer:
+2026-10-06 06:55:56.792 | INFO     | ChatGPT:infer:50 - 1st step is "Toggle Finger Drawing mode". The action is "Toggle" and the target component is "Finger Drawing mode". However, there is no explicit "Toggle" in the Available actions list. Therefore, we select the closest semantic action "tap". Following the Action primitives, the entity of the step is [Tap] ["Finger Drawing mode"].
+2nd step is "Select pen". The action is "Select" and the target component is "pen". However, there is no explicit "Select" in the Available actions list. Therefore, we select the closest semantic action "tap". Following the Action primitives, the entity of the step is [Tap] ["pen"].
+3rd step is "Zoom in". The action is "Zoom in". This is a gesture. Among the available actions, "double tap" is a common action to perform a zoom-in operation on a page or image. Therefore, we select the closest semantic action "double tap". The component is the "page" being zoomed. Following the Action primitives, the entity of the step is [Double tap] ["page"].
+4th step is "Then Use two finger to navigate on page". The action is "navigate on page", which is semantically equivalent to "scroll". The direction is not specified, so we can choose a representative direction like "down". Following the Action primitives, the entity of the step is [Scroll] ["down"].
+5th step is "You will be dot will be created on page". This step describes an outcome, not a user action, so it is ignored.
+
+Overall, the extracted S2R entities are:
+1. [Tap] ["Finger Drawing mode"]
+2. [Tap] ["pen"]
+3. [Double tap] ["page"]
+4. [Scroll] ["down"]
+2026-10-06 06:55:56.793 | INFO     | extract_step:infer:89 - 
+1. [Tap] ["Finger Drawing mode"] 
+  >>>> STEP-1: [Tap] ["Finger Drawing mode"] [None]
+2026-10-06 06:55:56.800 | INFO     | extract_step:infer:89 - 
+2. [Tap] ["pen"] 
+  >>>> STEP-2: [Tap] ["pen"] [None]
+2026-10-06 06:55:57.059 | DEBUG    | __main__:<module>:74 - [Tap] ["Finger Drawing mode"]
+2026-10-06 06:56:39.863 | INFO     | guided_replay:encoding:16 - reading hierarchy tree from step_0_hierarchy.xml ...
+2026-10-06 06:56:39.926 | INFO     | guided_replay:encoding:26 - encoding the ui elements in hierarchy tree...
+2026-10-06 06:56:39.926 | INFO     | ChatGPT:infer:46 - Question:
+GUI screen: 
+<html>
+  <button id=0 class="" alt="open drawer" style="width:196px; height:196px; left:0px; top:84px"></button>
+  <button id=1 class="chat_actionbar" alt="Chat" style="width:168px; height:168px; left:1272px; top:98px"></button>
+  <p id=2 class="toolbar_title" alt="" style="width:1076px; height:76px; left:196px; top:144px">Log In</p>
+  <p id=3 class="" alt="" style="width:1440px; height:98px; left:0px; top:280px">LOG IN WITH YOUR EMAIL</p>
+  <input id=4 class="et_new_login_username" alt="" style="width:1334px; height:105px; left:53px; top:442px"></input>
+  <input id=5 class="et_new_login_password" alt="" style="width:1334px; height:105px; left:53px; top:565px"></input>
+  <button id=6 class="login_username_btn" alt="" style="width:1334px; height:140px; left:53px; top:688px">LOGIN</button>
+  <p id=7 class="et_forgot_password" alt="" style="width:341px; height:57px; left:53px; top:881px">Forgot Password?</p>
+  <p id=8 class="et_forgot_email" alt="" style="width:346px; height:57px; left:1041px; top:881px">Forgot your email?</p>
+  <input id=9 type="checkbox" name="login_save_chk">
+  <label for=9 style="width:580px; height:76px; left:53px; top:991px">Keep Me Logged In</label>
+  <p id=10 class="login_fb_text" alt="" style="width:1440px; height:98px; left:0px; top:1155px">OR LOG IN WITH FACEBOOK</p>
+  <button id=11 class="login_fb_button" alt="" style="width:1334px; height:131px; left:53px; top:1306px">Log in with Facebook</button>
+  <p id=12 class="create_account_button" alt="" style="width:287px; height:57px; left:1100px; top:1490px">Create Account</p>
+</html>
+
+If I need to [Tap] ["Sign in"], which component id should I operate on the GUI? ->
+Answer: There is no explicit "Sign in" component in the current GUI screen. However, there is a semantic closest component "Log in" button. The id attribute of "Log in" component is 6. So, we could potentially operate on [id=6] in the screen.
+Question:
+GUI screen: 
+<html>
+  <button id=0 class="" alt="open drawer" style="width:196px; height:196px; left:0px; top:84px"></button>
+  <button id=1 class="chat_actionbar" alt="Chat" style="width:168px; height:168px; left:1272px; top:98px"></button>
+  <p id=2 class="toolbar_title" alt="" style="width:1076px; height:76px; left:196px; top:144px">Log In</p>
+  <p id=3 class="" alt="" style="width:1440px; height:98px; left:0px; top:280px">LOG IN WITH YOUR EMAIL</p>
+  <input id=4 class="et_new_login_username" alt="" style="width:1334px; height:105px; left:53px; top:442px"></input>
+  <input id=5 class="et_new_login_password" alt="" style="width:1334px; height:105px; left:53px; top:565px"></input>
+  <button id=6 class="login_username_btn" alt="" style="width:1334px; height:140px; left:53px; top:688px">LOGIN</button>
+  <p id=7 class="et_forgot_password" alt="" style="width:341px; height:57px; left:53px; top:881px">Forgot Password?</p>
+  <p id=8 class="et_forgot_email" alt="" style="width:346px; height:57px; left:1041px; top:881px">Forgot your email?</p>
+  <input id=9 type="checkbox" name="login_save_chk">
+  <label for=9 style="width:580px; height:76px; left:53px; top:991px">Keep Me Logged In</label>
+  <p id=10 class="login_fb_text" alt="" style="width:1440px; height:98px; left:0px; top:1155px">OR LOG IN WITH FACEBOOK</p>
+  <button id=11 class="login_fb_button" alt="" style="width:1334px; height:131px; left:53px; top:1306px">Log in with Facebook</button>
+  <p id=12 class="create_account_button" alt="" style="width:287px; height:57px; left:1100px; top:1490px">Create Account</p>
+</html>
+
+If I need to [Tap] ["Settings"], which component id should I operate on the GUI? ->
+Answer: There is no explicit and semantic similar "Settings" component in the current GUI screen, so it appears a [MISSING] step. However, "Settings" could be related to the "drawer" button in the screen. The id attribute of "drawer" component is 0. So, we could potentially operate on [id=0] component in the screen.
+Question:
+GUI screen: 
+<html>
+  <button id=0"></button>
+  <p id=1 class="clock">6:55</p>
+  <img id=2 alt="Android System notification: " />
+  <button id=3 class="battery">Battery charging, 100 percent.</button>
+  <button id=4 class="mobile_combo">Phone signal full.</button>
+  <img id=5 class="wifi_signal" alt="Wifi signal full." />
+  <button id=6">Update available</button>
+  <button id=7">A new version of the app is available.</button>
+  <button id=8">Dismiss</button>
+  <button id=9">Update</button>
+</html>
+
+If I need to [Tap] ["Finger Drawing mode"], which component id should I operate on the GUI? ->
+Answer:
+2026-10-06 06:56:46.241 | INFO     | ChatGPT:infer:50 - Answer: There is no explicit and semantic similar "Finger Drawing mode" component in the current GUI screen, so it appears a [MISSING] step.
+2026-10-06 06:56:46.243 | INFO     | __main__:<module>:110 - Operate on id=None in the GUI screen.
+2026-10-06 06:56:47.481 | INFO     | __main__:<module>:113 - No component found!
+2026-10-06 06:56:47.481 | DEBUG    | __main__:<module>:74 - [Tap] ["Finger Drawing mode"]
+2026-10-06 06:56:53.872 | INFO     | guided_replay:encoding:16 - reading hierarchy tree from step_0_hierarchy.xml ...
+2026-10-06 06:56:54.102 | INFO     | guided_replay:encoding:26 - encoding the ui elements in hierarchy tree...
+2026-10-06 06:56:54.103 | INFO     | ChatGPT:infer:46 - Question:
+GUI screen: 
+<html>
+  <button id=0 class="" alt="open drawer" style="width:196px; height:196px; left:0px; top:84px"></button>
+  <button id=1 class="chat_actionbar" alt="Chat" style="width:168px; height:168px; left:1272px; top:98px"></button>
+  <p id=2 class="toolbar_title" alt="" style="width:1076px; height:76px; left:196px; top:144px">Log In</p>
+  <p id=3 class="" alt="" style="width:1440px; height:98px; left:0px; top:280px">LOG IN WITH YOUR EMAIL</p>
+  <input id=4 class="et_new_login_username" alt="" style="width:1334px; height:105px; left:53px; top:442px"></input>
+  <input id=5 class="et_new_login_password" alt="" style="width:1334px; height:105px; left:53px; top:565px"></input>
+  <button id=6 class="login_username_btn" alt="" style="width:1334px; height:140px; left:53px; top:688px">LOGIN</button>
+  <p id=7 class="et_forgot_password" alt="" style="width:341px; height:57px; left:53px; top:881px">Forgot Password?</p>
+  <p id=8 class="et_forgot_email" alt="" style="width:346px; height:57px; left:1041px; top:881px">Forgot your email?</p>
+  <input id=9 type="checkbox" name="login_save_chk">
+  <label for=9 style="width:580px; height:76px; left:53px; top:991px">Keep Me Logged In</label>
+  <p id=10 class="login_fb_text" alt="" style="width:1440px; height:98px; left:0px; top:1155px">OR LOG IN WITH FACEBOOK</p>
+  <button id=11 class="login_fb_button" alt="" style="width:1334px; height:131px; left:53px; top:1306px">Log in with Facebook</button>
+  <p id=12 class="create_account_button" alt="" style="width:287px; height:57px; left:1100px; top:1490px">Create Account</p>
+</html>
+
+If I need to [Tap] ["Sign in"], which component id should I operate on the GUI? ->
+Answer: There is no explicit "Sign in" component in the current GUI screen. However, there is a semantic closest component "Log in" button. The id attribute of "Log in" component is 6. So, we could potentially operate on [id=6] in the screen.
+Question:
+GUI screen: 
+<html>
+  <button id=0 class="" alt="open drawer" style="width:196px; height:196px; left:0px; top:84px"></button>
+  <button id=1 class="chat_actionbar" alt="Chat" style="width:168px; height:168px; left:1272px; top:98px"></button>
+  <p id=2 class="toolbar_title" alt="" style="width:1076px; height:76px; left:196px; top:144px">Log In</p>
+  <p id=3 class="" alt="" style="width:1440px; height:98px; left:0px; top:280px">LOG IN WITH YOUR EMAIL</p>
+  <input id=4 class="et_new_login_username" alt="" style="width:1334px; height:105px; left:53px; top:442px"></input>
+  <input id=5 class="et_new_login_password" alt="" style="width:1334px; height:105px; left:53px; top:565px"></input>
+  <button id=6 class="login_username_btn" alt="" style="width:1334px; height:140px; left:53px; top:688px">LOGIN</button>
+  <p id=7 class="et_forgot_password" alt="" style="width:341px; height:57px; left:53px; top:881px">Forgot Password?</p>
+  <p id=8 class="et_forgot_email" alt="" style="width:346px; height:57px; left:1041px; top:881px">Forgot your email?</p>
+  <input id=9 type="checkbox" name="login_save_chk">
+  <label for=9 style="width:580px; height:76px; left:53px; top:991px">Keep Me Logged In</label>
+  <p id=10 class="login_fb_text" alt="" style="width:1440px; height:98px; left:0px; top:1155px">OR LOG IN WITH FACEBOOK</p>
+  <button id=11 class="login_fb_button" alt="" style="width:1334px; height:131px; left:53px; top:1306px">Log in with Facebook</button>
+  <p id=12 class="create_account_button" alt="" style="width:287px; height:57px; left:1100px; top:1490px">Create Account</p>
+</html>
+
+If I need to [Tap] ["Settings"], which component id should I operate on the GUI? ->
+Answer: There is no explicit and semantic similar "Settings" component in the current GUI screen, so it appears a [MISSING] step. However, "Settings" could be related to the "drawer" button in the screen. The id attribute of "drawer" component is 0. So, we could potentially operate on [id=0] component in the screen.
+Question:
+GUI screen: 
+<html>
+  <p id=0 class="clock">6:56</p>
+  <img id=1 alt="Android System notification: " />
+  <button id=2 class="battery">Battery charging, 100 percent.</button>
+  <button id=3 class="mobile_combo">Phone signal full.</button>
+  <img id=4 class="wifi_signal" alt="Wifi signal full." />
+  <button id=5"></button>
+  <button id=6">Recent notes</button>
+  <button id=7">Welcome to Saber</button>
+  <button id=8">Tap the + button to create a new note</button>
+  <button id=9"></button>
+  <button id=10">Home
+Tab 1 of 4</button>
+  <button id=11">Browse
+Tab 2 of 4</button>
+  <button id=12">Whiteboard
+Tab 3 of 4</button>
+  <button id=13">Settings
+Tab 4 of 4</button>
+</html>
+
+If I need to [Tap] ["Finger Drawing mode"], which component id should I operate on the GUI? ->
+Answer:
+2026-10-06 06:57:04.439 | INFO     | ChatGPT:infer:50 - Answer: There is no explicit and semantic similar "Finger Drawing mode" component in the current GUI screen, so it appears a [MISSING] step. However, "Finger Drawing mode" could be related to the "Whiteboard" button in the screen. The id attribute of "Whiteboard" component is 12. So, we could potentially operate on [id=12] component in the screen.
+2026-10-06 06:57:04.440 | INFO     | __main__:<module>:110 - Operate on id=12 in the GUI screen.
+2026-10-06 06:57:07.214 | DEBUG    | __main__:<module>:74 - [Tap] ["pen"]
+2026-10-06 06:57:08.595 | INFO     | guided_replay:encoding:16 - reading hierarchy tree from step_1_hierarchy.xml ...
+2026-10-06 06:57:09.130 | INFO     | guided_replay:encoding:26 - encoding the ui elements in hierarchy tree...
+2026-10-06 06:57:09.131 | INFO     | ChatGPT:infer:46 - Question:
+GUI screen: 
+<html>
+  <button id=0 class="" alt="open drawer" style="width:196px; height:196px; left:0px; top:84px"></button>
+  <button id=1 class="chat_actionbar" alt="Chat" style="width:168px; height:168px; left:1272px; top:98px"></button>
+  <p id=2 class="toolbar_title" alt="" style="width:1076px; height:76px; left:196px; top:144px">Log In</p>
+  <p id=3 class="" alt="" style="width:1440px; height:98px; left:0px; top:280px">LOG IN WITH YOUR EMAIL</p>
+  <input id=4 class="et_new_login_username" alt="" style="width:1334px; height:105px; left:53px; top:442px"></input>
+  <input id=5 class="et_new_login_password" alt="" style="width:1334px; height:105px; left:53px; top:565px"></input>
+  <button id=6 class="login_username_btn" alt="" style="width:1334px; height:140px; left:53px; top:688px">LOGIN</button>
+  <p id=7 class="et_forgot_password" alt="" style="width:341px; height:57px; left:53px; top:881px">Forgot Password?</p>
+  <p id=8 class="et_forgot_email" alt="" style="width:346px; height:57px; left:1041px; top:881px">Forgot your email?</p>
+  <input id=9 type="checkbox" name="login_save_chk">
+  <label for=9 style="width:580px; height:76px; left:53px; top:991px">Keep Me Logged In</label>
+  <p id=10 class="login_fb_text" alt="" style="width:1440px; height:98px; left:0px; top:1155px">OR LOG IN WITH FACEBOOK</p>
+  <button id=11 class="login_fb_button" alt="" style="width:1334px; height:131px; left:53px; top:1306px">Log in with Facebook</button>
+  <p id=12 class="create_account_button" alt="" style="width:287px; height:57px; left:1100px; top:1490px">Create Account</p>
+</html>
+
+If I need to [Tap] ["Sign in"], which component id should I operate on the GUI? ->
+Answer: There is no explicit "Sign in" component in the current GUI screen. However, there is a semantic closest component "Log in" button. The id attribute of "Log in" component is 6. So, we could potentially operate on [id=6] in the screen.
+Question:
+GUI screen: 
+<html>
+  <button id=0 class="" alt="open drawer" style="width:196px; height:196px; left:0px; top:84px"></button>
+  <button id=1 class="chat_actionbar" alt="Chat" style="width:168px; height:168px; left:1272px; top:98px"></button>
+  <p id=2 class="toolbar_title" alt="" style="width:1076px; height:76px; left:196px; top:144px">Log In</p>
+  <p id=3 class="" alt="" style="width:1440px; height:98px; left:0px; top:280px">LOG IN WITH YOUR EMAIL</p>
+  <input id=4 class="et_new_login_username" alt="" style="width:1334px; height:105px; left:53px; top:442px"></input>
+  <input id=5 class="et_new_login_password" alt="" style="width:1334px; height:105px; left:53px; top:565px"></input>
+  <button id=6 class="login_username_btn" alt="" style="width:1334px; height:140px; left:53px; top:688px">LOGIN</button>
+  <p id=7 class="et_forgot_password" alt="" style="width:341px; height:57px; left:53px; top:881px">Forgot Password?</p>
+  <p id=8 class="et_forgot_email" alt="" style="width:346px; height:57px; left:1041px; top:881px">Forgot your email?</p>
+  <input id=9 type="checkbox" name="login_save_chk">
+  <label for=9 style="width:580px; height:76px; left:53px; top:991px">Keep Me Logged In</label>
+  <p id=10 class="login_fb_text" alt="" style="width:1440px; height:98px; left:0px; top:1155px">OR LOG IN WITH FACEBOOK</p>
+  <button id=11 class="login_fb_button" alt="" style="width:1334px; height:131px; left:53px; top:1306px">Log in with Facebook</button>
+  <p id=12 class="create_account_button" alt="" style="width:287px; height:57px; left:1100px; top:1490px">Create Account</p>
+</html>
+
+If I need to [Tap] ["Settings"], which component id should I operate on the GUI? ->
+Answer: There is no explicit and semantic similar "Settings" component in the current GUI screen, so it appears a [MISSING] step. However, "Settings" could be related to the "drawer" button in the screen. The id attribute of "drawer" component is 0. So, we could potentially operate on [id=0] component in the screen.
+Question:
+GUI screen: 
+<html>
+  <p id=0 class="clock">6:57</p>
+  <img id=1 alt="Android System notification: " />
+  <button id=2 class="battery">Battery charging, 100 percent.</button>
+  <button id=3 class="mobile_combo">Phone signal full.</button>
+  <img id=4 class="wifi_signal" alt="Wifi signal full." />
+  <button id=5"></button>
+  <button id=6">Whiteboard</button>
+  <button id=7"></button>
+  <button id=8"></button>
+  <button id=9"></button>
+  <button id=10"></button>
+  <button id=11"></button>
+  <button id=12"></button>
+  <button id=13"></button>
+  <button id=14"></button>
+  <button id=15"></button>
+  <button id=16"></button>
+  <button id=17"></button>
+  <button id=18"></button>
+  <button id=19">Home
+Tab 1 of 4</button>
+  <button id=20">Browse
+Tab 2 of 4</button>
+  <button id=21">Whiteboard
+Tab 3 of 4</button>
+  <button id=22">Settings
+Tab 4 of 4</button>
+</html>
+
+If I need to [Tap] ["pen"], which component id should I operate on the GUI? ->
+Answer:
+2026-10-06 06:57:24.213 | INFO     | ChatGPT:infer:50 - Answer: There is no explicit and semantic similar "pen" component in the current GUI screen, so it appears a [MISSING] step. However, "pen" could be related to the 'unlabeled' button in the screen. The id attribute of 'unlabeled' component is 7. So, we could potentially operate on [id=7] component in the screen.
+2026-10-06 06:57:24.213 | INFO     | __main__:<module>:110 - Operate on id=7 in the GUI screen.

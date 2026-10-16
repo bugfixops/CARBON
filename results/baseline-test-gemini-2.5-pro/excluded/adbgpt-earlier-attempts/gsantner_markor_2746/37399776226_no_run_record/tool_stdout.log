@@ -1,0 +1,99 @@
+2026-10-06 02:42:22.628 | INFO     | ChatGPT:infer:46 - Available actions: [tap, input, scroll, double tap, long tap]
+Action primitives: [Tap] [Component], [Scroll] [Direction], [Input] [Component] [Value], [Double-tap] [Component], [Long-tap] [Component]
+Question: Extract the entity from the following ->
+    "1. Open bookmark 
+    2. Tap "add new bookmark" and create a name with "a" 
+    3. Create another one with name "b" 
+    4. Click "a" 
+    5. Go back to bookmark after changing name "a" to "b" 
+    6. App crash"
+Answer: 
+    1st step is "Open bookmark". The action is "open" and the target component is "bookmark". However, there is no explicit "open" in the Available actions list. Therefore, we select the closest semantic action "tap". Following the Action primitives, the entity of the step is [Tap] ["bookmark"].
+    2nd step is "Tap 'add new bookmark' and create a name with 'a'". Due to the conjunction word "and", this step can be separated into two sub-steps, "Tap 'add new bookmark'" and "create a name with 'a'". For the first sub-step, following the Action primitives, the entity is [Tap] ["add new bookmark"]. For the second sub-step, there is no explicit "create" in the Available actions list. Therefore, we select the closest semantic action "input". Following the Action primitives, the entity of the sub-step is [Input] ["name"] ["a"].
+    3rd step is "Create another one with name 'b'". Due to its semantic meaning, this step is meant to repeat the previous steps to add another bookmark with name "b". Therefore, it should actually be the 2nd step, that is [Tap] ["add new bookmark"] and [Input] ["name"] ["b"].
+    4th step is "Click 'a'". The action is "click" and the target component is "a". However, there is no explicit "click" in the Available actions list. Therefore, we select the closest semantic action "tap". Following the Action primitives, the entity of the step is [Tap] ["a"].
+    5th step is "Go back to bookmark after changing name 'a' to 'b'". Due to the conjunction word "after", this step can be separated into two sub-steps, "Go back to bookmark" and "change name 'a' to 'b'". The conjunction word "after" also alters the temporal order of the sub-steps, that "change name 'a' to 'b'" should be executed first, followed by "go back to bookmark". For the first sub-step, there is no explicit "change" in the Available actions list. Therefore, we select the closest semantic action "input". Following the Action primitives, the entity of the sub-step is [Input] ["name"] ["b"]. For the second sub-step, there is no explicit "go back" in the Available actions list. Therefore, we select the closest semantic action "tap". Following the Action primitives, the entity of the sub-step is [Tap] ["back"].
+    6th step is "App crash". This step does not have any operations.
+    Overall, the extracted S2R entities are: 
+    1. [Tap] ["bookmark"]
+    2. [Tap] ["add new bookmark"]
+    3. [Input] ["name"] ["a"]
+    4. [Tap] ["add new bookmark"]
+    5. [Input] ["name"] ["b"]
+    6. [Tap] ["a"]
+    7. [Input] ["name"] ["b"]
+    8. [Tap] ["back"]
+
+    Question: Extract the entity from the following -> "Markor does not recognize URL/link anymore
+
+App: gsantner/markor
+Version: 2.15.2
+Issue: https://github.com/gsantner/markor/issues/2746
+APK: https://github.com/gsantner/markor/releases/download/v2.15.2/net.gsantner.markor-v161-2.15.2-flavorDefault-release.apk
+APK Tag: v2.15.2
+Gestures: double-tap, tap, touch, click, press
+
+Steps to Reproduce:
+  1. When I had a link on Markor, I just had to double-tap on the link for Markor to select the entire link.
+  2. After selecting it, to the left of the three lines, I had the icon of the app that should have opened the link. I clicked on that icon and Markor took me to the app.
+  3. For 10 days, none of this has been working, and I am encountering the problem, so I am forced to double-tap on the link, then press the three lines icon to select the entire link, then paste the link into another text editor in order to open the link
+  4. Markor 2.15.2
+  5. Paste a simple URL
+  6. double-tap on it: it should recognize which app should open the URL, but it does not
+
+Expected Behavior:
+  (see full report below)
+
+Actual Behavior:
+  (see full report below)
+
+--- Full Issue Body ---
+### ⚠️ This issue respects the following points: ⚠️
+
+- [x] This is a **bug**. Not a [question or feature request](https://github.com/gsantner/markor/issues/new/choose).
+- [x] The topic is **not** already reported at [Issues](https://github.com/gsantner/markor/issues?q=#js-issues-search). _(I've searched it)_.
+- [x] Markor **is** up to date. See [Releases](https://github.com/gsantner/markor/tags) for the latest version. Updates are available from [F-Droid](https://f-droid.org/en/packages/net.gsantner.markor/) and GitHub.
+- [x] The bug is still present in the latest development version (git master). (Please [download](https://nightly.link/gsantner/markor/workflows/build-android-project/master) and try the test version of Markor, named **Marder**. Don't worry; Markor and Marder appear as completely separate applications. You can install both side-by-side, and Markor settings are not touched. In case the issue is resolved there, you don't need to create a bug report. The change will be part of the next Markor update.)
+
+### Description
+
+Hello everyone,
+This is the first time I've commented on an issue on GitHub, so I hope I'm doing it right. I've also searched through the various issues and discussions to see if my problem has already been addressed, but I haven't found anything. So I'm opening a discussion.
+
+For the past ten days or so, I've been encountering a problem that I've never had in Markor v2.15.2 in years of use. Basically, if I have a link written in my txt file on my Galaxy A54, Markor doesn't recognize it as a link, so a double-tap doesn't recognize which app should open that link. Example:
+<screenshot below>
+Here I noticed three strange behaviors, all related:
+1. When I had a link on Markor, I just had to double-tap on the link for Markor to select the entire link.
+2. After selecting it, to the left of the three lines, I had the icon of the app that should have opened the link. I clicked on that icon and Markor took me to the app.
+3. For 10 days, none of this has been working, and I am encountering the problem, so I am forced to double-tap on the link, then press the three lines icon to select the entire link, then paste the link into another text editor in order to open the link
+
+All this despite the fact that I haven't updated Markor in the last 10 days (the last update was 4 months ago from F-Droid, automatic) and despite the fact that I haven't changed any settings. Can you help me solve this, please? Thank you.
+
+[screenshot]
+
+### Steps to reproduce
+
+1. Markor 2.15.2
+2. Paste a simple URL
+3. double-tap on it: it should recognize which app should open the URL, but it does not
+
+### Information
+
+Android version: 16
+Device: samsung galaxy a54
+App Version: 2.15.2
+
+### Source
+
+F-Droid
+
+### Format / File type
+
+Something else (-> Additional info)
+
+### Additional info / Log
+
+```shell
+I have tried both txt and md
+```"
+ Answer:

@@ -1,0 +1,115 @@
+Bug Report Title:
+Crash in Card Browser, the multi-select mode: Edit => change the card type
+Bug Report Issue:
+###### Reproduction Steps
+
+1. Create any type and clone it (to keep things simple, I've just used basic, calling the types "Basic 1" & "Basic 2").
+2. Add two cards to the first type.
+3. Browser → select the two new cards → Edit → try to change the type (in my case, "Basic 1" → "Basic 2"). 
+
+
+###### Expected Result
+If you could allow there some sort of batch type reassignment via the default field mapping, that would be perfect!
+
+
+###### Actual Result
+
+It crashes, only the first card is affected by the change.
+
+
+###### Debug info
+Refer to the [support page](https://ankidroid.org/docs/help.html) if you are unsure where to get the "debug info".
+
+###### Research
+*Enter an [x] character to confirm the points below:*
+
+--- I've reported it via the play.google.com, your representative there suggested that I report it here.
+
+
+- [ ] I have read the [support page](https://ankidroid.org/docs/help.html) and am reporting a bug or enhancement request specific to AnkiDroid
+- [ ] I have checked the [manual](https://ankidroid.org/docs/manual.html) and the [FAQ](https://github.com/ankidroid/Anki-Android/wiki/FAQ) and could not find a solution to my issue
+- [ ] I have searched for similar existing issues here and on the user forum
+- [ ] (Optional) I have confirmed the issue is not resolved in the latest alpha release ([instructions](https://docs.ankidroid.org/manual.html#betaTesting))
+Comments:
+Comment#1:
+Hello! 👋 Thanks for logging this issue. Please remember we are all volunteers here, so some patience may be required before we can get to the issue. Also remember that the fastest way to get resolution on an issue is to propose a change directly, https://github.com/ankidroid/Anki-Android/wiki/Contributing
+---
+Comment#2:
+Guys, your program is great! The issue is, obviously, not pressing at all: my main goal has been to contribute a tiny bit via reporting this. Thank you!
+---
+Comment#3:
+Hey @dymky - thanks for logging this! I think this is an unexpected side-effect of #6243 - the idea with that one was that even in multi-select mode we could enable edit note but just have it affect the first card. That use case should not crash at minimum, but if it gives people the impression they can change the card type and it will affect multiple notes, that's not correct
+
+Then at the same time, changing multiple card types at once is a popular feature (and something I'd love myself)
+
+I think #6243 might need a revert now that I think about it - there may be other note-related things that would confuse people if they thought it would apply to all the selected notes but it really just affects one, and the feature of changing note type for multiple notes at once is still on the wish list
+---
+Comment#4:
+In upstream, for the change note type, it instead checks whether all selected card have same note type. It would be a really easy change here. At least as far as we only apply simple rules such as "field 1 goes to field 1"...
+---
+Comment#5:
+@dymky when you say «it crashed», do you mean the program actually stop, or only that it did not do what is expected ? 
+Did you accepted to send report ? In which case we may have the crash report. But we would need informations from https://docs.ankidroid.org/help.html to find it (at least if I understand things correctly. I'm new here)
+---
+Comment#6:
+> I think #6243 might need a revert now that I think about it - there may be other note-related things that would confuse people if they thought it would apply to all the selected notes but it really just affects one, and the feature of changing note type for multiple notes at once is still on the wish list
+
+It was #6243. Apologies.
+
+To note: #6243 was intended to only show the "edit note" dialog if all selected cards are on the same note. It should not have appeared when multiple notes were selected.
+
+This is an issue between changing the note type while we are in multiselect mode.
+
+<details><summary>Stack Trace</summary>
+
+
+```
+2020-06-11 14:11:59.122 24055-24149/com.ichi2.anki E/com.ichi2.anki: [qarth_debug:]  get PatchStore::createDisableExceptionQarthFile method fail.
+2020-06-11 14:11:59.140 24055-24149/com.ichi2.anki E/AndroidRuntime: FATAL EXCEPTION: AsyncTask #4
+    Process: com.ichi2.anki, PID: 24055
+    java.lang.RuntimeException: An error occurred while executing doInBackground()
+        at android.os.AsyncTask$3.done(AsyncTask.java:355)
+        at java.util.concurrent.FutureTask.finishCompletion(FutureTask.java:383)
+        at java.util.concurrent.FutureTask.setException(FutureTask.java:252)
+        at java.util.concurrent.FutureTask.run(FutureTask.java:271)
+        at android.os.AsyncTask$SerialExecutor$1.run(AsyncTask.java:246)
+        at java.util.concurrent.ThreadPoolExecutor.processTask(ThreadPoolExecutor.java:1187)
+        at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1152)
+        at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:641)
+        at java.lang.Thread.run(Thread.java:784)
+     Caused by: java.lang.IndexOutOfBoundsException: Index: 1, Size: 0
+        at java.util.ArrayList.get(ArrayList.java:437)
+        at com.ichi2.async.CollectionTask.doInBackgroundCheckCardSelection(CollectionTask.java:1573)
+        at com.ichi2.async.CollectionTask.doInBackground(CollectionTask.java:355)
+        at com.ichi2.async.CollectionTask.doInBackground(CollectionTask.java:73)
+        at android.os.AsyncTask$2.call(AsyncTask.java:334)
+        at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+        at android.os.AsyncTask$SerialExecutor$1.run(AsyncTask.java:246) 
+        at java.util.concurrent.ThreadPoolExecutor.processTask(ThreadPoolExecutor.java:1187) 
+        at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1152) 
+        at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:641) 
+        at java.lang.Thread.run(Thread.java:784) 
+```
+</details>
+
+Data flow:
+
+* `onActivityResult` -> save card edit -> search cards
+
+----
+
+* `onCreateOptionsMenu` -> `mInMultiSelectMode = true`
+* `updateMultiselectMenu`
+* `TASK_TYPE_CHECK_CARD_SELECTION` -> crash. This task is passed in both the card positions and the card lists. These are out of sync due to the searchCards call.
+---
+Comment#7:
+Hi,
+
+Thank you!
+
+By crash I mean program crashing. I have not submitted a crash report, but before starting this thread I had tried it on a freshly created "toy example" (as described above) and it crashed right away: so it must be really straightforward to reproduce (and most likely related to the recent change, as suggested above).
+
+Indeed, changing the type for multiple cards at once would take your great program to yet another level of usability (for me, at least): I keep adjusting my own "generic" card type to my needs, and from time to time it happens that I "split" a previous "general-purpose" field into several more specific ones: in such cases it would be great to be able to convert many cards at once to the new type mechanically.
+
+Maybe in the meanwhile you could add some most basic option for that? Say, if I delete a non-empty card type, the program might offer to convert all its cards to some other type by performing the most trivial field-mapping action? With this simple operation what I usually need would be achievable (even if via some intermediate steps).
+---
