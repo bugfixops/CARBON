@@ -1,0 +1,100 @@
+2026-10-06 02:42:53.415 | INFO     | ChatGPT:infer:46 - Available actions: [tap, input, scroll, double tap, long tap]
+Action primitives: [Tap] [Component], [Scroll] [Direction], [Input] [Component] [Value], [Double-tap] [Component], [Long-tap] [Component]
+Question: Extract the entity from the following ->
+    "1. Open bookmark 
+    2. Tap "add new bookmark" and create a name with "a" 
+    3. Create another one with name "b" 
+    4. Click "a" 
+    5. Go back to bookmark after changing name "a" to "b" 
+    6. App crash"
+Answer: 
+    1st step is "Open bookmark". The action is "open" and the target component is "bookmark". However, there is no explicit "open" in the Available actions list. Therefore, we select the closest semantic action "tap". Following the Action primitives, the entity of the step is [Tap] ["bookmark"].
+    2nd step is "Tap 'add new bookmark' and create a name with 'a'". Due to the conjunction word "and", this step can be separated into two sub-steps, "Tap 'add new bookmark'" and "create a name with 'a'". For the first sub-step, following the Action primitives, the entity is [Tap] ["add new bookmark"]. For the second sub-step, there is no explicit "create" in the Available actions list. Therefore, we select the closest semantic action "input". Following the Action primitives, the entity of the sub-step is [Input] ["name"] ["a"].
+    3rd step is "Create another one with name 'b'". Due to its semantic meaning, this step is meant to repeat the previous steps to add another bookmark with name "b". Therefore, it should actually be the 2nd step, that is [Tap] ["add new bookmark"] and [Input] ["name"] ["b"].
+    4th step is "Click 'a'". The action is "click" and the target component is "a". However, there is no explicit "click" in the Available actions list. Therefore, we select the closest semantic action "tap". Following the Action primitives, the entity of the step is [Tap] ["a"].
+    5th step is "Go back to bookmark after changing name 'a' to 'b'". Due to the conjunction word "after", this step can be separated into two sub-steps, "Go back to bookmark" and "change name 'a' to 'b'". The conjunction word "after" also alters the temporal order of the sub-steps, that "change name 'a' to 'b'" should be executed first, followed by "go back to bookmark". For the first sub-step, there is no explicit "change" in the Available actions list. Therefore, we select the closest semantic action "input". Following the Action primitives, the entity of the sub-step is [Input] ["name"] ["b"]. For the second sub-step, there is no explicit "go back" in the Available actions list. Therefore, we select the closest semantic action "tap". Following the Action primitives, the entity of the sub-step is [Tap] ["back"].
+    6th step is "App crash". This step does not have any operations.
+    Overall, the extracted S2R entities are: 
+    1. [Tap] ["bookmark"]
+    2. [Tap] ["add new bookmark"]
+    3. [Input] ["name"] ["a"]
+    4. [Tap] ["add new bookmark"]
+    5. [Input] ["name"] ["b"]
+    6. [Tap] ["a"]
+    7. [Input] ["name"] ["b"]
+    8. [Tap] ["back"]
+
+    Question: Extract the entity from the following -> "Crash somtimes on showing keyboard when the preferred input method is supported by the addon
+
+App: fcitx5-android/fcitx5-android
+Version: 0.1.2
+Issue: https://github.com/fcitx5-android/fcitx5-android/issues/841
+APK: https://github.com/fcitx5-android/fcitx5-android/releases/download/0.1.2/org.fcitx.fcitx5.android-0.1.2-0-g5a4870c0-arm64-v8a-release.apk
+APK Tag: 0.1.2
+Gestures: drag it
+
+Steps to Reproduce:
+  1. 安装额外的输入法插件（以中州韵为例）；
+  2. 打开应用中的“输入法”，启用“中州韵”并拖放到列表中第一个位置；
+  3. 日常使用，偶尔复现崩溃。
+  4. Install extra input method addon (such as RIME);
+  5. Open "Input method" in the app, enable RIME then drag it to be the first item in the list;
+  6. App crash sometimes on showing keyboard when daily use.
+  7. 1.2-0-g5a4870c0-release
+  8. 1.1-0-g3f41b65d
+
+Expected Behavior:
+  无崩溃现象。
+
+No crash, of course.
+
+Actual Behavior:
+  (see full report below)
+
+--- Full Issue Body ---
+### 摘要 / Summary
+
+当首选输入法为插件所支持时（如中州韵），应用有时会在弹起键盘就崩溃。
+
+### 重现步骤 / Steps to Reproduce
+
+1. 安装额外的输入法插件（以中州韵为例）；
+2. 打开应用中的“输入法”，启用“中州韵”并拖放到列表中第一个位置；
+3. 日常使用，偶尔复现崩溃。
+
+---
+
+1. Install extra input method addon (such as RIME);
+2. Open "Input method" in the app, enable RIME then drag it to be the first  item in the list;
+3. App crash sometimes on showing keyboard when daily use.
+
+### 预期行为 / Expected Behavior
+
+无崩溃现象。
+
+No crash, of course.
+
+### 日志 / Log
+
+[org.fcitx.fcitx5.android-2026-01-15T16_18_39Z.txt](https://github.com/user-attachments/files/24648419/org.fcitx.fcitx5.android-2026-01-15T16_18_39Z.txt)
+
+### 截图 / Screenshot
+
+_No response_
+
+### 附加信息 / Additional Context
+
+_No response_
+
+### 系统版本 / OS Version
+
+Android 13 (Origin OS 3)
+
+### 应用版本 / App Version
+
+0.1.2-0-g5a4870c0-release
+
+### 插件版本 / Plugins Version
+
+0.1.1-0-g3f41b65d"
+ Answer:

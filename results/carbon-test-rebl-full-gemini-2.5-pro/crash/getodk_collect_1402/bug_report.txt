@@ -1,0 +1,42 @@
+Bug Report Title:
+Crash when rotating About screen
+Bug Report Issue:
+#### Software and hardware versions 
+Collect v1.1.10 beta
+
+#### Problem description
+Reported [here](https://forum.opendatakit.org/t/odk-collect-1-10-0-beta-1/9618/7?u=ln)
+
+#### Steps to reproduce the problem
+Open the About menu. Rotate the screen.
+
+#### Other information 
+
+Almost certainly related to #1289 
+
+```
+09-01 17:28:41java.lang.RuntimeException: Unable to start activity ComponentInfo{org.odk.collect.android/org.odk.collect.android.preferences.AboutPreferencesActivity}: java.lang.IllegalArgumentException: connection is null
+09-01 17:28:41	at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2659)
+09-01 17:28:41	at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:2724)
+09-01 17:28:41	at android.app.ActivityThread.handleRelaunchActivity(ActivityThread.java:4524)
+09-01 17:28:41	at android.app.ActivityThread.-wrap19(ActivityThread.java)
+09-01 17:28:41	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1479)
+09-01 17:28:41	at android.os.Handler.dispatchMessage(Handler.java:102)
+09-01 17:28:41	at android.os.Looper.loop(Looper.java:154)
+09-01 17:28:41	at android.app.ActivityThread.main(ActivityThread.java:6123)
+09-01 17:28:41	at java.lang.reflect.Method.invoke(Native Method)
+09-01 17:28:41	at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:867)
+09-01 17:28:41	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:757)
+09-01 17:28:41Caused by: java.lang.IllegalArgumentException: connection is null
+09-01 17:28:41	at android.app.ContextImpl.unbindService(ContextImpl.java:1508)
+09-01 17:28:41	at android.content.ContextWrapper.unbindService(ContextWrapper.java:648)
+09-01 17:28:41	at org.odk.collect.android.preferences.AboutPreferencesFragment.onDestroy(AboutPreferencesFragment.java:73)
+09-01 17:28:41	at android.app.Fragment.performDestroy(Fragment.java:2586)
+09-01 17:28:41	at android.app.FragmentManagerImpl.moveToState(FragmentManager.java:1121)
+09-01 17:28:41	at android.app.FragmentManagerImpl.removeFragment(FragmentManager.java:1276)
+09-01 17:28:41	at android.app.BackStackRecord.run(BackStackRecord.java:766)
+09-01 17:28:41	at android.app.FragmentManagerImpl.execPendingActions(FragmentManager.java:1580)
+09-01 17:28:41	at android.app.FragmentController.execPendingActions(FragmentController.java:371)
+09-01 17:28:41	at android.app.Activity.performStart(Activity.java:6688)
+09-01 17:28:41	at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2622)
+```

@@ -1,0 +1,83 @@
+Bug Report Title:
+NPE on create payment
+Bug Report Issue:
+Steps to reproduce:
+
+create a trip -> long click the trip -> swipe the tab from "Travelers" to "Report", and click menu option "create payment"
+
+Exception trace:
+```
+java.lang.NullPointerException: Attempt to invoke virtual method 'android.app.Application android.support.v4.app.FragmentActivity.getApplication()' on a null object reference
+        at de.koelle.christian.trickytripper.activities.a.c(ParticipantTabActivity.java:96)
+        at de.koelle.christian.trickytripper.activities.a.a(ParticipantTabActivity.java:36)
+        at de.koelle.christian.trickytripper.activities.a$b.a(ParticipantTabActivity.java:154)
+        at android.support.v7.app.AppCompatDelegateImplV9$b.a(AppCompatDelegateImplV9.java:1790)
+        at android.support.v7.app.q$a.a(WindowDecorActionBar.java:1101)
+        at android.support.v7.view.menu.h.a(MenuBuilder.java:817)
+        at android.support.v7.view.menu.j.b(MenuItemImpl.java:156)
+        at android.support.v7.view.menu.h.a(MenuBuilder.java:964)
+        at android.support.v7.view.menu.m.onItemClick(MenuPopup.java:127)
+        at android.widget.AdapterView.performItemClick(AdapterView.java:310)
+        at android.widget.AbsListView.performItemClick(AbsListView.java:1145)
+        at android.widget.AbsListView$PerformClick.run(AbsListView.java:3042)
+        at android.widget.AbsListView$3.run(AbsListView.java:3879)
+        at android.os.Handler.handleCallback(Handler.java:739)
+        at android.os.Handler.dispatchMessage(Handler.java:95)
+        at android.os.Looper.loop(Looper.java:148)
+        at android.app.ActivityThread.main(ActivityThread.java:5417)
+        at java.lang.reflect.Method.invoke(Native Method)
+        at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:726)
+        at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:616)
+```
+App Version: 1.5.8
+
+Device: Android 6.0 emulator
+Comments:
+Comment#1:
+Sorry for the inconveniences. 
+
+1. Right now version 1.6.0 is the latest version. Please update to 1.6.0. There should be no risk, as nothing has been changed on the internal database for a very long time. If you don't have access to the store, use [this link](https://github.com/koelleChristian/trickytripper/tree/master/releases/181001_1_6_0_V23)
+1. I cannot reproduce the error with your description. 
+   1. I create a new trip
+   1. If I long tap on the trip -> I am in the edit dialog of the trip I cannot swipe and I cannot create payments
+   1. if I select the trip I have no travelers, so I should not be able to create payments but I can swipe to Report
+   1. When I am on the main swipe screen within a trip, i.e. the "Report"-Tab, there is no menu to create payments
+   1. The only menu option to create a payment is when you long tap on a existing traveler. If I use this menu option on a Android Emulator 23 rev. 3 aka Android Marshmallow aka Android 6, I do not get this error but get the create payment dialog displayed.
+
+So far, so good. This might be fixed due to an underlying update of the support library.
+Without further feedback, I will consider this as 'fixed'.
+---
+Comment#2:
+Thanks for your inspection, Christian. Maybe I have not stated the reproduction steps very clearly.
+
+The STR is: start the fresh app -> create a traveler (e.g., named "Ting") -> long press on the traveler "Ting" ->  swipe from the tab "Travelers"  to "Report" -> click the menu option -> choose "Create payment". The app crashes.
+
+I reproduced on the latest version 1.6.0 on Android 6.0 emulator. 
+
+![image](https://user-images.githubusercontent.com/3156978/49682445-6b5a2e00-faef-11e8-8458-080b94d1fd27.png)
+
+I guess this crash is due to the switches between different fragments?
+---
+Comment#3:
+Any update?
+---
+Comment#4:
+IMHO, when the user swipes from "Travelers" to "Report", the tab "Travelers" becomes invisible, and the fragment "ParticipantTabActivity" will be recycled and detached from its associated main activity (i.e., "TrickyTripperActivity"). At this time, since the menu options are not changed, if the user selects the option "create payment", the code will call getActivity() in the fragment "ParticipantTabActivity", which will return null, and crashes the app. Hope this could be useful to fix the issue.
+---
+Comment#5:
+I will try to take a look at this this week. Sorry for the delay.
+---
+Comment#6:
+Thanks, Christian. Let me know if you need more help :)
+---
+Comment#7:
+Can be reproduced thanks for your support.
+
+As far as I remember, i could not switch tabs whilst option menu activated.
+
+The problem can be fixed by switching from FragmentStatePagerAdapter to FragementPagerAdapter.
+Alternatives:
+
+- Close the options menu bar on tab-swipe.
+- Disable tab-swipe when options menu bar open
+---

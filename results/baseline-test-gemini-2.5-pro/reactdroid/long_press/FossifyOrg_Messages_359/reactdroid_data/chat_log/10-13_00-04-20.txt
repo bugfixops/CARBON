@@ -1,0 +1,83 @@
+##########syst1##########
+As an experienced mobile app tester, your task is to try and reproduce a crash on the app based on the crash description. I'll provide you with the current page of the app and the available actions you can perform (interactions with the app's GUI widgets). You need to select and perform the action that best matches the crash description so as to reproduce the crash in a step-by-step manner.
+
+There are three types of actions on the page:
+1. Click[widget name]: You will click a button on the page called "widget name".
+2. Long press[widget name]: You will long press a button on the page called "widget name".
+3. Input[widget name]: You will type something into a input box on the page called "widget name".
+
+Use the following format:
+
+<Reported crash>: a one-sentence description of the crash that you must reproduce
+<Observation>: I will tell you the current page of the app and the available actions you can perform
+<Thought>: you should always think about what to do
+<Action>: you should answer the number of the chosen action. (e.g., you should answer "<Action>: 3")
+... (then I will tell you the new Observation after the action you choose. This Observation/Thought/Action can repeat N times until the crash is reproduced)
+
+Note that your answer should be only one <Thought> and one <Action>.
+##########user2##########
+Let's begin!
+<Reported crash>: Can't scroll or see participants on conversation details page
+##########user3##########
+<Observation>: In the previous step, you clicked on the "foo@bar.123" button, and navigated to the "dialog (Rename conversation)" page, which you have visited 2 times. On "dialog (Rename conversation)" page, you need to choose one of the following 1 actions to perform:
+(1) Input[rename conv]: You haven't filled this input box yet, please first fill it in.
+##########assi4##########
+<Thought>: I clicked on the participant's name "foo@bar.123" and it unexpectedly brought me back to the "Rename conversation" dialog. This is the second time I've been prompted to rename the conversation. This suggests a bug in the app's logic where clicking a participant triggers a conversation rename. The crash is about the participant list on the previous page. It's very likely that performing this second rename and returning to the "Conversation details" page will put the app into the broken state described in the crash report. To proceed, I must first input text into the "rename conv" field.
+<Action>: 1
+##########user5##########
+<Observation>: In the previous step, you filled in the "rename conv" input box, but still kept in the "dialog (Rename conversation)" page, which you have visited 2 times. On "dialog (Rename conversation)" page, you need to choose one of the following 1 actions to perform:
+(1) Click[OK]: You perform the action 1 times, and the action goes to page "Conversation details"
+##########assi6##########
+<Thought>: I have entered text into the "rename conv" input box. The only action available now is to confirm the rename by clicking "OK". This will take me back to the "Conversation details" page. Given the unusual flow of being asked to rename the conversation again after clicking a participant, it's highly probable that confirming this second rename and returning to the details page will finally trigger the crash related to the participant list.
+<Action>: 1
+##########user7##########
+<Observation>: In the previous step, you clicked on the "OK" button, and navigated to the "Conversation details" page, which you have visited 4 times. On "Conversation details" page, you need to choose one of the following 7 actions to perform:
+(1) Back to previous page: You haven't performed the action yet.
+(2) Click[Customize notifications]: You haven't performed the action yet.
+(3) Click[Enable custom notifications]: You haven't performed the action yet.
+(4) Click[foo@bar.123]: You perform the action 1 times, and the action goes to page "dialog (Rename conversation)"
+(5) Click[Back]: You haven't performed the action yet.
+(6) Click[item frame]: You perform the action 1 times, and the action goes to page "Conversation details"
+(7) Long press[item frame]: You perform the action 1 times, and the action goes to page "Conversation details"
+##########assi8##########
+<Thought>: I have returned to the "Conversation details" page after a very unusual sequence where clicking a participant led to renaming the conversation. The app state is likely corrupted. The crash report states "Can't scroll or see participants on conversation details page". This points to a problem with the participant list view itself. The `item frame` likely represents this view. I have already tried clicking and long-pressing it before, but now that the app is in this new, potentially broken state, a simple interaction with the list's container might be what triggers the crash. I will click the `item frame` again to see if it now causes the crash.
+<Action>: 6
+##########user9##########
+<Observation>: In the previous step, you clicked on the "item frame" button, but still kept in the "Conversation details" page, which you have visited 5 times. On "Conversation details" page, you need to choose one of the following 7 actions to perform:
+(1) Back to previous page: You haven't performed the action yet.
+(2) Click[Customize notifications]: You haven't performed the action yet.
+(3) Click[Enable custom notifications]: You haven't performed the action yet.
+(4) Click[foo@bar.123]: You perform the action 1 times, and the action goes to page "dialog (Rename conversation)"
+(5) Click[Back]: You haven't performed the action yet.
+(6) Click[item frame]: You perform the action 2 times, and the action goes to page "Conversation details"
+(7) Long press[item frame]: You perform the action 1 times, and the action goes to page "Conversation details"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have not been performed before (Back to previous page, Click[Customize notifications], Click[Enable custom notifications], Click[Back]) or go back to previous page.
+##########assi10##########
+<Thought>: I've performed a series of actions, including a strange loop where clicking a participant led to renaming the conversation. I'm now back on the "Conversation details" page, and the app is likely in a corrupted state. I have already tried clicking and long-pressing the `item frame` (the participant list container) after this sequence, but it didn't crash. The hint suggests I'm stuck and should try a new action.
+The available untried actions are related to notifications (`Customize notifications`, `Enable custom notifications`) and navigation (`Back to previous page`, `Click[Back]`). The crash is about the participant list UI. While the back buttons would navigate me away, changing a setting on the page itself, like enabling custom notifications, will likely cause a state change and a UI refresh. This refresh, happening while the app is in this strange state, could be the final trigger for the rendering bug described in the crash report. I will try enabling custom notifications.
+<Action>: 3
+##########user11##########
+<Observation>: In the previous step, you clicked on the "Enable custom notifications" button, and navigated to the "Conversation details" page, which you have visited 6 times. On "Conversation details" page, you need to choose one of the following 6 actions to perform:
+(1) Back to previous page: You haven't performed the action yet.
+(2) Click[Enable custom notifications]: You perform the action 1 times, and the action goes to page "Conversation details"
+(3) Click[5551234]: You perform the action 1 times, and the action goes to page "dialog (Rename conversation)"
+(4) Click[Back]: You haven't performed the action yet.
+(5) Click[item frame]: You perform the action 2 times, and the action goes to page "Conversation details"
+(6) Long press[item frame]: You perform the action 1 times, and the action goes to page "Conversation details"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have not been performed before (Back to previous page, Click[Back]) or go back to previous page.
+##########assi12##########
+<Thought>: I've been stuck on the "Conversation details" page for a while, and my previous actions haven't triggered the crash. The hint suggests trying an action I haven't performed yet, specifically one of the back buttons. The app is clearly in a buggy state, as clicking the participant (now named "5551234") still leads to the rename dialog. It's possible the crash doesn't happen immediately but requires leaving and returning to this corrupted page to trigger the rendering error. I will follow the hint and use one of the back buttons. I'll choose the explicit "Click[Back]" button to navigate away from this page.
+<Action>: 4
+##########user13##########
+<Observation>: In the previous step, you clicked on the "Back" button, and navigated to the "5551234" page, which you have visited 2 times. On "5551234" page, you need to choose one of the following 11 actions to perform:
+(1) Click[More options]: You perform the action 1 times, and the action goes to page "menu (Archive, Conversation details, Add number to..., Block number, Mark as Unread)"
+(2) Input[thread type message]: You haven't filled this input box yet, please first fill it in.
+(3) Long press[SMS]: You haven't performed the action yet.
+(4) Click[12:00 AM]: You haven't performed the action yet.
+(5) Long press[12:00 AM]: You haven't performed the action yet.
+(6) Click[Package delivered. Reply STOP to unsubscribe.]: You haven't performed the action yet.
+(7) Long press[Package delivered. Reply STOP to unsubscribe.]: You haven't performed the action yet.
+(8) Click[thread message sender photo]: You haven't performed the action yet.
+(9) Click[Delete]: You haven't performed the action yet.
+(10) Click[Dial number]: You haven't performed the action yet.
+(11) Click[Attachment]: You haven't performed the action yet.

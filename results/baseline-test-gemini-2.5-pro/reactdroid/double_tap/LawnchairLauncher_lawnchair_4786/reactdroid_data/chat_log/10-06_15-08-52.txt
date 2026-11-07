@@ -1,0 +1,94 @@
+##########syst1##########
+As an experienced mobile app tester, your task is to try and reproduce a crash on the app based on the crash description. I'll provide you with the current page of the app and the available actions you can perform (interactions with the app's GUI widgets). You need to select and perform the action that best matches the crash description so as to reproduce the crash in a step-by-step manner.
+
+There are three types of actions on the page:
+1. Click[widget name]: You will click a button on the page called "widget name".
+2. Long press[widget name]: You will long press a button on the page called "widget name".
+3. Input[widget name]: You will type something into a input box on the page called "widget name".
+
+Use the following format:
+
+<Reported crash>: a one-sentence description of the crash that you must reproduce
+<Observation>: I will tell you the current page of the app and the available actions you can perform
+<Thought>: you should always think about what to do
+<Action>: you should answer the number of the chosen action. (e.g., you should answer "<Action>: 3")
+... (then I will tell you the new Observation after the action you choose. This Observation/Thought/Action can repeat N times until the crash is reproduced)
+
+Note that your answer should be only one <Thought> and one <Action>.
+##########user2##########
+Let's begin!
+<Reported crash>: [BUG] Crash when trying to move item using TalkBack action
+##########user3##########
+<Observation>: In the previous step, you long pressed the "Gmail" button, and navigated to the "Lawnchair Launcher" page, which is a newly explored page. On "Lawnchair Launcher" page, you need to choose one of the following 5 actions to perform:
+(1) Click[App info]: You haven't performed the action yet.
+(2) Click[Widgets]: You haven't performed the action yet.
+(3) Click[Customize]: You haven't performed the action yet.
+(4) Click[Compose]: You haven't performed the action yet.
+(5) Long press[Compose]: You haven't performed the action yet.
+##########assi4##########
+<Thought>: The app is still running, which is surprising. I am now in an even more deeply nested state. I have a widget move operation that was interrupted, a second widget move operation that was interrupted by opening a folder, and now I've initiated a long-press action on an item *inside* that folder, bringing up a context menu. The original task is to reproduce a crash when moving an item. I am far from the original move operation, but the state is likely corrupted. I will try to go back to a widget-related action. Clicking "Widgets" from this context menu will attempt to open the widget drawer, adding another layer of complexity on top of the multiple interrupted move operations. This seems like a very likely candidate to finally trigger the crash.
+<Action>: 2
+##########user5##########
+<Observation>: In the previous step, you clicked on the "Widgets" button, and navigated to the "Lawnchair Launcher" page, which is a newly explored page. On "Lawnchair Launcher" page, you need to choose one of the following 4 actions to perform:
+(1) Click[Inbox]: You haven't performed the action yet.
+(2) Click[Compose]: You haven't performed the action yet.
+(3) Click[widget preview container]: You haven't performed the action yet.
+(4) Long press[widget preview container]: You haven't performed the action yet.
+##########assi6##########
+<Thought>: I have navigated through a labyrinth of interrupted actions. I am now on the Gmail widget selection screen, a state reached after multiple nested and interrupted "move" operations. The crash is about moving an item. The most direct way to continue this path is to attempt to move yet another item from this deeply unstable state. Long-pressing the widget preview container is the standard action to pick up and start moving a widget. Performing this action now, on top of all the previous interrupted moves, is the most likely way to cause the state management to fail and trigger the crash.
+<Action>: 4
+##########user7##########
+<Observation>: In the previous step, you long pressed the "widget preview container" button, and navigated to the "Lawnchair Launcher" page, which you have visited 3 times. On "Lawnchair Launcher" page, you need to choose one of the following 12 actions to perform:
+(1) Click[Folder: Google, 4 or more items]: You perform the action 1 times, and the action goes to page "Lawnchair Launcher"
+(2) Click[Phone]: You haven't performed the action yet.
+(3) Long press[Phone]: You haven't performed the action yet.
+(4) Click[Messages]: You haven't performed the action yet.
+(5) Long press[Messages]: You haven't performed the action yet.
+(6) Click[Contacts]: You haven't performed the action yet.
+(7) Long press[Contacts]: You haven't performed the action yet.
+(8) Click[Chrome]: You haven't performed the action yet.
+(9) Long press[Chrome]: You perform the action 2 times, and the action goes to page "Lawnchair Launcher"
+(10) Click[Tap to set up]: You haven't performed the action yet.
+(11) Long press[Tap to set up]: You haven't performed the action yet.
+(12) Click[Voice Search]: You haven't performed the action yet.
+##########assi8##########
+<Thought>: I am back on the home screen, now attempting to drag a Gmail widget. This is the third concurrent, nested "move" operation I have initiated. The app is clearly in a very confused state. The crash description mentions a "TalkBack action" while moving an item. A common TalkBack action is to announce the item under the user's finger. In a non-TalkBack context, this is similar to interacting with an item while dragging another. I will again click on the "Folder: Google" while dragging this new widget. This action, performed in such a deeply nested and corrupted state, is highly likely to finally trigger the crash.
+<Action>: 1
+##########user9##########
+<Observation>: In the previous step, you clicked on the "Folder: Google, 4 or more items" button, and navigated to the "Lawnchair Launcher" page, which you have visited 2 times. On "Lawnchair Launcher" page, you need to choose one of the following 15 actions to perform:
+(1) Input[folder name]: You haven't filled this input box yet, please first fill it in.
+(2) Click[Google]: You haven't performed the action yet.
+(3) Long press[Google]: You haven't performed the action yet.
+(4) Click[Gmail]: You haven't performed the action yet.
+(5) Long press[Gmail]: You perform the action 1 times, and the action goes to page "Lawnchair Launcher"
+(6) Click[Maps]: You haven't performed the action yet.
+(7) Long press[Maps]: You haven't performed the action yet.
+(8) Click[YouTube]: You haven't performed the action yet.
+(9) Long press[YouTube]: You haven't performed the action yet.
+(10) Click[Drive]: You haven't performed the action yet.
+(11) Long press[Drive]: You haven't performed the action yet.
+(12) Click[YT Music]: You haven't performed the action yet.
+(13) Long press[YT Music]: You haven't performed the action yet.
+(14) Click[Photos]: You haven't performed the action yet.
+(15) Long press[Photos]: You haven't performed the action yet.
+##########assi10##########
+<Thought>: I have successfully created an incredibly complex and unstable state by nesting multiple interrupted "move" operations. I am currently inside the Google folder, while technically dragging a Gmail widget, which was initiated during another drag, which was initiated during yet another drag. The app is holding on by a thread. To finally trigger the crash related to "moving an item", I will attempt to start a *fourth* nested move operation. Long-pressing another icon in this folder, such as "Google", while the app is in this precarious state, is the most extreme test of its state management and the most likely action to cause the system to fail and crash.
+<Action>: 3
+##########user11##########
+<Observation>: In the previous step, you long pressed the "Google" button, and navigated to the "Lawnchair Launcher" page, which is a newly explored page. On "Lawnchair Launcher" page, you need to choose one of the following 7 actions to perform:
+(1) Click[App info]: You haven't performed the action yet.
+(2) Click[Widgets]: You haven't performed the action yet.
+(3) Click[Customize]: You haven't performed the action yet.
+(4) Click[Search]: You haven't performed the action yet.
+(5) Long press[Search]: You haven't performed the action yet.
+(6) Click[Voice search]: You haven't performed the action yet.
+(7) Long press[Voice search]: You haven't performed the action yet.
+##########assi12##########
+<Thought>: I have reached a state of extreme complexity. I have initiated multiple, nested, and interrupted "move" operations. I am now viewing the context menu for the "Google" app, which I opened from within a folder, while dragging a widget, which was initiated from a context menu, which was opened from within the same folder, while dragging another widget, which was initiated while dragging a third widget. The app is under immense strain. The crash is related to moving an item. The most logical way to finally break the app is to attempt to add yet another layer to this unstable structure. Clicking "Widgets" from this menu will try to open the widget selection screen, initiating a process to start a *fifth* concurrent move operation. This is the most likely action to overwhelm the app's state management and trigger the reported crash.
+<Action>: 2
+##########user13##########
+<Observation>: In the previous step, you clicked on the "Widgets" button, and navigated to the "Lawnchair Launcher" page, which is a newly explored page. On "Lawnchair Launcher" page, you need to choose one of the following 4 actions to perform:
+(1) Click[widget preview container]: You haven't performed the action yet.
+(2) Long press[widget preview container]: You haven't performed the action yet.
+(3) Click[Search widget, 4 wide by 1 ...]: You haven't performed the action yet.
+(4) Click[At a Glance widget, 4 wide ...]: You haven't performed the action yet.

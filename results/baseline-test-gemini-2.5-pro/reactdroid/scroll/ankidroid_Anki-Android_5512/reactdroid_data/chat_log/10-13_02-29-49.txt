@@ -1,0 +1,72 @@
+##########syst1##########
+As an experienced mobile app tester, your task is to try and reproduce a crash on the app based on the crash description. I'll provide you with the current page of the app and the available actions you can perform (interactions with the app's GUI widgets). You need to select and perform the action that best matches the crash description so as to reproduce the crash in a step-by-step manner.
+
+There are three types of actions on the page:
+1. Click[widget name]: You will click a button on the page called "widget name".
+2. Long press[widget name]: You will long press a button on the page called "widget name".
+3. Input[widget name]: You will type something into a input box on the page called "widget name".
+
+Use the following format:
+
+<Reported crash>: a one-sentence description of the crash that you must reproduce
+<Observation>: I will tell you the current page of the app and the available actions you can perform
+<Thought>: you should always think about what to do
+<Action>: you should answer the number of the chosen action. (e.g., you should answer "<Action>: 3")
+... (then I will tell you the new Observation after the action you choose. This Observation/Thought/Action can repeat N times until the crash is reproduced)
+
+Note that your answer should be only one <Thought> and one <Action>.
+##########user2##########
+Let's begin!
+<Reported crash>: AnkiDroid scroll bug
+##########user3##########
+<Observation>: In the previous step, you go back to previous page, and navigated to the "Card types" page, which you have visited 4 times. On "Card types" page, you need to choose one of the following 6 actions to perform:
+(1) Click[More options]: You perform the action 1 times, and the action goes to page "menu (Add, Delete)"
+(2) Input[Front template]: You haven't filled this input box yet, please first fill it in.
+(3) Input[Back template]: You haven't filled this input box yet, please first fill it in.
+(4) Input[Styling]: You haven't filled this input box yet, please first fill it in.
+(5) Click[CARD 1]: You perform the action 1 times, and the action goes to page "Card types"
+(6) Click[Preview]: You perform the action 1 times, and the action goes to page "Preview"
+##########assi4##########
+<Thought>: I have returned to the "Card types" page after a round trip to the "Preview" screen. The app is still in an inconsistent state, showing "CARD 1" even though I deleted it. The crash is a "scroll bug," and this page is scrollable. My previous actions have likely corrupted the data model for the list of card templates. The "More options" button leads to a menu that operates on this list of templates ("Add", "Delete"). By clicking "More options" now, I will force the app to re-evaluate the state of this corrupted list to populate the menu. This is a very likely point for a crash, as the app might try to access an invalid index or a null object when checking the status of the (supposedly deleted) "CARD 1" template.
+<Action>: 1
+##########user5##########
+<Observation>: In the previous step, you clicked on the "More options" button, and navigated to the "menu (Add, Delete)" page, which you have visited 2 times. On "menu (Add, Delete)" page, you need to choose one of the following 2 actions to perform:
+(1) Click[Add]: You haven't performed the action yet.
+(2) Click[Delete]: You perform the action 1 times, and the action goes to page "Card types"
+##########assi6##########
+<Thought>: I am in a menu with "Add" and "Delete" options, which I accessed from the "Card types" page that is in an inconsistent state (showing a deleted card template). The "Delete" action is the most promising path to a crash. The app's internal data model likely believes there are no templates left to delete, while the UI state that triggered this menu thinks there is one. Attempting to execute the "Delete" command again will force the app to reconcile these conflicting states. This will likely involve an operation on a list or array, and trying to remove an item from an already empty or corrupted list is a classic cause for an `IndexOutOfBoundsException` or a similar fatal error, which would manifest as the reported crash.
+<Action>: 2
+##########user7##########
+<Observation>: In the previous step, you clicked on the "Delete" button, and navigated to the "Card types" page, which you have visited 5 times. On "Card types" page, you need to choose one of the following 6 actions to perform:
+(1) Click[More options]: You perform the action 2 times, and the action goes to page "menu (Add, Delete)"
+(2) Input[Front template]: You haven't filled this input box yet, please first fill it in.
+(3) Input[Back template]: You haven't filled this input box yet, please first fill it in.
+(4) Input[Styling]: You haven't filled this input box yet, please first fill it in.
+(5) Click[CARD 1]: You perform the action 1 times, and the action goes to page "Card types"
+(6) Click[Preview]: You perform the action 1 times, and the action goes to page "Preview"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have not been performed before (Back to previous page, Input[Front template], Input[Back template], Click[Save], Click[Navigate up], Input[Styling]) or go back to previous page.
+##########assi8##########
+<Thought>: I am stuck in a loop on the "Card types" page. The app is in a severely inconsistent state, showing UI elements for a card template that I have deleted multiple times. The hint suggests trying an action I haven't performed before. The available unperformed actions are inputting text into the template or styling fields. The crash is described as a "scroll bug," and these input fields are part of a scrollable view. Interacting with these fields by inputting text will force the app to modify the data model for the non-existent "CARD 1" template. This is a highly probable trigger for a crash, as the app will likely try to operate on a null or invalid object. I will start by inputting text into the "Front template" field.
+<Action>: 2
+##########user9##########
+<Observation>: In the previous step, you filled in the "Front template" input box, and navigated to the "Card types" page, which is a newly explored page. On "Card types" page, you need to choose one of the following 4 actions to perform:
+(1) Click[More options]: You haven't performed the action yet.
+(2) Input[Styling]: You haven't filled this input box yet, please first fill it in.
+(3) Click[CARD 1]: You haven't performed the action yet.
+(4) Click[Preview]: You haven't performed the action yet.
+##########assi10##########
+<Thought>: I have successfully inputted text into the "Front template" field for a card template that should not exist. The app is now in an even more unstable state. The crash is a "scroll bug," and this page is a scrollable form. By inputting text into the "Styling" field, I am forcing the app to perform another modification on the corrupted data model. This action is very likely to trigger a re-rendering or re-layout of the scrollable view to apply the new styling. This process of updating the view based on corrupted data is a prime candidate for causing the described "scroll bug" crash.
+<Action>: 2
+##########user11##########
+<Observation>: In the previous step, you filled in the "Styling" input box, but still kept in the "Card types" page, which is a newly explored page. On "Card types" page, you need to choose one of the following 4 actions to perform:
+(1) Click[More options]: You haven't performed the action yet.
+(2) Input[Front template]: You haven't filled this input box yet, please first fill it in.
+(3) Click[CARD 1]: You haven't performed the action yet.
+(4) Click[Preview]: You haven't performed the action yet.
+##########assi12##########
+<Thought>: I have now inputted text into both the "Front template" and "Styling" fields for a card template that should not exist. The application is in a highly unstable state. The crash is described as a "scroll bug". The "Preview" action will attempt to render the card using the corrupted template and styling data I just entered. This rendering process often happens within a scrollable WebView. Given that the underlying data is for a non-existent object that I have just modified, asking the app to render a preview is a very stressful operation and is highly likely to cause a crash, especially one related to view rendering or scrolling.
+<Action>: 4
+##########user13##########
+<Observation>: In the previous step, you clicked on the "Preview" button, and navigated to the "Preview" page, which you have visited 2 times. On "Preview" page, you need to choose one of the following 2 actions to perform:
+(1) Click[SHOW ANSWER]: You perform the action 1 times, and the action goes to page "Preview"
+(2) Long press[France]: You haven't performed the action yet.

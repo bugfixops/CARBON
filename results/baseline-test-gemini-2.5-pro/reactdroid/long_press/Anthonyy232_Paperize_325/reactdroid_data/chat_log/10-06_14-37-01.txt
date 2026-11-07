@@ -1,0 +1,66 @@
+##########syst1##########
+As an experienced mobile app tester, your task is to try and reproduce a crash on the app based on the crash description. I'll provide you with the current page of the app and the available actions you can perform (interactions with the app's GUI widgets). You need to select and perform the action that best matches the crash description so as to reproduce the crash in a step-by-step manner.
+
+There are three types of actions on the page:
+1. Click[widget name]: You will click a button on the page called "widget name".
+2. Long press[widget name]: You will long press a button on the page called "widget name".
+3. Input[widget name]: You will type something into a input box on the page called "widget name".
+
+Use the following format:
+
+<Reported crash>: a one-sentence description of the crash that you must reproduce
+<Observation>: I will tell you the current page of the app and the available actions you can perform
+<Thought>: you should always think about what to do
+<Action>: you should answer the number of the chosen action. (e.g., you should answer "<Action>: 3")
+... (then I will tell you the new Observation after the action you choose. This Observation/Thought/Action can repeat N times until the crash is reproduced)
+
+Note that your answer should be only one <Thought> and one <Action>.
+##########user2##########
+Let's begin!
+<Reported crash>: [Bug] Crashing when adding images
+##########user3##########
+<Observation>: In the previous step, you go back to previous page, and navigated to the "Paperize" page, which you have visited 12 times. On "Paperize" page, you need to choose one of the following 2 actions to perform:
+(1) Click[Paperize]: You perform the action 5 times, and the action goes to page "Main Activity"
+(2) Click[Wallpaper]: You perform the action 5 times, and the action goes to page "dialog (New Album)"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have only been performed a few times (Back to previous page) or go back to previous page.
+##########assi4##########
+<Thought>: I'm back on the "Paperize" page. Going back from the "Main Activity" page just returned me here. This is a very persistent loop. I've tried both "Paperize" and "Wallpaper" multiple times. The hint again suggests going back. Since going back from the *next* page didn't work, I need to go back from *this* page. There isn't an explicit "Back" button listed in the actions, but the hint implies it's a possibility. Let's re-examine the actions. "Click[Paperize]" and "Click[Wallpaper]". I've explored both. The crash is about "adding images". I've created an album via the "Wallpaper" path before. Maybe I need to interact with that album. I'll try the "Wallpaper" path again, but this time I'll be looking for a way to add an image to the album I create.
+<Action>: 2
+##########user5##########
+<Observation>: In the previous step, you clicked on the "Wallpaper" button, and navigated to the "dialog (New Album)" page, which you have visited 6 times. On "dialog (New Album)" page, you need to choose one of the following 3 actions to perform:
+(1) Input[New Album]: You haven't filled this input box yet, please first fill it in.
+(2) Click[New Album]: You perform the action 4 times, and the action goes to page "Main Activity"
+(3) Back to previous page: You perform the action 1 times, and the action goes to page "Paperize"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have only been performed a few times (Back to previous page) or go back to previous page.
+##########assi6##########
+<Thought>: I'm on the "New Album" dialog. The crash is about "adding images". Creating an album is the first step. I've been here before and clicked "New Album" without inputting a name, which took me to the "Main Activity". This time, to properly create an album, I must first give it a name. The hint also suggests trying actions that haven't been performed, and "Input[New Album]" is the only one. This is the correct step to proceed with creating an album, which is a prerequisite for adding an image.
+<Action>: 1
+##########user7##########
+<Observation>: In the previous step, you filled in the "New Album" input box, but still kept in the "dialog (New Album)" page, which you have visited 6 times. On "dialog (New Album)" page, you need to choose one of the following 2 actions to perform:
+(1) Click[New Album]: You perform the action 4 times, and the action goes to page "Main Activity"
+(2) Back to previous page: You perform the action 1 times, and the action goes to page "Paperize"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have only been performed a few times (Back to previous page) or go back to previous page.
+##########assi8##########
+<Thought>: I have just entered a name for the new album. Now I need to confirm its creation. The options are to click "New Album" or go back. Going back would cancel the album creation, which is counterproductive to my goal of adding an image. Clicking "New Album" should finalize the creation process and hopefully take me to a screen where I can add images to this newly created album. This is the logical next step.
+<Action>: 1
+##########user9##########
+<Observation>: In the previous step, you clicked on the "New Album" button, and navigated to the "Main Activity" page, which is a newly explored page. On "Main Activity" page, you need to choose one of the following 2 actions to perform:
+(1) Input[HelloWorld!]: You haven't filled this input box yet, please first fill it in.
+(2) Click[HelloWorld!]: You haven't performed the action yet.
+##########assi10##########
+<Thought>: I've successfully created an album and landed on a new "Main Activity" page. This page seems to be the content view for the new album, with a default "HelloWorld!" entry. The crash is about adding images. The current options are to input text or click the "HelloWorld!" element. Inputting text doesn't seem related to adding an image. However, clicking on the text element might bring up an editing toolbar or a menu with an option to insert an image, which is a common UI pattern. Therefore, clicking "HelloWorld!" is the most promising action to find the image-adding functionality.
+<Action>: 2
+##########user11##########
+<Observation>: In the previous step, you clicked on the "HelloWorld!" button, and navigated to the "Paperize" page, which you have visited 13 times. On "Paperize" page, you need to choose one of the following 2 actions to perform:
+(1) Click[Paperize]: You perform the action 5 times, and the action goes to page "Main Activity"
+(2) Click[Wallpaper]: You perform the action 6 times, and the action goes to page "dialog (New Album)"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have only been performed a few times (Back to previous page) or go back to previous page.
+##########assi12##########
+<Thought>: This is frustrating. Clicking "HelloWorld!" took me back to the "Paperize" page, which is the main menu. I'm in another loop. I created an album, but clicking its content just sent me back to the start. The hint again suggests going back. I've been on this "Paperize" page many times. I've tried "Paperize" and "Wallpaper". The crash is about "adding images". I need to find a different path. Let's reconsider the "Paperize" page. I've clicked "Wallpaper" to create an album. Maybe there's another way to interact with albums from this page. I'll try "Wallpaper" again, but this time I'll look for a different interaction on the subsequent dialog.
+<Action>: 2
+##########user13##########
+<Observation>: In the previous step, you clicked on the "Wallpaper" button, and navigated to the "dialog (New Album)" page, which you have visited 7 times. On "dialog (New Album)" page, you need to choose one of the following 3 actions to perform:
+(1) Input[New Album]: You haven't filled this input box yet, please first fill it in.
+(2) Click[New Album]: You perform the action 5 times, and the action goes to page "Main Activity"
+(3) Back to previous page: You perform the action 1 times, and the action goes to page "Paperize"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have only been performed a few times (Back to previous page) or go back to previous page.

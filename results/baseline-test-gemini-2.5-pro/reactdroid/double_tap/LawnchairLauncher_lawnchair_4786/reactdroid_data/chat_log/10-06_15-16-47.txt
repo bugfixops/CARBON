@@ -1,0 +1,65 @@
+##########syst1##########
+As an experienced mobile app tester, your task is to try and reproduce a crash on the app based on the crash description. I'll provide you with the current page of the app and the available actions you can perform (interactions with the app's GUI widgets). You need to select and perform the action that best matches the crash description so as to reproduce the crash in a step-by-step manner.
+
+There are three types of actions on the page:
+1. Click[widget name]: You will click a button on the page called "widget name".
+2. Long press[widget name]: You will long press a button on the page called "widget name".
+3. Input[widget name]: You will type something into a input box on the page called "widget name".
+
+Use the following format:
+
+<Reported crash>: a one-sentence description of the crash that you must reproduce
+<Observation>: I will tell you the current page of the app and the available actions you can perform
+<Thought>: you should always think about what to do
+<Action>: you should answer the number of the chosen action. (e.g., you should answer "<Action>: 3")
+... (then I will tell you the new Observation after the action you choose. This Observation/Thought/Action can repeat N times until the crash is reproduced)
+
+Note that your answer should be only one <Thought> and one <Action>.
+##########user2##########
+Let's begin!
+<Reported crash>: [BUG] Crash when trying to move item using TalkBack action
+##########user3##########
+<Observation>: In the previous step, you long pressed the "Phone" button, and navigated to the "Lawnchair Launcher" page, which you have visited 4 times. On "Lawnchair Launcher" page, you need to choose one of the following 3 actions to perform:
+(1) Long press[New contact]: You perform the action 1 times, and the action goes to page "Lawnchair Launcher"
+(2) Back to previous page: You haven't performed the action yet.
+(3) Click[Customize]: You haven't performed the action yet.
+##########assi4##########
+<Thought>: I have successfully broken out of the loop again by long-pressing the "Phone" icon. I am now back at the context menu for the Phone app. I am still in the state of nine nested drag operations. Last time I was here, I chose to long-press "New contact" which led me back to the unresponsive home screen. This time, I will choose the other option, "Customize". This seems like a plausible action to trigger a crash, as customizing an item while in a deeply nested drag state could cause a conflict.
+<Action>: 3
+##########user5##########
+<Observation>: In the previous step, you clicked on the "Customize" button, and navigated to the "Lawnchair Launcher" page, which is a newly explored page. On "Lawnchair Launcher" page, you need to choose one of the following 3 actions to perform:
+(1) Input[Hide from app drawer]: You haven't filled this input box yet, please first fill it in.
+(2) Click[Hide from app drawer]: You haven't performed the action yet.
+(3) Click[Phone]: You haven't performed the action yet.
+##########assi6##########
+<Thought>: I've clicked "Customize" and landed on a new page, which is a good sign. This page seems to be a customization screen for the "Phone" app icon. I have three options: an input field and two buttons. The crash is about moving an item with a TalkBack action. I'm in a deeply nested drag state. The most logical next step to continue this "move" or "modify" sequence is to interact with the customization options. The "Hide from app drawer" option is a modification of the item's state. I will try clicking the "Hide from app drawer" checkbox.
+<Action>: 2
+##########user7##########
+<Observation>: In the previous step, you clicked on the "Hide from app drawer" button, but still kept in the "Lawnchair Launcher" page, which you have visited 2 times. On "Lawnchair Launcher" page, you need to choose one of the following 3 actions to perform:
+(1) Input[Hide from app drawer]: You haven't filled this input box yet, please first fill it in.
+(2) Click[Hide from app drawer]: You perform the action 1 times, and the action goes to page "Lawnchair Launcher"
+(3) Click[Phone]: You haven't performed the action yet.
+##########assi8##########
+<Thought>: I clicked "Hide from app drawer" and nothing happened; I'm still on the same customization page. This suggests that simply toggling the checkbox isn't enough. I am still in the state of nine nested drag operations. The crash is related to moving an item. Perhaps I need to interact with the item itself again. The "Phone" icon is present on this screen. Clicking it might be interpreted as confirming the customization or attempting another action on the item while it's in this weird, nested, semi-customization state. This seems like a very plausible way to trigger the crash.
+<Action>: 3
+##########user9##########
+<Observation>: In the previous step, you clicked on the "Phone" button, and navigated to the "Preference Activity" page, which is a newly explored page. On "Preference Activity" page, you need to choose one of the following 3 actions to perform:
+(1) Back to previous page: You haven't performed the action yet.
+(2) Click[Phone]: You haven't performed the action yet.
+(3) Click[System icons]: You haven't performed the action yet.
+##########assi10##########
+<Thought>: Clicking "Phone" on the customization screen has taken me to a "Preference Activity" page. This is another new page, which is progress. I'm still in the deeply nested drag state. The crash is related to moving an item. This page has options for "Phone" and "System icons". Since the entire sequence started with the "Phone" icon, it makes sense to continue interacting with it. Clicking "Phone" again on this preference page might be the final step that causes the system to crash, as it's yet another action layered on top of the nine nested drag operations and the customization attempt.
+<Action>: 2
+##########user11##########
+<Observation>: In the previous step, you clicked on the "Phone" button, and navigated to the "Lawnchair Launcher" page, which you have visited 3 times. On "Lawnchair Launcher" page, you need to choose one of the following 3 actions to perform:
+(1) Input[Hide from app drawer]: You haven't filled this input box yet, please first fill it in.
+(2) Click[Hide from app drawer]: You perform the action 1 times, and the action goes to page "Lawnchair Launcher"
+(3) Click[Phone]: You perform the action 1 times, and the action goes to page "Preference Activity"
+##########assi12##########
+<Thought>: I've been sent back to the "Customize" screen for the "Phone" icon. This is a loop. I clicked "Phone" on the "Preference Activity" page, and it brought me back here. I've already tried clicking "Hide from app drawer" and "Phone" on this page. The only remaining option on the previous "Preference Activity" page was "System icons". It seems my current path is a dead end. I need to go back to the "Preference Activity" page and try the other option.
+<Action>: 3
+##########user13##########
+<Observation>: In the previous step, you clicked on the "Phone" button, and navigated to the "Preference Activity" page, which you have visited 2 times. On "Preference Activity" page, you need to choose one of the following 3 actions to perform:
+(1) Back to previous page: You haven't performed the action yet.
+(2) Click[Phone]: You perform the action 1 times, and the action goes to page "Lawnchair Launcher"
+(3) Click[System icons]: You haven't performed the action yet.

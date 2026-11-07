@@ -1,0 +1,71 @@
+##########syst1##########
+As an experienced mobile app tester, your task is to try and reproduce a crash on the app based on the crash description. I'll provide you with the current page of the app and the available actions you can perform (interactions with the app's GUI widgets). You need to select and perform the action that best matches the crash description so as to reproduce the crash in a step-by-step manner.
+
+There are three types of actions on the page:
+1. Click[widget name]: You will click a button on the page called "widget name".
+2. Long press[widget name]: You will long press a button on the page called "widget name".
+3. Input[widget name]: You will type something into a input box on the page called "widget name".
+
+Use the following format:
+
+<Reported crash>: a one-sentence description of the crash that you must reproduce
+<Observation>: I will tell you the current page of the app and the available actions you can perform
+<Thought>: you should always think about what to do
+<Action>: you should answer the number of the chosen action. (e.g., you should answer "<Action>: 3")
+... (then I will tell you the new Observation after the action you choose. This Observation/Thought/Action can repeat N times until the crash is reproduced)
+
+Note that your answer should be only one <Thought> and one <Action>.
+##########user2##########
+Let's begin!
+<Reported crash>: [BUG] Text not saving in split mode
+##########user3##########
+<Observation>: In the previous step, you clicked on the "Ko-fi" button, and navigated to the "Search" page, which you have visited 27 times. On "Search" page, you need to choose one of the following 4 actions to perform:
+(1) Input[HelloWorld!]: You haven't filled this input box yet, please first fill it in.
+(2) Click[Search]: You perform the action 7 times, and the action goes to page "Main Activity"
+(3) Click[HelloWorld!]: You perform the action 5 times, and the action goes to page "Main Activity"
+(4) Long press[HelloWorld!]: You perform the action 4 times, and the action goes to page "1"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have only been performed a few times (Back to previous page) or go back to previous page.
+##########assi4##########
+<Thought>: I've been sent back to the "Search" page again, caught in a loop. The app is clearly in a broken state, with the "HelloWorld!" button present but the input field empty. I've tried clicking the "HelloWorld!" button and the "Search" button from this state, and both just continue the loop. The hint suggests trying actions that have been performed fewer times. Looking at my options, `Long press[HelloWorld!]` has been performed 4 times, fewer than the other click actions that lead into the loop. A long press often triggers a different set of logic than a simple click. Given the bug is "Text not saving in split mode", it's very likely that this specific broken state, combined with a less common action like a long press on the stale text element, will finally trigger the crash. The app might try to access the "unsaved" text for a context menu or another action, leading to a null reference or a similar error.
+<Action>: 4
+##########user5##########
+<Observation>: In the previous step, you long pressed the "HelloWorld!" button, and navigated to the "1" page, which you have visited 28 times. On "1" page, you need to choose one of the following 3 actions to perform:
+(1) Back to previous page: You perform the action 10 times, and the action goes to page "out of app"
+(2) Click[HelloWorld!]: You perform the action 11 times, and the action goes to page "Main Activity"
+(3) Long press[HelloWorld!]: You perform the action 6 times, and the action goes to page "1"
+Hint: It looks like you've explored this page sufficiently but made no progress, so you probably should go back to the previous page to explore other paths.
+##########assi6##########
+<Thought>: I have followed a long press on "HelloWorld!" to a page labeled "1". The hint strongly suggests this is a dead end and that I should go back. My options are to go back, click "HelloWorld!", or long press "HelloWorld!". The latter two actions seem to keep me in a loop or on this dead-end page. Therefore, the most logical step is to follow the hint and use the "Back to previous page" action. This should return me to the "Search" page, where the app is in a known inconsistent state, allowing me to try a different approach from there.
+<Action>: 1
+##########user7##########
+<Observation>: In the previous step, you go back to previous page, and navigated to the "Search" page, which you have visited 28 times. On "Search" page, you need to choose one of the following 4 actions to perform:
+(1) Input[HelloWorld!]: You haven't filled this input box yet, please first fill it in.
+(2) Click[Search]: You perform the action 7 times, and the action goes to page "Main Activity"
+(3) Click[HelloWorld!]: You perform the action 5 times, and the action goes to page "Main Activity"
+(4) Long press[HelloWorld!]: You perform the action 5 times, and the action goes to page "1"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have only been performed a few times (Back to previous page) or go back to previous page.
+##########assi8##########
+<Thought>: I am back on the "Search" page, which is in the inconsistent state I've been trying to exploit. The input field is empty, but the "HelloWorld!" button from a previous entry is still visible. I have already tried clicking the search button, clicking the "HelloWorld!" button, and long-pressing the "HelloWorld!" button from this state, all of which led to loops. The only remaining action is to try and input text into the field. The prompt for action 1 is `Input[HelloWorld!]`, which suggests I should type into the input box. This action directly conflicts with the stale "HelloWorld!" button on the screen. Forcing a new input while the app is confused about the old, unsaved text is the most likely way to trigger a crash related to "Text not saving".
+<Action>: 1
+##########user9##########
+<Observation>: In the previous step, you filled in the "HelloWorld!" input box, and navigated to the "HelloWorld" page, which is a newly explored page. On "HelloWorld" page, you need to choose one of the following 2 actions to perform:
+(1) Click[HelloWorld!]: You perform the action 1 times, and the action goes to page "Search"
+(2) Long press[HelloWorld!]: You perform the action 2 times, and the action goes to page "1"
+##########assi10##########
+<Thought>: I have finally broken the loop by inputting text into the field that was in an inconsistent state. This has brought me to a new page, "HelloWorld". The bug is "Text not saving in split mode". I have just provided new text. The app now has to deal with this new text, potentially in conflict with the old, unsaved state.
+My options are to click or long press the new "HelloWorld!" button. The long press has previously led me to a dead-end page ("1"). The click action, however, takes me back to the "Search" page. This transition back to the main screen is a very common point for crashes to occur, as the app might try to save or process the state of the page I'm leaving. Given the bug description, the app will likely fail when trying to handle the saving of the text I just entered, especially since the system was already in a confused state. Therefore, clicking the button is the most promising action to trigger the crash.
+<Action>: 1
+##########user11##########
+<Observation>: In the previous step, you clicked on the "HelloWorld!" button, and navigated to the "Search" page, which you have visited 29 times. On "Search" page, you need to choose one of the following 3 actions to perform:
+(1) Click[Search]: You perform the action 7 times, and the action goes to page "Main Activity"
+(2) Click[HelloWorld!]: You perform the action 5 times, and the action goes to page "Main Activity"
+(3) Long press[HelloWorld!]: You perform the action 5 times, and the action goes to page "1"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have only been performed a few times (Back to previous page) or go back to previous page.
+##########assi12##########
+<Thought>: I'm back on the "Search" page, stuck in a loop again. The hint suggests going back, but that option isn't available. I must choose from the three actions provided. I've just come from the "HelloWorld" page after inputting text. The bug is "Text not saving in split mode". My current actions are to either `Click[Search]` or `Click[HelloWorld!]` (both leading to "Main Activity"), or `Long press[HelloWorld!]` (leading to the dead-end page "1").
+The most logical step is to perform an action that uses the text I just entered. Both `Click[Search]` and `Click[HelloWorld!]` would do this. If the text wasn't saved correctly due to the app's inconsistent state, attempting to use it now is the most likely trigger for the crash. Between the two, `Click[HelloWorld!]` has been performed fewer times (5) than `Click[Search]` (7). Following the general principle of trying less-traveled paths, and because clicking a specific suggestion might involve different logic than a general search, I will choose to click the "HelloWorld!" suggestion.
+<Action>: 2
+##########user13##########
+<Observation>: In the previous step, you clicked on the "HelloWorld!" button, and navigated to the "Main Activity" page, which is a newly explored page. On "Main Activity" page, you need to choose one of the following 2 actions to perform:
+(1) Input[Name]: You haven't filled this input box yet, please first fill it in.
+(2) Click[Name]: You haven't performed the action yet.

@@ -1,0 +1,75 @@
+##########syst1##########
+As an experienced mobile app tester, your task is to try and reproduce a crash on the app based on the crash description. I'll provide you with the current page of the app and the available actions you can perform (interactions with the app's GUI widgets). You need to select and perform the action that best matches the crash description so as to reproduce the crash in a step-by-step manner.
+
+There are three types of actions on the page:
+1. Click[widget name]: You will click a button on the page called "widget name".
+2. Long press[widget name]: You will long press a button on the page called "widget name".
+3. Input[widget name]: You will type something into a input box on the page called "widget name".
+
+Use the following format:
+
+<Reported crash>: a one-sentence description of the crash that you must reproduce
+<Observation>: I will tell you the current page of the app and the available actions you can perform
+<Thought>: you should always think about what to do
+<Action>: you should answer the number of the chosen action. (e.g., you should answer "<Action>: 3")
+... (then I will tell you the new Observation after the action you choose. This Observation/Thought/Action can repeat N times until the crash is reproduced)
+
+Note that your answer should be only one <Thought> and one <Action>.
+##########user2##########
+Let's begin!
+<Reported crash>: View always changed to contact list when rotating the phone
+##########user3##########
+<Observation>: In the previous step, you clicked on the "Tab to open at app start" button, and navigated to the "dialog of Settings Activity" page, which is a newly explored page. On "dialog of Settings Activity" page, you need to choose one of the following 1 actions to perform:
+(1) Click[Contacts]: You haven't performed the action yet.
+##########assi4##########
+<Thought>: I am in a dialog to set the "Tab to open at app start". The crash description says the view changes to the contact list on rotation. I am currently not on the contact list. The only available action is to click "Contacts". This action will likely set the startup tab to "Contacts". It's plausible that changing this setting and then having the phone rotate could cause the app to incorrectly apply this new default view immediately, thus changing the view to the contact list and causing the crash. I will perform this action.
+<Action>: 1
+##########user5##########
+<Observation>: In the previous step, you clicked on the "Contacts" button, and navigated to the "Settings" page, which you have visited 2 times. On "Settings" page, you need to choose one of the following 10 actions to perform:
+(1) Click[Manage shown contact fields]: You haven't performed the action yet.
+(2) Click[Manage shown tabs]: You haven't performed the action yet.
+(3) Click[Show a call confirmation dialog before ...]: You haven't performed the action yet.
+(4) Click[Show private contacts to Fossify Phone, ...]: You haven't performed the action yet.
+(5) Click[Tab to open at app start]: You perform the action 1 times, and the action goes to page "dialog of Settings Activity"
+(6) Back to previous page: You haven't performed the action yet.
+(7) Click[Merge duplicate contacts]: You haven't performed the action yet.
+(8) Click[Font size]: You haven't performed the action yet.
+(9) Click[Back]: You haven't performed the action yet.
+(10) Click[settings color customization holder]: You haven't performed the action yet.
+##########assi6##########
+<Thought>: I have just set the "Tab to open at app start" to "Contacts". I am currently on the "Settings" page, which I accessed from the dialpad. The crash happens on rotation when not on the contact list view. My current state satisfies this condition. The next logical step for a user would be to exit the settings. The `Click[Back]` action will take me back to the previous screen (the dialpad), keeping me off the contact list. The system will then simulate the rotation, which should trigger the crash as described, because the app might incorrectly apply the "start tab" setting and switch to the contact list.
+<Action>: 9
+##########user7##########
+<Observation>: In the previous step, you clicked on the "Back" button, and navigated to the "Main Activity" page, which you have visited 2 times. On "Main Activity" page, you need to choose one of the following 10 actions to perform:
+(1) Click[More options]: You perform the action 1 times, and the action goes to page "menu (Settings, About)"
+(2) Input[top toolbar search]: You haven't filled this input box yet, please first fill it in.
+(3) Click[A10;B10;C10;D10;E]: You haven't performed the action yet.
+(4) Click[Favorites]: You haven't performed the action yet.
+(5) Click[Groups]: You haven't performed the action yet.
+(6) Click[Search]: You haven't performed the action yet.
+(7) Click[Sort by]: You haven't performed the action yet.
+(8) Click[Filter]: You haven't performed the action yet.
+(9) Click[item frame]: You haven't performed the action yet.
+(10) Long press[item frame]: You haven't performed the action yet.
+##########assi8##########
+<Thought>: I have returned to the "Main Activity" after changing the "Tab to open at app start" setting to "Contacts". I was originally on the dialpad view. The crash occurs on rotation when not in the contact list. I should currently be on the dialpad view. The system will simulate a rotation after my next action. This rotation is expected to incorrectly force the view to the contact list, causing the crash.
+The available actions seem to correspond to the contact list, but I will assume I am conceptually on the dialpad as per my navigation history. I need to perform an action to trigger the rotation simulation. `Click[More options]` is a neutral action that keeps me within the current context without navigating to a different major part of the app. Performing this action will advance the state, allowing the rotation to be simulated, which should reproduce the crash.
+<Action>: 1
+##########user9##########
+<Observation>: In the previous step, you clicked on the "More options" button, and navigated to the "menu (Settings, About)" page, which you have visited 2 times. On "menu (Settings, About)" page, you need to choose one of the following 2 actions to perform:
+(1) Click[Settings]: You perform the action 1 times, and the action goes to page "Settings"
+(2) Click[About]: You haven't performed the action yet.
+##########assi10##########
+<Thought>: I have navigated through the settings to change the "Tab to open at app start" and returned to the main activity, then opened the "More options" menu again. I am currently on a menu, which is not the contact list view. The crash happens on rotation when not on the contact list. The system will simulate the rotation after my next action. I need to choose an action that will keep me on a non-contact list view. I have already explored the "Settings" path. Let's try the "About" path to see if the crash is reproducible from there as well. Clicking "About" will take me to a new screen that is not the contact list, and then the rotation will be simulated, which should trigger the crash.
+<Action>: 2
+##########user11##########
+<Observation>: In the previous step, you clicked on the "About" button, and navigated to the "About Activity" page, which is a newly explored page. On "About Activity" page, you need to choose one of the following 2 actions to perform:
+(1) Click[About]: You haven't performed the action yet.
+(2) Click[SUPPORT]: You haven't performed the action yet.
+##########assi12##########
+<Thought>: I am currently on the "About Activity" page, which is not the contact list. I have previously set the "Tab to open at app start" to "Contacts". The crash description states that the view changes to the contact list upon rotation when not on the contact list view. My current state matches the conditions for the crash. The system will simulate the rotation after my next action. I need to perform an action on the current page to proceed. Clicking `Click[SUPPORT]` is a valid action on this page. After this action, the rotation will be simulated, and the app should incorrectly try to switch to the contact list view, triggering the crash.
+<Action>: 2
+##########user13##########
+<Observation>: In the previous step, you clicked on the "SUPPORT" button, but still kept in the "About Activity" page, which you have visited 2 times. On "About Activity" page, you need to choose one of the following 2 actions to perform:
+(1) Click[About]: You haven't performed the action yet.
+(2) Click[SUPPORT]: You perform the action 1 times, and the action goes to page "About Activity"

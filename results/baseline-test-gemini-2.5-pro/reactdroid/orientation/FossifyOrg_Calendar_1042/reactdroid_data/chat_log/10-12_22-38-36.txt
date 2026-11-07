@@ -1,0 +1,159 @@
+##########syst1##########
+As an experienced mobile app tester, your task is to try and reproduce a crash on the app based on the crash description. I'll provide you with the current page of the app and the available actions you can perform (interactions with the app's GUI widgets). You need to select and perform the action that best matches the crash description so as to reproduce the crash in a step-by-step manner.
+
+There are three types of actions on the page:
+1. Click[widget name]: You will click a button on the page called "widget name".
+2. Long press[widget name]: You will long press a button on the page called "widget name".
+3. Input[widget name]: You will type something into a input box on the page called "widget name".
+
+Use the following format:
+
+<Reported crash>: a one-sentence description of the crash that you must reproduce
+<Observation>: I will tell you the current page of the app and the available actions you can perform
+<Thought>: you should always think about what to do
+<Action>: you should answer the number of the chosen action. (e.g., you should answer "<Action>: 3")
+... (then I will tell you the new Observation after the action you choose. This Observation/Thought/Action can repeat N times until the crash is reproduced)
+
+Note that your answer should be only one <Thought> and one <Action>.
+##########user2##########
+Let's begin!
+<Reported crash>: The current selected day, month, week, year is not preserved after rotating
+##########user3##########
+<Observation>: In the previous step, you clicked on the "Print" button, and navigated to the "Main Activity" page, which you have visited 14 times. On "Main Activity" page, you need to choose one of the following 13 actions to perform:
+(1) Click[More options]: You perform the action 4 times, and the action goes to page "menu (Go to date, Print, Add holidays, Add contact birthdays, Add contact anniversaries, About)"
+(2) Input[top toolbar search]: You haven't filled this input box yet, please first fill it in.
+(3) Back to previous page: You haven't performed the action yet.
+(4) Click[Fri10;16]: You perform the action 1 times, and the action goes to page "Main Activity"
+(5) Click[Sat10;17]: You perform the action 1 times, and the action goes to page "Main Activity"
+(6) Click[Sun10;11]: You perform the action 1 times, and the action goes to page "Main Activity"
+(7) Click[Mon10;12]: You perform the action 1 times, and the action goes to page "Main Activity"
+(8) Click[Tue10;13]: You haven't performed the action yet.
+(9) Click[Wed10;14]: You haven't performed the action yet.
+(10) Click[Thu10;15]: You haven't performed the action yet.
+(11) Click[Search]: You haven't performed the action yet.
+(12) Click[Change view]: You perform the action 3 times, and the action goes to page "dialog of Main Activity"
+(13) Click[Settings]: You perform the action 2 times, and the action goes to page "Settings"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have not been performed before (Back to previous page, Click[Tue10;13], Click[Wed10;14], Click[Thu10;15], Input[top toolbar search], Click[Search]) or go back to previous page.
+##########assi4##########
+<Thought>: I clicked "Print" and was returned to the main activity. The app didn't crash, but it also didn't do anything sensible. This further confirms the app is in a deeply confused state. It's likely that the print function failed silently, unable to handle the corrupted view data.
+I've exhausted the most obvious crash triggers related to the corrupted view state. I've tried changing views, navigating dates, and now printing. The app is stubbornly refusing to crash, but it's also completely broken.
+At this point, the most logical next step is to try and interact with the UI in a way I haven't before. I've clicked on several days in the week, but not all of them. The crash could be triggered by interacting with a specific element that has some unique property or event handler.
+I will now click on "Tue 10/13", a day I haven't interacted with yet. It's possible that the event handler for this specific day is different, or that interacting with a new element in this corrupted state will finally push the app over the edge.
+<Action>: 8
+##########user5##########
+<Observation>: In the previous step, you clicked on the "Tue10;13" button, and navigated to the "Main Activity" page, which you have visited 10 times. On "Main Activity" page, you need to choose one of the following 14 actions to perform:
+(1) Click[More options]: You haven't performed the action yet.
+(2) Click[New Event]: You perform the action 1 times, and the action goes to page "Main Activity"
+(3) Input[top toolbar search]: You haven't filled this input box yet, please first fill it in.
+(4) Back to previous page: You haven't performed the action yet.
+(5) Click[Fri10;16]: You perform the action 1 times, and the action goes to page "dialog of Main Activity"
+(6) Click[Sat10;17]: You perform the action 1 times, and the action goes to page "Main Activity"
+(7) Click[Sun10;11]: You haven't performed the action yet.
+(8) Click[Mon10;12]: You haven't performed the action yet.
+(9) Click[Tue10;13]: You haven't performed the action yet.
+(10) Click[Wed10;14]: You haven't performed the action yet.
+(11) Click[Thu10;15]: You haven't performed the action yet.
+(12) Click[October 17 (Sat)]: You haven't performed the action yet.
+(13) Click[Go to today]: You perform the action 3 times, and the action goes to page "dialog of Main Activity"
+(14) Click[Change view]: You perform the action 3 times, and the action goes to page "dialog of Main Activity"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have not been performed before (Back to previous page, Click[Sun10;11], Click[Mon10;12], Click[Tue10;13], Click[Wed10;14], Click[Thu10;15], Input[top toolbar search], Click[October 17 (Sat)], Click[Back], Click[More options], Click[Go to previous day], Click[Go to next day]) or go back to previous page.
+##########assi6##########
+<Thought>: I've clicked on "Tue 10/13" and the app is still stuck in this broken state. It seems that interacting with individual days is not the key to triggering the crash. I've tried almost everything on this screen, and the app is just looping back to the same broken state.
+The crash description is "The current selected day, month, week, year is not preserved after rotating". I have already performed the rotation. The app is in a state where the displayed view (weekly) and the internal state (daily) are inconsistent. I've tried to exploit this inconsistency by changing views, navigating, and printing, all to no avail.
+At this point, I'm going to try something different. The "New Event" button is a core feature of any calendar app. Creating a new event requires the app to know the currently selected date. In this corrupted state, the app has no reliable information about the current date. Trying to create a new event will force the app to confront this inconsistency head-on. The code for creating a new event will likely try to access the selected date, find it to be in an invalid or unexpected state, and crash. This is a very promising path to reproducing the crash.
+<Action>: 2
+##########user7##########
+<Observation>: In the previous step, you clicked on the "New Event" button, and navigated to the "Main Activity" page, which you have visited 2 times. On "Main Activity" page, you need to choose one of the following 16 actions to perform:
+(1) Click[More options]: You haven't performed the action yet.
+(2) Click[New Event]: You haven't performed the action yet.
+(3) Input[top toolbar search]: You haven't filled this input box yet, please first fill it in.
+(4) Click[Fri10;16]: You haven't performed the action yet.
+(5) Click[Sat10;17]: You haven't performed the action yet.
+(6) Click[Sun10;11]: You haven't performed the action yet.
+(7) Click[Mon10;12]: You haven't performed the action yet.
+(8) Click[Tue10;13]: You haven't performed the action yet.
+(9) Click[Wed10;14]: You haven't performed the action yet.
+(10) Click[Thu10;15]: You haven't performed the action yet.
+(11) Click[Task]: You haven't performed the action yet.
+(12) Click[Event]: You perform the action 1 times, and the action goes to page "New Event"
+(13) Click[October 11 (Sun)]: You haven't performed the action yet.
+(14) Click[task]: You haven't performed the action yet.
+(15) Click[Go to today]: You haven't performed the action yet.
+(16) Click[Change view]: You haven't performed the action yet.
+##########assi8##########
+<Thought>: I clicked "New Event" and now I'm presented with a choice between creating a "Task" or an "Event". This is the next step in the event creation process. The app is still in a corrupted state where it doesn't know the correct date. To create an event, the app will need to know which date to create it for. By proceeding with the event creation, I am forcing the app to confront its own corrupted state. Clicking the "Event" button will take me to the next screen, which will likely try to pre-fill the date. Since the date information is broken, this is a very high-probability point for the crash to occur.
+<Action>: 12
+##########user9##########
+<Observation>: In the previous step, you clicked on the "Event" button, and navigated to the "New Event" page, which is a newly explored page. On "New Event" page, you need to choose one of the following 9 actions to perform:
+(1) Click[event show map]: You haven't performed the action yet.
+(2) Input[event title]: You haven't filled this input box yet, please first fill it in.
+(3) Input[event description]: You haven't filled this input box yet, please first fill it in.
+(4) Click[11:00 PM]: You perform the action 1 times, and the action goes to page "Event Activity"
+(5) Click[October 11 (Sun)]: You perform the action 2 times, and the action goes to page "Event Activity"
+(6) Click[Location]: You haven't performed the action yet.
+(7) Long press[Location]: You haven't performed the action yet.
+(8) Click[10 minutes before]: You haven't performed the action yet.
+(9) Click[All-day]: You perform the action 3 times, and the action goes to page "New Event"
+##########assi10##########
+<Thought>: I have successfully navigated to the "New Event" screen. The app has pre-filled the date as "October 11 (Sun)". This is the moment of truth. The entire problem stems from the app's corrupted date state after rotation. Now, I am on a screen that is fundamentally dependent on that date.
+The most direct way to trigger a crash is to interact with the corrupted data itself. By clicking on the date "October 11 (Sun)", I will force the app to process this date. It will likely try to open a date picker or another activity, using the corrupted date information as its input. This is the most probable action to cause a crash, as the underlying code will likely encounter an invalid state, a null value, or an unexpected data format when trying to handle the date that was not preserved correctly.
+<Action>: 5
+##########user11##########
+<Observation>: In the previous step, you clicked on the "October 11 (Sun)" button, and navigated to the "Event Activity" page, which you have visited 11 times. On "Event Activity" page, you need to choose one of the following 35 actions to perform:
+(1) Click[OK]: You perform the action 5 times, and the action goes to page "New Event"
+(2) Back to previous page: You haven't performed the action yet.
+(3) Click[01 October 2026]: You haven't performed the action yet.
+(4) Click[02 October 2026]: You haven't performed the action yet.
+(5) Click[03 October 2026]: You haven't performed the action yet.
+(6) Click[04 October 2026]: You haven't performed the action yet.
+(7) Click[05 October 2026]: You haven't performed the action yet.
+(8) Click[06 October 2026]: You haven't performed the action yet.
+(9) Click[07 October 2026]: You haven't performed the action yet.
+(10) Click[08 October 2026]: You haven't performed the action yet.
+(11) Click[09 October 2026]: You haven't performed the action yet.
+(12) Click[10]: You haven't performed the action yet.
+(13) Click[11]: You haven't performed the action yet.
+(14) Click[12]: You haven't performed the action yet.
+(15) Click[13]: You perform the action 2 times, and the action goes to page "Event Activity"
+(16) Click[14]: You haven't performed the action yet.
+(17) Click[15]: You haven't performed the action yet.
+(18) Click[16]: You haven't performed the action yet.
+(19) Click[17]: You perform the action 2 times, and the action goes to page "Event Activity"
+(20) Click[18]: You haven't performed the action yet.
+(21) Click[19]: You haven't performed the action yet.
+(22) Click[20]: You haven't performed the action yet.
+(23) Click[21]: You haven't performed the action yet.
+(24) Click[22]: You haven't performed the action yet.
+(25) Click[23]: You haven't performed the action yet.
+(26) Click[24]: You haven't performed the action yet.
+(27) Click[25]: You haven't performed the action yet.
+(28) Click[26]: You haven't performed the action yet.
+(29) Click[27]: You haven't performed the action yet.
+(30) Click[28]: You haven't performed the action yet.
+(31) Click[29]: You haven't performed the action yet.
+(32) Click[30]: You haven't performed the action yet.
+(33) Click[31]: You haven't performed the action yet.
+(34) Click[2026]: You perform the action 1 times, and the action goes to page "Event Activity"
+(35) Click[Sun, Oct 11]: You haven't performed the action yet.
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have not been performed before (Back to previous page, Click[01 October 2026], Click[02 October 2026], Click[03 October 2026], Click[04 October 2026], Click[05 October 2026], Click[06 October 2026], Click[07 October 2026], Click[08 October 2026], Click[09 October 2026], Click[10], Click[11], Click[12], Click[14], Click[15], Click[16], Click[18], Click[19], Click[20], Click[21], Click[22], Click[23], Click[24], Click[25], Click[26], Click[27], Click[28], Click[29], Click[30], Click[31], Click[Cancel], Click[Sun, Oct 11], Click[Previous month]) or go back to previous page.
+##########assi12##########
+<Thought>: I've clicked on the date and now I'm in a date picker. The app is showing October 2026, which is completely wrong. This confirms that the app's internal date state is completely corrupted. The crash report says "The current selected day, month, week, year is not preserved after rotating". I have successfully reproduced a state where the date is not preserved. Now I need to trigger the crash.
+The most logical next step is to confirm the selection of this corrupted date. By clicking "OK", I am telling the app to accept this incorrect date and use it for the new event. This will force the app to process the corrupted date information and try to apply it to the event. This is a very likely point for a crash, as the app will be trying to reconcile the corrupted date with the rest of the event data.
+<Action>: 1
+##########user13##########
+<Observation>: In the previous step, you clicked on the "OK" button, and navigated to the "New Event" page, which you have visited 7 times. On "New Event" page, you need to choose one of the following 14 actions to perform:
+(1) Click[event show map]: You haven't performed the action yet.
+(2) Input[event title]: You haven't filled this input box yet, please first fill it in.
+(3) Input[event description]: You haven't filled this input box yet, please first fill it in.
+(4) Back to previous page: You haven't performed the action yet.
+(5) Click[11:00 PM]: You haven't performed the action yet.
+(6) Click[October 11 (Sun)]: You haven't performed the action yet.
+(7) Click[Event color]: You haven't performed the action yet.
+(8) Click[Location]: You haven't performed the action yet.
+(9) Long press[Location]: You haven't performed the action yet.
+(10) Click[No repetition]: You haven't performed the action yet.
+(11) Click[Confirmed]: You perform the action 1 times, and the action goes to page "dialog of Event Activity"
+(12) Click[10 minutes before]: You haven't performed the action yet.
+(13) Click[Local calendar]: You haven't performed the action yet.
+(14) Click[All-day]: You haven't performed the action yet.
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have not been performed before (Back to previous page, Click[11:00 PM], Click[October 11 (Sun)], Click[Event color], Click[Location], Long press[Location], Click[No repetition], Input[event description], Click[10 minutes before], Click[Add another reminder], Click[Local calendar], Click[All-day], Click[event show map], Click[Save], Click[Back]) or go back to previous page.

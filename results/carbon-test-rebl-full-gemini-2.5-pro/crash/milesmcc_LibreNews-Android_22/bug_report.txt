@@ -1,0 +1,67 @@
+Bug Report Title:
+java.lang.ArrayIndexOutOfBoundsException
+Bug Report Issue:
+Reproduced in Android Studio Emulator and Android Nexus 5 Phone (6.0.1)
+
+Steps:
+
+1. Install v1.4 from FDroid.
+2. Launch app.
+3. Disable `automatically refresh`
+4. Change server address to an invalid one, e.g., `xxyyzz`.
+5. Click `refresh`.
+
+Solution:
+At FlashManager.java#L184, `min` may be 0 and the array may be empty.
+Hence, we need to handle this case explicitly.
+
+[FlashManager.java#L184](https://github.com/milesmcc/LibreNews-Android/blob/974b9592fa6c4ef591f5efccc4e85468c3650684/LibreNews-App/src/main/java/app/librenews/io/librenews/controllers/FlashManager.java#L184)
+
+-------------------------------
+Stack traces
+```
+11-01 14:56:58.359 12058 12058 I System.out: LibreNews Debug: Unable to load flashes from storage: No flash storage file exists or is empty.
+11-01 14:56:58.360 12058 12058 W System.err: java.io.FileNotFoundException: No flash storage file exists or is empty.
+11-01 14:56:58.360 12058 12058 W System.err:    at app.librenews.io.librenews.controllers.FlashManager.loadFlashesFromStorage(FlashManager.java:140)
+11-01 14:56:58.360 12058 12058 W System.err:    at app.librenews.io.librenews.controllers.FlashManager.getLatestPushedFlashes(FlashManager.java:191)
+11-01 14:56:58.360 12058 12058 W System.err:    at app.librenews.io.librenews.controllers.FlashManager.refresh(FlashManager.java:251)
+11-01 14:56:58.360 12058 12058 W System.err:    at app.librenews.io.librenews.views.MainFlashActivity$1.onClick(MainFlashActivity.java:67)
+11-01 14:56:58.360 12058 12058 W System.err:    at android.view.View.performClick(View.java:5204)
+11-01 14:56:58.360 12058 12058 W System.err:    at android.view.View$PerformClick.run(View.java:21153)
+11-01 14:56:58.360 12058 12058 W System.err:    at android.os.Handler.handleCallback(Handler.java:739)
+11-01 14:56:58.360 12058 12058 W System.err:    at android.os.Handler.dispatchMessage(Handler.java:95)
+11-01 14:56:58.360 12058 12058 W System.err:    at android.os.Looper.loop(Looper.java:148)
+11-01 14:56:58.360 12058 12058 W System.err:    at android.app.ActivityThread.main(ActivityThread.java:5417)
+11-01 14:56:58.360 12058 12058 W System.err:    at java.lang.reflect.Method.invoke(Native Method)
+11-01 14:56:58.360 12058 12058 W System.err:    at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:726)
+11-01 14:56:58.360 12058 12058 W System.err:    at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:616)
+```
+
+```
+// CRASH: app.librenews.io.librenews (pid 3182) (elapsed nanos: 493838390542)
+// Short Msg: java.lang.ArrayIndexOutOfBoundsException
+// Long Msg: java.lang.ArrayIndexOutOfBoundsException: length=0; index=0
+// Build Label: Android/sdk_google_phone_x86/generic_x86:6.0/MASTER/4088240:userdebug/test-keys
+// Build Changelist: 4088240
+// Build Time: 1497047463000
+// java.lang.ArrayIndexOutOfBoundsException: length=0; index=0
+// 	at app.librenews.io.librenews.controllers.FlashManager.convertFlashesToOutputString(FlashManager.java:184)
+// 	at app.librenews.io.librenews.controllers.FlashManager.writeFlashesToStorage(FlashManager.java:152)
+// 	at app.librenews.io.librenews.controllers.FlashManager.clearPushedFlashes(FlashManager.java:200)
+// 	at app.librenews.io.librenews.controllers.FlashManager.refresh(FlashManager.java:256)
+// 	at app.librenews.io.librenews.views.MainFlashActivity$1.onClick(MainFlashActivity.java:67)
+// 	at android.view.View.performClick(View.java:5198)
+// 	at android.view.View$PerformClick.run(View.java:21147)
+// 	at android.os.Handler.handleCallback(Handler.java:739)
+// 	at android.os.Handler.dispatchMessage(Handler.java:95)
+// 	at android.os.Looper.loop(Looper.java:148)
+// 	at android.app.ActivityThread.main(ActivityThread.java:5417)
+// 	at java.lang.reflect.Method.invoke(Native Method)
+// 	at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:726)
+// 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:616)
+// 
+```
+Comments:
+Comment#1:
+I think one possible solution of this is just deleting the three line, [FlashManager.java#L180](https://github.com/milesmcc/LibreNews-Android/blob/974b9592fa6c4ef591f5efccc4e85468c3650684/LibreNews-App/src/main/java/app/librenews/io/librenews/controllers/FlashManager.java#L180) to [FlashManager.java#L182](https://github.com/milesmcc/LibreNews-Android/blob/974b9592fa6c4ef591f5efccc4e85468c3650684/LibreNews-App/src/main/java/app/librenews/io/librenews/controllers/FlashManager.java#L182), that will prevent program running to the following loop in line 183.
+---

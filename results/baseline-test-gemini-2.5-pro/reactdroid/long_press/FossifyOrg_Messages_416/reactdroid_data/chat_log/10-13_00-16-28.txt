@@ -1,0 +1,100 @@
+##########syst1##########
+As an experienced mobile app tester, your task is to try and reproduce a crash on the app based on the crash description. I'll provide you with the current page of the app and the available actions you can perform (interactions with the app's GUI widgets). You need to select and perform the action that best matches the crash description so as to reproduce the crash in a step-by-step manner.
+
+There are three types of actions on the page:
+1. Click[widget name]: You will click a button on the page called "widget name".
+2. Long press[widget name]: You will long press a button on the page called "widget name".
+3. Input[widget name]: You will type something into a input box on the page called "widget name".
+
+Use the following format:
+
+<Reported crash>: a one-sentence description of the crash that you must reproduce
+<Observation>: I will tell you the current page of the app and the available actions you can perform
+<Thought>: you should always think about what to do
+<Action>: you should answer the number of the chosen action. (e.g., you should answer "<Action>: 3")
+... (then I will tell you the new Observation after the action you choose. This Observation/Thought/Action can repeat N times until the crash is reproduced)
+
+Note that your answer should be only one <Thought> and one <Action>.
+##########user2##########
+Let's begin!
+<Reported crash>: New conversation shortcut doesn't work
+##########user3##########
+<Observation>: In the previous step, you clicked on the "Alice Walker" button, and navigated to the "Bob Chen" page, which you have visited 5 times. On "Bob Chen" page, you need to choose one of the following 5 actions to perform:
+(1) Click[More options]: You perform the action 3 times, and the action goes to page "menu (Block number)"
+(2) Input[thread type message]: You haven't filled this input box yet, please first fill it in.
+(3) Long press[SMS]: You haven't performed the action yet.
+(4) Click[Dial number]: You haven't performed the action yet.
+(5) Click[Attachment]: You haven't performed the action yet.
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have not been performed before (Back to previous page, Long press[SMS], Click[Dial number], Click[Add Person], Click[Attachment], Click[Back]) or go back to previous page.
+##########assi4##########
+<Thought>: The app's state is completely broken. I clicked on the shortcut for "Alice Walker", a deleted contact, and it took me to the conversation page for "Bob Chen", another deleted contact. The app is fundamentally confused about its own state.
+The hint suggests trying a new action. The available new actions are `Input[thread type message]`, `Long press[SMS]`, `Click[Dial number]`, and `Click[Attachment]`.
+The core of the problem is the corrupted conversation thread. Actions that interact directly with this thread are most likely to cause a crash.
+- `Click[Dial number]` would try to access the contact's phone number. Since the contact is deleted, this could cause a crash when it fails to find the data.
+- `Long press[SMS]` is an uncommon action on the send button. It might trigger a special feature (like scheduling) that the developers didn't test in this corrupted state. The app, being confused about whether the thread is for Alice or Bob, might try to perform this action with an invalid thread ID, leading to a crash.
+Between these two, `Long press[SMS]` is a more unusual interaction with the messaging component itself, which is at the heart of the current bug. It's a good candidate for triggering an unhandled exception in this deeply confused state.
+<Action>: 3
+##########user5##########
+<Observation>: In the previous step, you long pressed the "SMS" button, but still kept in the "Bob Chen" page, which you have visited 6 times. On "Bob Chen" page, you need to choose one of the following 5 actions to perform:
+(1) Click[More options]: You perform the action 3 times, and the action goes to page "menu (Block number)"
+(2) Input[thread type message]: You haven't filled this input box yet, please first fill it in.
+(3) Long press[SMS]: You perform the action 1 times, and the action goes to page "Bob Chen"
+(4) Click[Dial number]: You haven't performed the action yet.
+(5) Click[Attachment]: You haven't performed the action yet.
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have not been performed before (Back to previous page, Click[Dial number], Click[Add Person], Click[Attachment], Click[Back]) or go back to previous page.
+##########assi6##########
+<Thought>: I am on a page for a deleted contact ("Bob Chen"), which I accessed by clicking a shortcut for a different deleted contact ("Alice Walker"). The app's state is fundamentally broken. My previous action, `Long press[SMS]`, did not cause a crash.
+The hint suggests trying a new action. The remaining untried actions are `Input[thread type message]`, `Click[Dial number]`, and `Click[Attachment]`.
+The most promising action to trigger a crash is `Click[Dial number]`. This action requires the app to retrieve the phone number associated with the current conversation thread. Since the app is confused about whether the thread belongs to "Alice Walker" or "Bob Chen", and both contacts have been deleted, it's highly probable that the app will fail to retrieve a valid phone number. This could easily lead to a `NullPointerException` or another fatal error when it tries to pass a null or invalid number to the dialer intent, causing the app to crash. This action directly probes the corrupted data state.
+<Action>: 4
+##########user7##########
+<Observation>: In the previous step, you clicked on the "Dial number" button, and navigated to the "Main Activity" page, which is a newly explored page. On "Main Activity" page, you need to choose one of the following 8 actions to perform:
+(1) Click[More options]: You haven't performed the action yet.
+(2) Input[top toolbar search]: You haven't filled this input box yet, please first fill it in.
+(3) Click[5551234]: You haven't performed the action yet.
+(4) Long press[5551234]: You haven't performed the action yet.
+(5) Click[Carol Diaz]: You haven't performed the action yet.
+(6) Long press[Carol Diaz]: You haven't performed the action yet.
+(7) Click[Search]: You haven't performed the action yet.
+(8) Click[conversations]: You haven't performed the action yet.
+##########assi8##########
+<Thought>: I have been trying to crash the app by interacting with shortcuts for deleted contacts. My last action, clicking "Dial number" on a corrupted conversation page, unexpectedly brought me back to the main conversation list ("Main Activity") instead of crashing.
+The reported crash is "New conversation shortcut doesn't work". To continue pursuing this crash, I must return to the "New conversation" page where the problematic shortcuts are located. On the current "Main Activity" page, the action `Click[conversations]` is the most likely way to initiate a new conversation and navigate back to that page. This will allow me to resume my interaction with the broken shortcuts in the app's now highly unstable state.
+<Action>: 8
+##########user9##########
+<Observation>: In the previous step, you clicked on the "conversations" button, and navigated to the "New conversation" page, which is a newly explored page. On "New conversation" page, you need to choose one of the following 5 actions to perform:
+(1) Input[new conversation address]: You haven't filled this input box yet, please first fill it in.
+(2) Click[A10;B10;C10;D10;E]: You haven't performed the action yet.
+(3) Click[Carol Diaz]: You haven't performed the action yet.
+(4) Click[item frame]: You haven't performed the action yet.
+(5) Long press[item frame]: You haven't performed the action yet.
+##########assi10##########
+<Thought>: I am back on the "New conversation" page, which is the location of the shortcuts mentioned in the crash report. The app's state is highly unstable due to previous interactions with deleted contacts. The available shortcuts are now different, showing "Carol Diaz" and a generic "item frame". The crash is about a "New conversation shortcut" not working. The most direct way to reproduce this is to interact with one of these shortcuts. The "item frame" is particularly suspicious; its generic name suggests it might be a UI element for a contact that failed to load correctly due to the corrupted state, possibly one of the deleted contacts like "Bob" or "Alice". Clicking on this broken element is a very strong candidate for triggering a null reference or an unhandled exception, leading to the crash.
+<Action>: 4
+##########user11##########
+<Observation>: In the previous step, you clicked on the "item frame" button, and navigated to the "Bob Chen" page, which you have visited 7 times. On "Bob Chen" page, you need to choose one of the following 5 actions to perform:
+(1) Click[More options]: You perform the action 3 times, and the action goes to page "menu (Block number)"
+(2) Input[thread type message]: You haven't filled this input box yet, please first fill it in.
+(3) Back to previous page: You haven't performed the action yet.
+(4) Long press[SMS]: You perform the action 1 times, and the action goes to page "Bob Chen"
+(5) Click[Attachment]: You haven't performed the action yet.
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have not been performed before (Back to previous page, Click[Add Person], Click[Attachment], Click[Back]) or go back to previous page.
+##########assi12##########
+<Thought>: I am once again on the conversation page for the deleted contact "Bob Chen", having arrived by clicking a broken shortcut. The app's state is clearly corrupted. The hint suggests trying an action I haven't performed before on this page. The remaining untried actions are `Input[thread type message]`, `Back to previous page`, and `Click[Attachment]`.
+The crash is related to broken shortcuts, and I am currently in a state caused by one. To trigger a crash, I should perform an action that relies on the validity of this conversation thread. `Click[Attachment]` is a strong candidate. This action likely initiates a process to add a file to the message. This process would need to reference the current conversation thread ID to associate the attachment correctly. Since the thread is for a deleted contact, the ID might be invalid or point to null data. Attempting to use this invalid data in the attachment workflow could easily cause a `NullPointerException` or another unhandled exception, leading to the crash. This is a more complex operation than simply typing text and is a very plausible failure point in this corrupted state.
+<Action>: 5
+##########user13##########
+<Observation>: In the previous step, you clicked on the "Attachment" button, and navigated to the "Bob Chen" page, which is a newly explored page. On "Bob Chen" page, you need to choose one of the following 13 actions to perform:
+(1) Click[More options]: You haven't performed the action yet.
+(2) Input[thread type message]: You haven't filled this input box yet, please first fill it in.
+(3) Long press[SMS]: You haven't performed the action yet.
+(4) Click[Choose photo]: You haven't performed the action yet.
+(5) Click[Choose video]: You haven't performed the action yet.
+(6) Click[Take photo]: You haven't performed the action yet.
+(7) Click[Record video]: You haven't performed the action yet.
+(8) Click[Record audio]: You haven't performed the action yet.
+(9) Click[Choose file]: You haven't performed the action yet.
+(10) Click[Choose contact]: You haven't performed the action yet.
+(11) Click[Schedule message]: You haven't performed the action yet.
+(12) Click[Dial number]: You haven't performed the action yet.
+(13) Click[Attachment]: You haven't performed the action yet.

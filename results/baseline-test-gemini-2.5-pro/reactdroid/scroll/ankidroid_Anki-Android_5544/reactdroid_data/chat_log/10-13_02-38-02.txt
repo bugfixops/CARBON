@@ -1,0 +1,100 @@
+##########syst1##########
+As an experienced mobile app tester, your task is to try and reproduce a crash on the app based on the crash description. I'll provide you with the current page of the app and the available actions you can perform (interactions with the app's GUI widgets). You need to select and perform the action that best matches the crash description so as to reproduce the crash in a step-by-step manner.
+
+There are three types of actions on the page:
+1. Click[widget name]: You will click a button on the page called "widget name".
+2. Long press[widget name]: You will long press a button on the page called "widget name".
+3. Input[widget name]: You will type something into a input box on the page called "widget name".
+
+Use the following format:
+
+<Reported crash>: a one-sentence description of the crash that you must reproduce
+<Observation>: I will tell you the current page of the app and the available actions you can perform
+<Thought>: you should always think about what to do
+<Action>: you should answer the number of the chosen action. (e.g., you should answer "<Action>: 3")
+... (then I will tell you the new Observation after the action you choose. This Observation/Thought/Action can repeat N times until the crash is reproduced)
+
+Note that your answer should be only one <Thought> and one <Action>.
+##########user2##########
+Let's begin!
+<Reported crash>: AnkiDroid scroll bug
+##########user3##########
+<Observation>: In the previous step, you clicked on the "Reviews" button, and navigated to the "Deck Options" page, which you have visited 7 times. On "Deck Options" page, you need to choose one of the following 6 actions to perform:
+(1) Back to previous page: You perform the action 1 times, and the action goes to page "Options for Default"
+(2) Click[Maximum reviews/day]: You perform the action 1 times, and the action goes to page "dialog (Maximum reviews day)"
+(3) Click[Easy bonus]: You perform the action 1 times, and the action goes to page "dialog (Maximum reviews day)"
+(4) Click[Interval modifier]: You perform the action 1 times, and the action goes to page "dialog (Maximum reviews day)"
+(5) Click[Maximum interval]: You perform the action 1 times, and the action goes to page "dialog (Maximum reviews day)"
+(6) Click[Bury related reviews]: You perform the action 1 times, and the action goes to page "Deck Options"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have only been performed a few times (Back to previous page, Click[Maximum reviews/day], Click[Easy bonus], Click[Interval modifier], Click[Maximum interval], Click[Bury related reviews]) or go back to previous page.
+##########assi4##########
+<Thought>: I am on the "Deck Options" page, specifically in the "Reviews" section. The crash is a "scroll bug". I have a list of options related to reviews. Most of them, like "Maximum reviews/day", open a dialog box. However, action (6) `Click[Bury related reviews]` is different. Its destination is listed as "Deck Options", the very page I am on. This suggests it's an on-page control, like a checkbox or a toggle switch, that modifies the state of the current view without navigating away. An action that causes an immediate redraw or state change on a scrollable list is a very strong candidate for triggering a "scroll bug". I will perform this action.
+<Action>: 6
+##########user5##########
+<Observation>: In the previous step, you clicked on the "Bury related reviews" button, but still kept in the "Deck Options" page, which you have visited 8 times. On "Deck Options" page, you need to choose one of the following 6 actions to perform:
+(1) Back to previous page: You perform the action 1 times, and the action goes to page "Options for Default"
+(2) Click[Maximum reviews/day]: You perform the action 1 times, and the action goes to page "dialog (Maximum reviews day)"
+(3) Click[Easy bonus]: You perform the action 1 times, and the action goes to page "dialog (Maximum reviews day)"
+(4) Click[Interval modifier]: You perform the action 1 times, and the action goes to page "dialog (Maximum reviews day)"
+(5) Click[Maximum interval]: You perform the action 1 times, and the action goes to page "dialog (Maximum reviews day)"
+(6) Click[Bury related reviews]: You perform the action 2 times, and the action goes to page "Deck Options"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have only been performed a few times (Back to previous page, Click[Maximum reviews/day], Click[Easy bonus], Click[Interval modifier], Click[Maximum interval], Click[Bury related reviews]) or go back to previous page.
+##########assi6##########
+<Thought>: I clicked "Bury related reviews" and stayed on the same page, which confirms it's a toggle-like action. The crash hasn't happened yet. The "scroll bug" might be related to the view's state after this toggle has been flipped. The next logical step is to navigate away and then come back, to see if the view can correctly restore its state, including the scroll position and the state of the "Bury related reviews" toggle. I will use the "Back to previous page" action to leave this screen.
+<Action>: 1
+##########user7##########
+<Observation>: In the previous step, you go back to previous page, and navigated to the "Options for Default" page, which you have visited 10 times. On "Options for Default" page, you need to choose one of the following 11 actions to perform:
+(1) Click[New cards]: You perform the action 1 times, and the action goes to page "Deck Options"
+(2) Click[Changes to deck group options will ...]: You haven't performed the action yet.
+(3) Click[Options group]: You haven't performed the action yet.
+(4) Back to previous page: You perform the action 1 times, and the action goes to page "AnkiDroid"
+(5) Click[Group management]: You haven't performed the action yet.
+(6) Click[Reviews]: You perform the action 2 times, and the action goes to page "Deck Options"
+(7) Click[Lapses]: You perform the action 1 times, and the action goes to page "Deck Options"
+(8) Click[General]: You haven't performed the action yet.
+(9) Click[Reminders]: You perform the action 4 times, and the action goes to page "Deck Options"
+(10) Click[Deck description (affects current deck only)]: You haven't performed the action yet.
+(11) Click[Navigate up]: You haven't performed the action yet.
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have not been performed before (Click[Group management], Click[General], Click[Deck description (affects current deck only)], Click[Changes to deck group options will ...], Click[Options group], Click[Navigate up]) or go back to previous page.
+##########assi8##########
+<Thought>: I'm back on the "Options for Default" page. I just came from the "Reviews" section of the "Deck Options" page, where I toggled the "Bury related reviews" setting. The "scroll bug" is likely to happen when I return to that specific list. To test this, I need to go back to the "Reviews" section. Action (6) `Click[Reviews]` will take me there. This will force the app to load the "Deck Options" page again, potentially triggering the bug as it tries to render the list with the toggled setting.
+<Action>: 6
+##########user9##########
+<Observation>: In the previous step, you clicked on the "Reviews" button, and navigated to the "Deck Options" page, which you have visited 9 times. On "Deck Options" page, you need to choose one of the following 6 actions to perform:
+(1) Back to previous page: You perform the action 2 times, and the action goes to page "Options for Default"
+(2) Click[Maximum reviews/day]: You perform the action 1 times, and the action goes to page "dialog (Maximum reviews day)"
+(3) Click[Easy bonus]: You perform the action 1 times, and the action goes to page "dialog (Maximum reviews day)"
+(4) Click[Interval modifier]: You perform the action 1 times, and the action goes to page "dialog (Maximum reviews day)"
+(5) Click[Maximum interval]: You perform the action 1 times, and the action goes to page "dialog (Maximum reviews day)"
+(6) Click[Bury related reviews]: You perform the action 2 times, and the action goes to page "Deck Options"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have only been performed a few times (Back to previous page, Click[Maximum reviews/day], Click[Easy bonus], Click[Interval modifier], Click[Maximum interval], Click[Bury related reviews]) or go back to previous page.
+##########assi10##########
+<Thought>: I've returned to the "Deck Options" (Reviews) page after toggling the "Bury related reviews" setting, going back, and then coming here again. The crash hasn't occurred. The "scroll bug" description suggests an issue with the list's state, possibly when it's being re-displayed. I've tried a sequence of toggling a setting and navigating back and forth. Perhaps the sequence needs to be repeated, or perhaps the bug is triggered by interacting with a different element on this scrollable list.
+The available actions are mostly dialog pop-ups, except for the "Bury related reviews" toggle and going back. I have already toggled "Bury related reviews" twice, which likely returned it to its original state. To create a persistent state change, I should click it again. This will be the third time, leaving it in the "on" (or non-default) state. An unstable state is more likely to cause a crash.
+<Action>: 6
+##########user11##########
+<Observation>: In the previous step, you clicked on the "Bury related reviews" button, but still kept in the "Deck Options" page, which you have visited 10 times. On "Deck Options" page, you need to choose one of the following 6 actions to perform:
+(1) Back to previous page: You perform the action 2 times, and the action goes to page "Options for Default"
+(2) Click[Maximum reviews/day]: You perform the action 1 times, and the action goes to page "dialog (Maximum reviews day)"
+(3) Click[Easy bonus]: You perform the action 1 times, and the action goes to page "dialog (Maximum reviews day)"
+(4) Click[Interval modifier]: You perform the action 1 times, and the action goes to page "dialog (Maximum reviews day)"
+(5) Click[Maximum interval]: You perform the action 1 times, and the action goes to page "dialog (Maximum reviews day)"
+(6) Click[Bury related reviews]: You perform the action 3 times, and the action goes to page "Deck Options"
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have only been performed a few times (Back to previous page, Click[Maximum reviews/day], Click[Easy bonus], Click[Interval modifier], Click[Maximum interval], Click[Bury related reviews]) or go back to previous page.
+##########assi12##########
+<Thought>: I have now clicked "Bury related reviews" three times. The state of this toggle has been changed. The crash is a "scroll bug", and it hasn't happened yet. The most logical next step is to see if this state change causes an issue when the view is reloaded. I will navigate back to the previous page and then return, which is a common way to trigger bugs related to view state restoration.
+<Action>: 1
+##########user13##########
+<Observation>: In the previous step, you go back to previous page, and navigated to the "Options for Default" page, which you have visited 11 times. On "Options for Default" page, you need to choose one of the following 11 actions to perform:
+(1) Click[New cards]: You perform the action 1 times, and the action goes to page "Deck Options"
+(2) Click[Changes to deck group options will ...]: You haven't performed the action yet.
+(3) Click[Options group]: You haven't performed the action yet.
+(4) Back to previous page: You perform the action 1 times, and the action goes to page "AnkiDroid"
+(5) Click[Group management]: You haven't performed the action yet.
+(6) Click[Reviews]: You perform the action 3 times, and the action goes to page "Deck Options"
+(7) Click[Lapses]: You perform the action 1 times, and the action goes to page "Deck Options"
+(8) Click[General]: You haven't performed the action yet.
+(9) Click[Reminders]: You perform the action 4 times, and the action goes to page "Deck Options"
+(10) Click[Deck description (affects current deck only)]: You haven't performed the action yet.
+(11) Click[Navigate up]: You haven't performed the action yet.
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have not been performed before (Click[Group management], Click[General], Click[Deck description (affects current deck only)], Click[Changes to deck group options will ...], Click[Options group], Click[Navigate up]) or go back to previous page.

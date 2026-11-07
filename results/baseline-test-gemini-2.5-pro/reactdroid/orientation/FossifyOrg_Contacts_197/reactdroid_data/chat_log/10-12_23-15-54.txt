@@ -1,0 +1,91 @@
+##########syst1##########
+As an experienced mobile app tester, your task is to try and reproduce a crash on the app based on the crash description. I'll provide you with the current page of the app and the available actions you can perform (interactions with the app's GUI widgets). You need to select and perform the action that best matches the crash description so as to reproduce the crash in a step-by-step manner.
+
+There are three types of actions on the page:
+1. Click[widget name]: You will click a button on the page called "widget name".
+2. Long press[widget name]: You will long press a button on the page called "widget name".
+3. Input[widget name]: You will type something into a input box on the page called "widget name".
+
+Use the following format:
+
+<Reported crash>: a one-sentence description of the crash that you must reproduce
+<Observation>: I will tell you the current page of the app and the available actions you can perform
+<Thought>: you should always think about what to do
+<Action>: you should answer the number of the chosen action. (e.g., you should answer "<Action>: 3")
+... (then I will tell you the new Observation after the action you choose. This Observation/Thought/Action can repeat N times until the crash is reproduced)
+
+Note that your answer should be only one <Thought> and one <Action>.
+##########user2##########
+Let's begin!
+<Reported crash>: View always changed to contact list when rotating the phone
+##########user3##########
+<Observation>: In the previous step, you clicked on the "More options" button, and navigated to the "menu (Open with, Manage shown contact...)" page, which is a newly explored page. On "menu (Open with, Manage shown contact...)" page, you need to choose one of the following 2 actions to perform:
+(1) Click[Manage shown contact fields]: You haven't performed the action yet.
+(2) Click[Open with]: You haven't performed the action yet.
+##########assi4##########
+<Thought>: I am now on a menu page that appeared after clicking "More options". This is still not the main contact list. The crash report states that rotating the phone on any non-contact view will cause the app to switch to the contact list. The system will simulate a rotation after my next action. I will choose to click "Manage shown contact fields". This will likely take me to another configuration screen, which is also not the contact list. When the rotation is simulated on that new screen, the bug should be triggered, causing the app to incorrectly switch to the contact list and reproduce the crash.
+<Action>: 1
+##########user5##########
+<Observation>: In the previous step, you clicked on the "Manage shown contact fields" button, and navigated to the "Edit Contact Activity" page, which is a newly explored page. On "Edit Contact Activity" page, you need to choose one of the following 2 actions to perform:
+(1) Click[OK]: You haven't performed the action yet.
+(2) Click[Prefix]: You haven't performed the action yet.
+##########assi6##########
+<Thought>: I am on a new page, also named "Edit Contact Activity", but it seems to be a sub-screen for managing contact fields, as indicated by the "OK" and "Prefix" buttons. This is not the main contact list. The crash report states that rotating the phone on any non-contact view will cause the app to switch to the contact list. The system will simulate a rotation after my next action. I will click the "Prefix" button. This is likely a checkbox or a setting on this screen. This action should keep me on this current screen. When the rotation is simulated immediately after, the app should incorrectly switch to the contact list, thus reproducing the crash.
+<Action>: 2
+##########user7##########
+<Observation>: In the previous step, you clicked on the "Prefix" button, but still kept in the "Edit Contact Activity" page, which you have visited 2 times. On "Edit Contact Activity" page, you need to choose one of the following 2 actions to perform:
+(1) Click[OK]: You haven't performed the action yet.
+(2) Click[Prefix]: You perform the action 1 times, and the action goes to page "Edit Contact Activity"
+##########assi8##########
+<Thought>: I am on a sub-screen of the "Edit Contact Activity" for managing contact fields. This is not the main contact list. The crash report states that rotating the phone on any non-contact view will cause the app to switch to the contact list. The system will simulate a rotation after my next action. I have already tried clicking "Prefix", which kept me on this page. Now I will try clicking "OK". This will likely close this sub-screen and return me to the main "Edit Contact Activity" page. Since the main "Edit Contact Activity" page is also not the contact list, the rotation that follows this action should trigger the bug, causing the app to incorrectly switch to the contact list and thus reproduce the crash.
+<Action>: 1
+##########user9##########
+<Observation>: In the previous step, you clicked on the "OK" button, and navigated to the "Edit Contact Activity" page, which is a newly explored page. On "Edit Contact Activity" page, you need to choose one of the following 18 actions to perform:
+(1) Input[address]: You haven't filled this input box yet, please first fill it in.
+(2) Click[More options]: You haven't performed the action yet.
+(3) Input[number]: You haven't filled this input box yet, please first fill it in.
+(4) Input[email]: You haven't filled this input box yet, please first fill it in.
+(5) Input[notes]: You haven't filled this input box yet, please first fill it in.
+(6) Input[organization company]: You haven't filled this input box yet, please first fill it in.
+(7) Click[Home]: You haven't performed the action yet.
+(8) Click[Mobile]: You haven't performed the action yet.
+(9) Click[Alice]: You haven't performed the action yet.
+(10) Long press[Alice]: You haven't performed the action yet.
+(11) Click[Walker]: You haven't performed the action yet.
+(12) Long press[Walker]: You haven't performed the action yet.
+(13) Click[Share]: You haven't performed the action yet.
+(14) Click[Delete]: You haven't performed the action yet.
+(15) Click[Toggle favorite]: You haven't performed the action yet.
+(16) Long press[Toggle favorite]: You haven't performed the action yet.
+(17) Click[Change photo]: You haven't performed the action yet.
+(18) Long press[Change photo]: You haven't performed the action yet.
+##########assi10##########
+<Thought>: I am back on the "Edit Contact Activity" page after adjusting the visible fields. This page is not the main contact list. The crash report states that rotating the phone on any non-contact view will cause the app to switch to the contact list. The system will simulate a rotation after my next action. I will click the "Delete" button. This action will likely open a confirmation dialog, which is also a view that is not the contact list. When the rotation is simulated while this dialog is open, the app should incorrectly switch to the contact list, thus reproducing the crash.
+<Action>: 14
+##########user11##########
+<Observation>: In the previous step, you clicked on the "Delete" button, and navigated to the "dialog of Edit Contact Activity" page, which is a newly explored page. On "dialog of Edit Contact Activity" page, you need to choose one of the following 2 actions to perform:
+(1) Click[No]: You haven't performed the action yet.
+(2) Click[Yes]: You haven't performed the action yet.
+##########assi12##########
+<Thought>: I am now on a confirmation dialog for deleting a contact. This dialog is not the main contact list. The crash report states that rotating the phone on any non-contact view will cause the app to switch to the contact list. The system will simulate a rotation after my next action. I have two choices: "No" and "Yes". Clicking "Yes" might delete the contact and take me back to the contact list, which would prevent me from observing the bug. Clicking "No" will dismiss the dialog and return me to the "Edit Contact Activity" page. Since the "Edit Contact Activity" page is not the contact list, the rotation that will be simulated immediately after I return to it should trigger the bug, causing the app to incorrectly switch to the contact list and reproduce the crash.
+<Action>: 1
+##########user13##########
+<Observation>: In the previous step, you clicked on the "No" button, and navigated to the "Edit Contact Activity" page, which you have visited 2 times. On "Edit Contact Activity" page, you need to choose one of the following 18 actions to perform:
+(1) Input[address]: You haven't filled this input box yet, please first fill it in.
+(2) Click[More options]: You haven't performed the action yet.
+(3) Input[number]: You haven't filled this input box yet, please first fill it in.
+(4) Input[email]: You haven't filled this input box yet, please first fill it in.
+(5) Input[notes]: You haven't filled this input box yet, please first fill it in.
+(6) Input[organization company]: You haven't filled this input box yet, please first fill it in.
+(7) Click[Home]: You haven't performed the action yet.
+(8) Click[Mobile]: You haven't performed the action yet.
+(9) Click[Alice]: You haven't performed the action yet.
+(10) Long press[Alice]: You haven't performed the action yet.
+(11) Click[Walker]: You haven't performed the action yet.
+(12) Long press[Walker]: You haven't performed the action yet.
+(13) Click[Share]: You haven't performed the action yet.
+(14) Click[Delete]: You perform the action 1 times, and the action goes to page "dialog of Edit Contact Activity"
+(15) Click[Toggle favorite]: You haven't performed the action yet.
+(16) Long press[Toggle favorite]: You haven't performed the action yet.
+(17) Click[Change photo]: You haven't performed the action yet.
+(18) Long press[Change photo]: You haven't performed the action yet.

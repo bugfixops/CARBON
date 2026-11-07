@@ -1,0 +1,86 @@
+##########syst1##########
+As an experienced mobile app tester, your task is to try and reproduce a crash on the app based on the crash description. I'll provide you with the current page of the app and the available actions you can perform (interactions with the app's GUI widgets). You need to select and perform the action that best matches the crash description so as to reproduce the crash in a step-by-step manner.
+
+There are three types of actions on the page:
+1. Click[widget name]: You will click a button on the page called "widget name".
+2. Long press[widget name]: You will long press a button on the page called "widget name".
+3. Input[widget name]: You will type something into a input box on the page called "widget name".
+
+Use the following format:
+
+<Reported crash>: a one-sentence description of the crash that you must reproduce
+<Observation>: I will tell you the current page of the app and the available actions you can perform
+<Thought>: you should always think about what to do
+<Action>: you should answer the number of the chosen action. (e.g., you should answer "<Action>: 3")
+... (then I will tell you the new Observation after the action you choose. This Observation/Thought/Action can repeat N times until the crash is reproduced)
+
+Note that your answer should be only one <Thought> and one <Action>.
+##########user2##########
+Let's begin!
+<Reported crash>: App crash when note is selected, search filter changed and another note is selected
+##########user3##########
+<Observation>: In the previous step, you filled in the "enter body" input box, but still kept in the "Edit Note Activity" page, which you have visited 2 times. On "Edit Note Activity" page, you need to choose one of the following 13 actions to perform:
+(1) Click[Add Item]: You haven't performed the action yet.
+(2) Long press[Add Item]: You haven't performed the action yet.
+(3) Click[Tap for more options]: You perform the action 1 times, and the action goes to page "Edit Note Activity"
+(4) Long press[Tap for more options]: You haven't performed the action yet.
+(5) Click[Title]: You haven't performed the action yet.
+(6) Click[Edit]: You haven't performed the action yet.
+(7) Long press[Edit]: You haven't performed the action yet.
+(8) Click[Undo]: You haven't performed the action yet.
+(9) Long press[Undo]: You haven't performed the action yet.
+(10) Click[Redo]: You haven't performed the action yet.
+(11) Long press[Redo]: You haven't performed the action yet.
+(12) Click[Search]: You haven't performed the action yet.
+(13) Click[Pin]: You haven't performed the action yet.
+##########assi4##########
+<Thought>: I have now entered both a title and a body for the new note. The UI has updated, and now I see an "Add Item" button. This suggests that by entering text in the body, the note type might have implicitly changed to a list, or this is just a generic button for adding more content. In any case, my goal is to save this note and return to the main list. There is no explicit "Save" button. In many Android apps, pressing the system back button or the "up" navigation arrow in the toolbar saves the current work. I don't see a back or up button listed in the actions. The most logical next step to save the note and return to the list is to use the "Tap for more options" button, which might reveal a "Save" or "Done" action.
+<Action>: 3
+##########user5##########
+<Observation>: In the previous step, you clicked on the "Tap for more options" button, and navigated to the "Edit Note Activity" page, which you have visited 2 times. On "Edit Note Activity" page, you need to choose one of the following 8 actions to perform:
+(1) Click[Share]: You haven't performed the action yet.
+(2) Click[Export]: You haven't performed the action yet.
+(3) Click[Change Color]: You haven't performed the action yet.
+(4) Click[Reminders]: You haven't performed the action yet.
+(5) Click[Labels]: You haven't performed the action yet.
+(6) Click[Convert to List]: You haven't performed the action yet.
+(7) Click[Archive]: You perform the action 1 times, and the action goes to page "Notes"
+(8) Click[Delete]: You haven't performed the action yet.
+##########assi6##########
+<Thought>: I've tapped "more options" and now see a menu. None of these options are "Save" or "Done". The options are "Share", "Export", "Change Color", "Reminders", "Labels", "Convert to List", "Archive", and "Delete". The "Archive" action is the only one that explicitly states it will return me to the "Notes" page. Archiving the note will save it and move it out of the main view, but it will still exist. This is the most direct way to get back to the notes list and see if the new note I created is now present, which is a necessary step to continue with the crash reproduction.
+<Action>: 7
+##########user7##########
+<Observation>: In the previous step, you clicked on the "Archive" button, and navigated to the "Notes" page, which you have visited 2 times. On "Notes" page, you need to choose one of the following 3 actions to perform:
+(1) Input[enter search keyword]: You haven't filled this input box yet, please first fill it in.
+(2) Click[Make list]: You haven't performed the action yet.
+(3) Click[Take note]: You perform the action 2 times, and the action goes to page "Edit Note Activity"
+##########assi8##########
+<Thought>: I have returned to the "Notes" page after archiving the note I just created. The search filter I applied earlier is still active, which is why I don't see any notes. The crash description requires me to select a note, change the search filter, and then select another note. To do this, I first need to see some notes. The current search filter is hiding everything. I need to clear or change this filter. The "enter search keyword" input is the control for the filter. I will interact with it to change the filter, which should then display the notes and allow me to proceed with the crash reproduction steps.
+<Action>: 1
+##########user9##########
+<Observation>: In the previous step, you filled in the "enter search keyword" input box, and navigated to the "Notes" page, which you have visited 4 times. On "Notes" page, you need to choose one of the following 4 actions to perform:
+(1) Back to previous page: You perform the action 1 times, and the action goes to page "Notes"
+(2) Click[HelloWorld!]: You perform the action 2 times, and the action goes to page "Notes"
+(3) Click[Notes]: You perform the action 1 times, and the action goes to page "Notes"
+(4) Click[Navigate up]: You haven't performed the action yet.
+##########assi10##########
+<Thought>: I have successfully changed the search filter, and now I can see a note titled "HelloWorld!". The crash description starts with "note is selected". To follow the reproduction steps, my first action should be to select this visible note. Clicking on "HelloWorld!" will accomplish this.
+<Action>: 2
+##########user11##########
+<Observation>: In the previous step, you clicked on the "HelloWorld!" button, but still kept in the "Notes" page, which you have visited 5 times. On "Notes" page, you need to choose one of the following 5 actions to perform:
+(1) Input[enter search keyword]: You haven't filled this input box yet, please first fill it in.
+(2) Back to previous page: You perform the action 1 times, and the action goes to page "Notes"
+(3) Click[HelloWorld!]: You perform the action 3 times, and the action goes to page "Notes"
+(4) Click[Notes]: You perform the action 1 times, and the action goes to page "Notes"
+(5) Click[Navigate up]: You haven't performed the action yet.
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have not been performed before (Click[Navigate up]) or go back to previous page.
+##########assi12##########
+<Thought>: I have successfully selected the "HelloWorld!" note. According to the crash description, the next step is to change the search filter. The available action `Input[enter search keyword]` allows me to modify the search query, which directly corresponds to changing the search filter. This is the logical next step to follow the reproduction sequence.
+<Action>: 1
+##########user13##########
+<Observation>: In the previous step, you filled in the "enter search keyword" input box, but still kept in the "Notes" page, which you have visited 5 times. On "Notes" page, you need to choose one of the following 4 actions to perform:
+(1) Back to previous page: You perform the action 1 times, and the action goes to page "Notes"
+(2) Click[HelloWorld!]: You perform the action 3 times, and the action goes to page "Notes"
+(3) Click[Notes]: You perform the action 1 times, and the action goes to page "Notes"
+(4) Click[Navigate up]: You haven't performed the action yet.
+Hint: It looks like the page has been visited several times with no progress, you may need to try some actions that have not been performed before (Click[Navigate up]) or go back to previous page.
